@@ -132,7 +132,6 @@
   border-bottom-left-radius:70rpx;
   border-top-left-radius:70rpx;
   color: #ffffff;
-  opacity:0.8;
 }
 .store-button::after{
   outline: none;
@@ -143,7 +142,7 @@
   width:20rpx;
   height:20rpx;
   border-radius: 20rpx;
-  background-color:#dd514c;
+  background-color:#F8D85E;
   position:absolute;
   left:15rpx;
   top:45rpx; 
@@ -167,7 +166,7 @@
   margin: 10rpx;
 }
 .fs-select{
-  color: #ffffff !important;
+  color: #ffffff;
   background-color: #F44444;
   border: 1rpx solid #F44444;
 }

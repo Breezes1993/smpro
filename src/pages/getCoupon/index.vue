@@ -31,8 +31,8 @@
 
             <div class="pad-top-sm">
               <div class="pad-hov-xs m-flex">
-                <button style="line-height:1.6;" class="btn btn-danger btn-radius btn-xs" @click="getCpFn">立即领取</button>
-                <button style="line-height:1.6;" class="btn btn-danger btn-radius btn-xs" open-type="share">直接转发</button>
+                <button class="btn btn-danger btn-radius btn-xs" @click="getCpFn">立即领取</button>
+                <button class="btn btn-danger btn-radius btn-xs" open-type="share">直接转发</button>
               </div>
             </div>
 

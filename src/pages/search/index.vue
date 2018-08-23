@@ -4,7 +4,7 @@
     <div class="pad-hov-sm pad-ver-xs bg-white">
       <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
         <input type="text" class="block te-cen" v-model="searchInp" placeholder="搜索" confirm-type="search"
-               @confirm="searchFn" v-on:input ="inputFunc">
+               @confirm="searchFn">
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="bg-white text-sm pad-ver-xs pad-hov-smb2 posReal" v-show="!showResult" v-for="(fasetSelect,fsIndex) in fasetSelects" v-bind:key="fasetSelect.name+fsIndex">
+    <div class="bg-white text-sm pad-ver-xs pad-hov-smb2 posReal" v-for="(fasetSelect,fsIndex) in fasetSelects" v-bind:key="fasetSelect.name+fsIndex">
       <div class="pad-ver-xs pad-hov-xs text-lg text-Bolder">
         <span class="fs-tag"></span>
         <p style="margin-left:10rpx;">{{fasetSelect.name}}</p>
@@ -30,89 +30,7 @@
         <span @click="clickItem(fasetSelect.type,item.itemName)" class="fs-item" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
       </div>
     </div>
-    <div class="bg-white text-sm" v-show="showResult">
 
-      <div class="pad-sm b-t1" v-for="(item,index) in resultArr" @click="toStore(item.id)" :key="index"
-           :wx:key="index">
-        <div class="flexBox">
-          <div class="flex25">
-            <img :src="item.logo" class="block" style="width: 170rpx;height: 170rpx;" @error="setDefImg(index)">
-          </div>
-          <div class="flexAuto">
-            <div class="pad-left-sm">
-
-              <div class="flexBox ver-cen">
-                <div class="flexAuto">
-                  <p class="ell">{{item.name}}</p>
-                </div>
-                <div class="flexAuto te-right">
-                  <p class="text-danger">
-                    <img src="/static/img/hot.png" class="ver-mid" style="width: 36rpx;height: 36rpx;">
-                    <span class="ver-mid pad-left-xs">人气 {{item.popularity || 0}}</span>
-                  </p>
-                </div>
-              </div>
-
-              <div class="flexBox ver-cen pad-top-xs singleLine">
-                <div class="flexAuto">
-                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=1">
-                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=2">
-                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=3">
-                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=4">
-                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate==5">
-                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=1.1&&item.evaluate<2">
-                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=2.1&&item.evaluate<3">
-                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=3.1&&item.evaluate<4">
-                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                       v-if="item.evaluate>=4.1&&item.evaluate<5">
-                  <span class="text-warning ver-mid pad-left-xs">{{item.evaluate}}分</span>
-                </div>
-                <div class="flexAuto te-right">
-                  <img src="/static/img/position_gray.png" class="ver-mid" style="width: 36rpx;height: 36rpx;">
-                  <span class="ver-mid pad-left-xs">{{item.disShow}}</span>
-                </div>
-              </div>
-
-              <p class="ell text-999 pad-top-xs">{{item.address}}</p>
-              <div class="flexBox ver-cen pad-top-xs" v-if="item.typefrom>0">
-                <div class="flex8">
-                  <p class="btn btn-danger btn-lit btn-radius" v-if="item.typefrom==1">金</p>
-                  <p class="btn btn-waring btn-lit btn-radius" v-if="item.typefrom==2">折</p>
-                  <p class="btn btn-waring btn-lit btn-radius" v-if="item.typefrom==3">通</p>
-                </div>
-                <div class="flexAuto">
-                  <p class="pad-left-xs ell">{{item.quanname}}</p>
-                </div>
-                <!--<div class="flexAuto">
-                  <p class="ell text-999">满5000以上可以可以可以可以可以</p>
-                </div>-->
-              </div>
-              <!--<div class="flexBox ver-cen pad-top-xs">
-                <div class="flex8">
-                  <p class="btn btn-danger btn-lit btn-radius">金</p>
-                </div>
-                <div class="flexAuto">
-                  <p class="pad-left-xs">642.00代金券</p>
-                </div>
-                <div class="flexAuto">
-                  <p class="ell text-999">满5000以上可以可以可以可以可以</p>
-                </div>
-              </div>-->
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
   </div>
 </template>
 
@@ -166,8 +84,7 @@
           },{
             itemName: "排挡"
           },]
-        }],
-        showResult: false
+        }]
       }
     },
     onReachBottom() {
@@ -225,12 +142,6 @@
         })
 
       },
-      inputFunc(event){
-        console.log("inputFunc",event);
-        if(event.mp.detail.value.length===0){
-          this.showResult = false;
-        }
-      },
       searchFn() {
         let _this = this;
         if (_this.searchInp.length == 0) {
@@ -241,13 +152,11 @@
           });
           return;
         }
-        this.showResult = true;
         _this.setKw();
         return _this.subSearchFn();
       },
       subSearchFn(kw) {
         console.log("subSearchFn",kw)
-        
         let _this = this;
         let search = _this.searchInp;
         if (kw) {

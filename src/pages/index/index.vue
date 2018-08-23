@@ -215,7 +215,6 @@
           <span class="pad-left-xs ver-mid">众享礼券</span>
         </div>
         <p class="pad-top-xs">厦门中企信科技有限公司</p>
-        
       </div>
 
     </div>

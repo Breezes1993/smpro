@@ -104,7 +104,7 @@
         </div>
       </div>
 
-      <div class="flexBox pad-ver-sm ver-cen">
+      <div :class="'flexBox pad-ver-sm ver-cen ' + (pickerIndex===0?'b-b1':'')">
         <div class="flex25">
           <p>所属行业:</p>
         </div>
@@ -116,8 +116,19 @@
           </picker>
         </div>
       </div>
-
+      <div :class="'bg-white flexBox pad-ver-xs ' + ((fsIndex+1)===fasetSelects.length?'':'b-b1')" 
+        v-for="(fasetSelect,fsIndex) in fasetSelects" 
+        v-bind:key="fasetSelect.name+fsIndex"
+        v-if="pickerIndex===0">
+        <div class="pad-ver-xs" style="flex-shrink:0;">
+          <p>{{fasetSelect.name}}:</p>
+        </div>
+        <div class="flexBox changeLine" style="padding-left:15rpx;">
+          <span @click="clickItem(item,fasetSelect.type)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
+        </div>
+      </div>
     </div>
+
 
     <div class="pad-ver-sm">
       <div class="pad-sm bg-white">
@@ -281,7 +292,48 @@
         storeTel: '',
         telCode: '',
         hasOpened: 2,
-        agreementInfo: ''
+        agreementInfo: '',
+
+
+        fasetSelects: [{
+          name: "所在商圈",
+          type: "01",
+          items:[{
+            itemName: "不限"
+          },{
+            itemName: "SM城市"
+          },{
+            itemName: "中山路"
+          },{
+            itemName: "中华城"
+          },{
+            itemName: "沙坡尾"
+          },{
+            itemName: "火车站"
+          },{
+            itemName: "排挡"
+          },]
+        },{
+          name: "行业类别",
+          type: "02",
+          items:[{
+            itemName: "不限"
+          },{
+            itemName: "SM城市"
+          },{
+            itemName: "中山路"
+          },{
+            itemName: "中华城"
+          },{
+            itemName: "沙坡尾"
+          },{
+            itemName: "火车站"
+          },{
+            itemName: "排挡"
+          },{
+            itemName: "香港"
+          },]
+        }]
       }
     },
     onLoad(o) {
@@ -289,11 +341,17 @@
       _this.curId = o.id || -1;
       _this.initDateArr();
       _this.initCateFn();
-      if (o.id) {
-        _this.hasOpened = 1;
-        _this.loadAlready();
-        console.log("_this.hasOpened=" + _this.hasOpened, "o.id=" + o.id)
-      }
+      _this.initFastSelect().then(function(){
+        console.log("进入resolve")
+        if (o.id) {
+          _this.hasOpened = 1;
+          _this.loadAlready();
+          console.log("_this.hasOpened=" + _this.hasOpened, "o.id=" + o.id)
+        }
+      }).catch(function(msg){
+        console.log("进入reject",msg);
+      });
+
     },
     onUnload() {
       let _this = this;
@@ -333,7 +391,10 @@
         })
       },
       pickerChange(e) {
-        this.pickerIndex = e.target.value;
+        console.log("pickerChange",e);
+        this.pickerIndex = Number(e.target.value);
+        // this.$set(this,"pickerIndex",Number(e.target.value))
+        this.pickerName = this.typeArr[e.target.value].name;
       },
       dateChange(e, way) {
         let _this = this;
@@ -501,6 +562,7 @@
         return _this.initImg();
       },
       upLoadF(type, index) {
+        console.log("开始")
         let _this = this;
         type = parseInt(type);
         let files = [];
@@ -541,6 +603,19 @@
               d.shopid = _this.curId;
               d.isadd = 2;
             }
+            let tmpSelect = [];
+            _this.fasetSelects.forEach(element=>{
+              let tmpElement = JSON.parse(JSON.stringify(element));
+              tmpElement.items=[];
+              element.items.forEach(elementItem=>{
+                if(elementItem.isSelect){
+                  tmpElement.items.push(elementItem);
+                }
+              });
+              tmpSelect.push(tmpElement);
+            });
+            console.log("tmpSelect",tmpSelect);
+            d.fasetSelects = JSON.stringify(tmpSelect);
             url = Api.url_join_upload_text;
             break;
           case 1:
@@ -584,12 +659,18 @@
           default:
             break;
         }
+        console.log("d",d);
+        // if(type===0){
+        //   wx.hideLoading();
+        //   return;
+        // }
         wx.uploadFile({
           url: store.state.doMain + url,
           filePath: files[parseInt(index)].img,
           name: 'file',
           formData: d,
           success: function (res) {
+            console.log("商户注册,",res);
             let data = res.data;
             wx.hideLoading();
             if (data) {
@@ -599,7 +680,7 @@
                 case 0:
                   wx.showToast({
                     title: data.msg,
-                    icon: 'success',
+                    icon: data.status===1?'success':'none',
                     duration: 2000
                   });
                   setTimeout(() => {
@@ -867,7 +948,20 @@
         _this.latitude = o.data.latitude;
         _this.longitude = o.data.longitude;
         _this.storeInfo = o.data.introduction;
-
+        o.data.fasetSelects.forEach(oElement=>{
+          _this.fasetSelects.forEach(tElement=>{
+            if(oElement.type === tElement.type){
+              oElement.items.forEach(oElementItem=>{
+                tElement.items.forEach(tElementItem=>{
+                  if(oElementItem.itemName === tElementItem.itemName){
+                    tElementItem.isSelect = true;
+                  }
+                })
+              });
+            }
+          })
+        });
+        _this.fasetSelects = JSON.parse(JSON.stringify( _this.fasetSelects));
         let op = (o.data.businessstart <= 9) ? '0' + o.data.businessstart : o.data.businessstart;
         let ed = (o.data.businessend <= 9) ? '0' + o.data.businessend : o.data.businessend;
         for (let i = 0, len = _this.dateArr.length; i < len; i++) {
@@ -914,6 +1008,19 @@
         if (_this.tel != _this.tempTel) {
           o.data.code = _this.telCode;
         }
+        let tmpSelect = [];
+        _this.fasetSelects.forEach(element=>{
+          let tmpElement = JSON.parse(JSON.stringify(element));
+          tmpElement.items=[];
+          element.items.forEach(elementItem=>{
+            if(elementItem.isSelect){
+              tmpElement.items.push(elementItem);
+            }
+          });
+          tmpSelect.push(tmpElement);
+        });
+        console.log("tmpSelect",tmpSelect);
+        o.data.fasetSelects = JSON.stringify(tmpSelect);
         store.commit('reqInfo', o);
       },
       callBackEdit(o) {
@@ -993,7 +1100,57 @@
           icon: 'none',
           duration: 1500
         });
-      }
+      },
+      clickItem(item,type){
+        console.log("选中")
+        let _this = this;
+        let canChange = true;
+        if(type === '02'){
+          item.isSelect||_this.fasetSelects.forEach(element=>{
+            if(element.type === '02'){
+              let selectNums = 1;
+              element.items.forEach(elementItem=>{
+                if(elementItem.isSelect){
+                  if(selectNums>=3){
+                    wx.showToast({
+                      title: "行业不得超过三个",
+                      icon: 'none',
+                      duration: 1500
+                    });
+                    canChange = false;
+                    return;
+                  }
+                  selectNums++;
+                }
+              })
+            }
+          });
+        }
+        console.log("执行选中/取消选中",item.isSelect+'');
+        canChange&&this.$set(item,"isSelect",!item.isSelect);
+        console.log("执行选中/取消选中",item.isSelect+'');
+      },
+
+
+
+
+      initFastSelect() {
+        let _this = this;
+        return new Promise(function(resolve,reject){
+          let o = {
+            url: Api.url_fastselect,
+            data: {},
+            cb: _this.fastCallBack,
+            resolve: resolve
+          };
+          store.commit("getInfo", o);
+        });
+      },
+      fastCallBack(res,resolve){
+        console.log("获取faseselect",res);
+        this.$set(this,"fasetSelects",res.data.fasetSelects);
+        resolve();
+      },
     }
   }
 </script>

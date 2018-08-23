@@ -8,8 +8,7 @@
       </div>
     </div>
 
-    <!-- <div class="bg-white pad-hov-xs pad-ver-xs text-xs" v-if="kwArr.length>0"> -->
-    <div class="bg-white pad-hov-xs pad-ver-xs text-xs" v-if="false">
+    <div class="bg-white pad-hov-xs pad-ver-xs text-xs" v-if="kwArr.length>0">
 
       <span class="kwOne" v-for="(item,index) in kwArr" :key="index" :wx:key="index"
             @click="subSearchFn(item)">{{item}}</span>
@@ -21,15 +20,78 @@
       </div>
     </div>
 
-    <div class="bg-white text-sm pad-ver-xs pad-hov-smb2 posReal" v-for="(fasetSelect,fsIndex) in fasetSelects" v-bind:key="fasetSelect.name+fsIndex">
-      <div class="pad-ver-xs pad-hov-xs text-lg text-Bolder">
-        <span class="fs-tag"></span>
-        <p style="margin-left:10rpx;">{{fasetSelect.name}}</p>
+    <div class="bg-white text-sm">
+
+      <div class="pad-sm b-t1" v-for="(item,index) in resultArr" @click="toStore(item.id)" :key="index"
+           :wx:key="index">
+        <div class="flexBox">
+          <div class="flex25">
+            <img :src="item.logo" class="block" style="width: 170rpx;height: 170rpx;" @error="setDefImg(index)">
+          </div>
+          <div class="flexAuto">
+            <div class="pad-left-sm">
+
+              <div class="flexBox ver-cen">
+                <div class="flexAuto">
+                  <p class="ell">{{item.name}}</p>
+                </div>
+                <div class="flexAuto te-right">
+                  <p class="text-danger">
+                    <img src="/static/img/hot.png" class="ver-mid" style="width: 36rpx;height: 36rpx;">
+                    <span class="ver-mid pad-left-xs">人气 {{item.popularity || 0}}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="flexBox ver-cen pad-top-xs singleLine">
+                <div class="flexAuto">
+                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=1">
+                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=2">
+                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=3">
+                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=4">
+                  <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate==5">
+                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=1.1&&item.evaluate<2">
+                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=2.1&&item.evaluate<3">
+                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=3.1&&item.evaluate<4">
+                  <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
+                       v-if="item.evaluate>=4.1&&item.evaluate<5">
+                  <span class="text-warning ver-mid pad-left-xs">{{item.evaluate}}分</span>
+                </div>
+                <div class="flexAuto te-right">
+                  <img src="/static/img/position_gray.png" class="ver-mid" style="width: 36rpx;height: 36rpx;">
+                  <span class="ver-mid pad-left-xs">{{item.disShow}}</span>
+                </div>
+              </div>
+
+              <p class="ell text-999 pad-top-xs">{{item.address}}</p>
+
+              <!--<div class="flexBox ver-cen pad-top-xs">
+                <div class="flex8">
+                  <p class="btn btn-danger btn-lit btn-radius">金</p>
+                </div>
+                <div class="flexAuto">
+                  <p class="pad-left-xs">642.00代金券</p>
+                </div>
+                <div class="flexAuto">
+                  <p class="ell text-999">满5000以上可以可以可以可以可以</p>
+                </div>
+              </div>-->
+
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="flexBox changeLine pad-ver-xs pad-hov-xs">
-        <span @click="clickItem(fasetSelect.type,item.itemName)" class="fs-item" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
-      </div>
+
     </div>
+
 
   </div>
 </template>
@@ -46,45 +108,7 @@
         lastInp: '',
         curPage: 1,
         isEmpty: false,
-        resultArr: [],
-
-        fasetSelects: [{
-          name: "商圈",
-          type: "01",
-          items:[{
-            itemName: "不限"
-          },{
-            itemName: "SM城市"
-          },{
-            itemName: "中山路"
-          },{
-            itemName: "中华城"
-          },{
-            itemName: "沙坡尾"
-          },{
-            itemName: "火车站"
-          },{
-            itemName: "排挡"
-          },]
-        },{
-          name: "行业",
-          type: "02",
-          items:[{
-            itemName: "不限"
-          },{
-            itemName: "SM城市"
-          },{
-            itemName: "中山路"
-          },{
-            itemName: "中华城"
-          },{
-            itemName: "沙坡尾"
-          },{
-            itemName: "火车站"
-          },{
-            itemName: "排挡"
-          },]
-        }]
+        resultArr: []
       }
     },
     onReachBottom() {
@@ -96,8 +120,7 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.initHis();
-        this.initFastSelect();
+        this.initHis()
       })
     },
     methods: {
@@ -156,7 +179,6 @@
         return _this.subSearchFn();
       },
       subSearchFn(kw) {
-        console.log("subSearchFn",kw)
         let _this = this;
         let search = _this.searchInp;
         if (kw) {
@@ -202,28 +224,6 @@
       },
       setDefImg(index) {
         this.storeArr[index].src = store.state.defStore;
-      },
-
-
-      clickItem(type,searchName){
-        wx.navigateTo({
-          url: "/pages/searchResult/main" + '?searchName=' + searchName + '&searchType=' + type
-        });
-      },
-      initFastSelect() {
-        let o = {
-          url: Api.url_fastselect,
-          data: {},
-          cb: this.fastCallBack
-        };
-        store.commit("getInfo", o);
-      },
-      fastCallBack(res){
-        console.log("获取faseselect",res);
-        res.data.fasetSelects.forEach(element=>{
-          element.items.push({itemName:"不限"});
-        });
-        this.$set(this,"fasetSelects",res.data.fasetSelects);
       }
     }
   }

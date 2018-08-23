@@ -3,9 +3,9 @@
 
     <div class="posReal">
       <div class="abRight m-flex m-flex-column height100">
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
+        <button class="store-button" open-type="share" @click="sotreBtn(1)">直接转发</button>
+        <button class="store-button" @click="sotreBtn(2)">生成海报</button>
+        <button class="store-button" @click="sotreBtn(3)">返回首页</button>
       </div>
       <swiper indicator-dots autoplay interval="3000" duration="300" style="height: 400rpx">
         <!-- @change="swiperChange"-->
@@ -529,6 +529,19 @@
       </div>
     </div>-->
 
+    <!--mask-->
+    <!-- <div class="drawer_screen" bindtap="powerDrawer" data-statu="close" v-if="showModalStatus"></div>
+    <div :animation="animationData" class="drawer_box" v-if="showModalStatus">
+      <div class="drawer_title">提示</div>
+      <div class="drawer_content">
+        <div class="top grid content">
+          <label class="">请先获取用户信息！</label>
+        </div>
+      </div>
+      <div class="btn_ok" @click="powerDrawer('close')" >
+        <button @click="canUse" @getuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -555,12 +568,13 @@
         imgHead: 'data:image/png;base64,',
         curPage: 1,
         commArr: [],
-        isEmpty: false
+        isEmpty: false,
+        showModalStatus: false
       }
     },
     onLoad(o) {
       let _this = this;
-      console.log(o)
+      console.log("商户",o);
       _this.curId = o.id;
       if (o.scene) {
         _this.curId = o.scene;
@@ -647,7 +661,7 @@
           title: _this.storeInfo.name
         });
         _this.qrCodeImg = o.codeimg;
-
+        _this.shop_img = o.shop_img;
         return _this.initInfoCommFn();
       },
       openLocat() {
@@ -759,7 +773,98 @@
         if (_this.commArr.length > 0) {
           _this.isEmpty = (o.data.length < 5);
         }
-      }
+      },
+      sotreBtn(index){
+        let _this = this;
+        if(index === 1){
+
+        }else if(index === 2){
+          let shareInfo = {
+            imgTop: (_this.imgArr&&_this.imgArr.length>0)?_this.imgArr[0]:"",
+            storeInfo: _this.storeInfo,
+            ticketList: _this.ticketList,
+            qrCodeImg: _this.shop_img
+          }
+          wx.setStorageSync("shareInfo",shareInfo);
+          wx.navigateTo({
+            url: "/pages/shareCard/main?curId="+this.curId
+          })
+        }else if(index === 3){
+          // wx.navigateBack({
+          //   delta: 1
+          // });
+          wx.reLaunch({
+            url: "/pages/index/main"
+          });
+        }
+      },
+
+
+
+
+
+      // powerDrawer: function(currentStatu) {
+      //   console.log("12312")
+      //   this.util(currentStatu)
+      // },
+      // util: function(currentStatu) {
+      //   /* 动画部分 */
+      //   // 第1步：创建动画实例 
+      //   var animation = wx.createAnimation({
+      //     duration: 200, //动画时长
+      //     timingFunction: "linear", //线性
+      //     delay: 0 //0则不延迟
+      //   });
+
+      //   // 第2步：这个动画实例赋给当前的动画实例
+      //   this.animation = animation;
+
+      //   // 第3步：执行第一组动画
+      //   animation.opacity(0).rotateX(-100).step();
+
+      //   // 第4步：导出动画对象赋给数据对象储存
+
+      //   this.animationData = animation.export();
+
+      //   // 第5步：设置定时器到指定时候后，执行第二组动画
+      //   setTimeout(function() {
+      //     // 执行第二组动画
+      //     animation.opacity(1).rotateX(0).step();
+      //     // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+      //     this.animationData = animation
+
+      //     //关闭
+      //     if (currentStatu == "close") {
+      //         this.showModalStatus = false;
+      //     }
+      //   }.bind(this), 200)
+
+      //   // 显示
+      //   if (currentStatu == "open") {
+      //     this.setData({
+      //       showModalStatus: true
+      //     });
+      //   }
+      // },
+      // getUserInfo(e){
+      //   let obj = {
+      //     e: e,
+      //     that: this
+      //   }
+      //   store.commit("getUserInfoBtn",obj);
+      // },
+      // canUse(){
+      //   if(wx.canIUse('button.open-type.getUserInfo')){
+      //     // 用户版本可用
+      //   }else{
+      //     wx.showModal({
+      //       title: '提示',
+      //       content: '请先升级版本！',
+      //       showCancel: false
+      //     });
+      //   }
+      // }
     }
   }
 </script>
+

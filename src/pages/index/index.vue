@@ -218,14 +218,27 @@
       </div>
 
     </div>
+   
+    <div class="drawer_screen" bindtap="powerDrawer" data-statu="close" v-show="showModalStatus"></div>
 
+    <div :animation="animationData" class="drawer_box" v-show="showModalStatus">
+      <div class="drawer_title">提示</div>
+      <div class="drawer_content">
+        <div class="top grid content">
+          <label class="">请先获取用户信息！</label>
+        </div>
+      </div>
+      <div class="btn_ok" @click="powerDrawer('close')" >
+        <button @click="canUse" @getuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import store from './store'
   import Api from '../../../static/js/apis'
-
+  import {mapState} from 'vuex'
   export default {
     data() {
       return {
@@ -249,7 +262,8 @@
         curCate: -1,
         showCate: '',
         hasO: 1,
-        verifyCode: -1
+        verifyCode: -1,
+        showModalStatus: false
       }
     },
     onShareAppMessage: function (res) {
@@ -259,6 +273,7 @@
       }
     },
     created() {
+      console.log("store",store)
       let _this = this;
       wx.getLocation({
         type: 'gcj02',
@@ -269,11 +284,16 @@
           store.state.tempObj.tempLola.longitude = res.longitude;
         }
       });
-      store.commit('getUserInfoFn', _this.initCateFn);
+      
+      // return;
+      let obj = {that:this,cb:_this.initCateFn}
+      console.log("先执行这里吗？",obj)
+      store.commit('getUserInfoFn', obj);
     },
     onLoad(o) {
       let _this = this;
-      console.log(o);
+      console.log("首页",o);
+      console.log("_this",_this);
       _this.verifyCode = o.scene || -1;
     },
     onReachBottom() {
@@ -291,6 +311,7 @@
     },
     methods: {
       initInfoFn() {
+        console.log("initInfoFn");
         let _this = this;
         _this.hasO = store.state.hasOpened;
         let o = {
@@ -330,6 +351,7 @@
         _this.isLoading = false;
       },
       initCateFn() {
+        console.log("initCateFn");
         let _this = this;
         let o = {
           url: Api.url_index_cate,
@@ -339,6 +361,7 @@
         store.commit('getInfo', o);
       },
       callBackCate(o) {
+        console.log("callBackCate",o);
         let _this = this;
         _this.cateArr = o.data;
         if (o.data.length > 0) {
@@ -348,6 +371,7 @@
         return _this.initBannerFn();
       },
       initBannerFn() {
+        console.log("initBannerFn");
         let _this = this;
         let o = {
           url: Api.url_index_banner,
@@ -357,6 +381,7 @@
         store.commit('getInfo', o);
       },
       callBackBan(o) {
+        console.log("callBackBan");
         let _this = this;
         _this.imgArr = o.data;
         /*if (_this.verifyCode == -1) {
@@ -497,6 +522,68 @@
         });
         return _this.initInfoFn();
       }*/
+      powerDrawer: function(currentStatu) {
+        console.log("12312")
+        this.util(currentStatu)
+      },
+      util: function(currentStatu) {
+        /* 动画部分 */
+        // 第1步：创建动画实例 
+        var animation = wx.createAnimation({
+          duration: 200, //动画时长
+          timingFunction: "linear", //线性
+          delay: 0 //0则不延迟
+        });
+
+        // 第2步：这个动画实例赋给当前的动画实例
+        this.animation = animation;
+
+        // 第3步：执行第一组动画
+        animation.opacity(0).rotateX(-100).step();
+
+        // 第4步：导出动画对象赋给数据对象储存
+
+        this.animationData = animation.export();
+
+        // 第5步：设置定时器到指定时候后，执行第二组动画
+        setTimeout(function() {
+          // 执行第二组动画
+          animation.opacity(1).rotateX(0).step();
+          // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+          this.animationData = animation
+
+          //关闭
+          if (currentStatu == "close") {
+              this.showModalStatus = false;
+          }
+        }.bind(this), 200)
+
+        // 显示
+        if (currentStatu == "open") {
+          this.setData({
+            showModalStatus: true
+          });
+        }
+      },
+      getUserInfo(e){
+        let obj = {
+          e: e,
+          that: this,
+          cb: this.initCateFn
+        }
+        store.commit("getUserInfoBtn",obj);
+      },
+      canUse(){
+        if(wx.canIUse('button.open-type.getUserInfo')){
+          // 用户版本可用
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: '请先升级版本！',
+            showCancel: false
+          });
+        }
+      }
     }
   }
 </script>

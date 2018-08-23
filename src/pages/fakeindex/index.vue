@@ -109,7 +109,7 @@
           <img src="/static/img/comLogo.png" class="ver-mid" style="width: 70rpx;height: 70rpx;">
           <span class="pad-left-xs ver-mid">众享礼券</span>
         </div>
-        <p class="pad-top-xs">厦门中企信科技有限公司</p>
+        <p class="pad-top-xs">厦门中企信科2技有限公司</p>
       </div>
 
     </div>

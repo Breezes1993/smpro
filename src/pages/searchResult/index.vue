@@ -1,15 +1,14 @@
 <template>
   <div>
 
-    <div class="pad-hov-sm pad-ver-xs bg-white text-Bolder text-lg pad-bottom-m">{{searchInp}}</div>
+    <div class="pad-hov-sm pad-ver-xs bg-white text-Bolder text-lg pad-bottom-m">{{searchName}}</div>
 
     <div class="bg-white text-sm posReal" style="margin-top:30rpx;" 
       v-for="(fasetSelect,fsIndex) in fasetSelects" 
       v-bind:key="fasetSelect.name+fsIndex"
-      v-if="fasetSelect.type === '02'"
-      v-show="searchType === '02'">
+      v-if="fasetSelect.type !== searchType">
       <div class="flexBox pad-ver-xs pad-hov-xs" style="overflow-x: auto;">
-        <span @click="clickItem(item.itemName)" class="fs-item" style="color:#000;flex-shrink:0;" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
+        <span @click="clickItem(item)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" style="color:#000;flex-shrink:0;" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
       </div>
     </div>
 
@@ -116,6 +115,7 @@
         resultArr: [],
 
         searchType: '01',
+        searchName: "",
         fasetSelects: [{
           name: "商圈",
           type: "01",
@@ -162,13 +162,14 @@
       if(!o){
         return;
       }
+      this.resultArr = [];
       if(o.searchType){
         this.searchType = o.searchType;
       }
       if(o.searchName) {
         this.searchName = o.searchName;
-        this.subSearchFn(o.searchName);
       }
+      this.subSearchFn();
 
     },
     onReachBottom() {
@@ -243,14 +244,18 @@
         console.log("subSearchFn",searchName)
         let kw = searchName;
         let _this = this;
-        let search = _this.searchName;
+        let search = "";
         if (kw) {
           search = kw;
-          _this.searchName = kw;
+          // _this.searchName = kw;
           _this.searchInp = kw;
         }
+        let name = _this.searchType==='01' ? _this.searchName : search;
+        let name2 = _this.searchType==='01' ? search : _this.searchName;
+        let searchCondition = "?name=" + name + "&name2=" + name2 + "&from=" + _this.searchType;
         let o = {
-          url: Api.url_index_near + "?name=" + search + "&from=" + _this.searchType
+          // url: Api.url_index_near + "?name=" + search + "&from=" + _this.searchType
+          url: Api.url_index_near + searchCondition
           + "&longitude=" + store.state.tempObj.tempLola.longitude
           + "&latitude=" + store.state.tempObj.tempLola.latitude
           + "&page=" + _this.curPage,
@@ -258,14 +263,15 @@
           cb: _this.callBackSearch
         };
 
-        if (_this.lastInp != _this.searchInp) {
+        if (_this.lastInp != _this.searchInp || !_this.searchInp) {
           _this.resultArr = [];
           _this.curPage = 1;
           _this.isEmpty = false;
         } else {
+          console.log("执行了return");
           return;
         }
-
+        console.log("执行了return 2")
         store.commit('getInfo', o);
       },
       callBackSearch(o) {
@@ -308,7 +314,16 @@
         });
         this.$set(this,"fasetSelects",res.data.fasetSelects);
       },
-      clickItem(name){
+      clickItem(item){
+        let name = item.itemName;
+        console.log(JSON.stringify(this.fasetSelects))
+        this.fasetSelects.forEach(element=>{
+          element.items.forEach(elementItem=>{
+            console.log(JSON.stringify(elementItem));
+            delete elementItem.isSelect;
+          })
+        })
+        this.$set(item,"isSelect",true);
         this.curPage = 1;
         this.subSearchFn(name);
       },

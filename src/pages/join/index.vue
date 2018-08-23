@@ -106,7 +106,7 @@
 
       <div :class="'flexBox pad-ver-sm ver-cen ' + (pickerIndex===0?'b-b1':'')">
         <div class="flex25">
-          <p>所属行业:</p>
+          <p>所属分类:</p>
         </div>
         <div class="flexAuto">
           <picker @change="pickerChange" :value="pickerIndex" :range="typeArr" range-key="name">
@@ -124,7 +124,7 @@
           <p>{{fasetSelect.name}}:</p>
         </div>
         <div class="flexBox changeLine" style="padding-left:15rpx;">
-          <span @click="clickItem(item,fasetSelect.type)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
+          <span @click="clickItem(item,fasetSelect)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
         </div>
       </div>
     </div>
@@ -1101,31 +1101,31 @@
           duration: 1500
         });
       },
-      clickItem(item,type){
+      clickItem(item,fasetSelect){
+        let type = fasetSelect.type;
         console.log("选中")
         let _this = this;
         let canChange = true;
-        if(type === '02'){
-          item.isSelect||_this.fasetSelects.forEach(element=>{
-            if(element.type === '02'){
-              let selectNums = 1;
-              element.items.forEach(elementItem=>{
-                if(elementItem.isSelect){
-                  if(selectNums>=3){
-                    wx.showToast({
-                      title: "行业不得超过三个",
-                      icon: 'none',
-                      duration: 1500
-                    });
-                    canChange = false;
-                    return;
-                  }
-                  selectNums++;
+        item.isSelect||_this.fasetSelects.forEach(element=>{
+          if(element.type === type){
+            let selectNums = 1;
+            let maxNum = type === '01' ? 1 : 3;
+            element.items.forEach(elementItem=>{
+              if(elementItem.isSelect){
+                if(selectNums>=maxNum){
+                  wx.showToast({
+                    title: fasetSelect.name + "不得超过" + maxNum + "个",
+                    icon: 'none',
+                    duration: 1500
+                  });
+                  canChange = false;
+                  return;
                 }
-              })
-            }
-          });
-        }
+                selectNums++;
+              }
+            })
+          }
+        });
         console.log("执行选中/取消选中",item.isSelect+'');
         canChange&&this.$set(item,"isSelect",!item.isSelect);
         console.log("执行选中/取消选中",item.isSelect+'');

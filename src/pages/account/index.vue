@@ -184,7 +184,7 @@
 
         <div class="flexBox pad-ver-sm ver-cen">
           <div class="flex8">
-            <img src="/static/img/account/line4.png" class="block" style="width: 40rpx;height: 40rpx;">
+            <img src="/static/img/account/icon_setting.png" class="block" style="width: 40rpx;height: 40rpx;">
           </div>
           <div class="flexAuto">
             <button class="ell none-button" open-type="openSetting">权限管理</button>

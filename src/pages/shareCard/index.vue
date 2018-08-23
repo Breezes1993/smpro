@@ -436,8 +436,9 @@ export default {
       // shareInfo.ticketList[1] = shareInfo.ticketList[0];
       shareInfo.ticketList.forEach((element, index) => {
         //绘制每一个礼券
-        ctx.setFontSize(12);
+        
         //绘制代金券
+        ctx.setFontSize(16);
         ctx.setFillStyle("#ED5759");
         ctx.fillText(
           element.name,
@@ -445,6 +446,7 @@ export default {
           canvasHeight + ticketHeight
         );
         ticketHeight = ticketHeight + 20;
+        ctx.setFontSize(12);
         //绘制描述
         ctx.setFillStyle("#7F7F7F");
         ctx.fillText(
@@ -459,8 +461,8 @@ export default {
           canvasHeight + ticketHeight,
           element.timeinfo,
           "#7F7F7F",
-          13,
-          topImgWith - 130 - 40,
+          12,
+          topImgWith - 110 - 40,
           40,
           false
         );
@@ -473,7 +475,7 @@ export default {
         console.log("按钮x",canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40))
         _this.roundRect(
           ctx,
-          topImgWith - 130 + 20,
+          topImgWith - 110 + 20,
           canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40),//当无换行需要向上移居中
           100,
           40,
@@ -486,7 +488,7 @@ export default {
         ctx.setFillStyle("#fff");
         ctx.fillText(
           "立即领取",
-          topImgWith - 130 + 20 + 25,
+          topImgWith - 110 + 20 + 25,
           canvasHeight + 25 + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40),
         );
         //绘制虚线
@@ -520,7 +522,7 @@ export default {
 
       //绘制小程序二维码  
       canvasHeight = canvasHeight + 10;
-      let qrImgWidth = 100;
+      let qrImgWidth = 150;
       if(pmRes[3].path){
         ctx.drawImage(pmRes[3].path,sysInfo.screenWidth /2-qrImgWidth/2,canvasHeight,qrImgWidth,qrImgWidth);
         canvasHeight = canvasHeight + qrImgWidth;

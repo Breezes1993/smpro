@@ -273,7 +273,7 @@
       }
     },
     created() {
-      console.log("store",store)
+      //console.log("store",store)
       let _this = this;
       wx.getLocation({
         type: 'gcj02',
@@ -287,18 +287,20 @@
       
       // return;
       let obj = {that:this,cb:_this.initCateFn}
-      console.log("先执行这里吗？",obj)
+      //console.log("先执行这里吗？",obj)
       store.commit('getUserInfoFn', obj);
     },
     onLoad(o) {
       let _this = this;
-      console.log("首页",o);
-      console.log("_this",_this);
+      //console.log("首页",o);
+      //console.log("_this",_this);
       _this.verifyCode = o.scene || -1;
     },
     onReachBottom() {
       let _this = this;
-      if (!_this.isEmpty) {
+      //console.log("进入onReachBottom",_this.isEmpty+"",_this.isLoading+"")
+      if (!_this.isEmpty&&!_this.isLoading) {
+        //console.log("执行")
         _this.curPage++;
         _this.initInfoFn();
       }
@@ -311,7 +313,7 @@
     },
     methods: {
       initInfoFn() {
-        console.log("initInfoFn");
+        //console.log("initInfoFn");
         let _this = this;
         _this.hasO = store.state.hasOpened;
         let o = {
@@ -351,7 +353,7 @@
         _this.isLoading = false;
       },
       initCateFn() {
-        console.log("initCateFn");
+        //console.log("initCateFn");
         let _this = this;
         let o = {
           url: Api.url_index_cate,
@@ -361,7 +363,7 @@
         store.commit('getInfo', o);
       },
       callBackCate(o) {
-        console.log("callBackCate",o);
+        //console.log("callBackCate",o);
         let _this = this;
         _this.cateArr = o.data;
         if (o.data.length > 0) {
@@ -371,7 +373,7 @@
         return _this.initBannerFn();
       },
       initBannerFn() {
-        console.log("initBannerFn");
+        //console.log("initBannerFn");
         let _this = this;
         let o = {
           url: Api.url_index_banner,
@@ -381,7 +383,7 @@
         store.commit('getInfo', o);
       },
       callBackBan(o) {
-        console.log("callBackBan");
+        //console.log("callBackBan");
         let _this = this;
         _this.imgArr = o.data;
         /*if (_this.verifyCode == -1) {
@@ -483,7 +485,7 @@
           delay: 0,
           transformOrigin: '50% 50% 0',
           success: function (res) {
-            console.log(res)
+            //console.log(res)
           }
         });
         setInterval(() => {
@@ -523,7 +525,7 @@
         return _this.initInfoFn();
       }*/
       powerDrawer: function(currentStatu) {
-        console.log("12312")
+        //console.log("12312")
         this.util(currentStatu)
       },
       util: function(currentStatu) {

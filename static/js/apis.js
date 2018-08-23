@@ -64,5 +64,6 @@ export default {
 
   url_fakeindex_load: '/home/program/recommend',
 
+  url_fastselect: '/home/program/shop_type'
 
 }

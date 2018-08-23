@@ -111,17 +111,26 @@ export default {
         }));
         promiseArray.push(
           new Promise((resolve, reject) => {
+            let isBack = false;
             wx.getImageInfo({
               src: shareInfo.qrCodeImg || "",
               success: function(res) {
                 console.log("获取二维码",res,shareInfo.qrCodeImg)
+                isBack = true;
                 resolve(res);
               },
               faile: function(msg) {
                 console.log("二维码失败", msg);
+                isBack = true;
                 reject(msg);
               }
             });
+            setTimeout(function(){
+              if(!isBack){
+                console.log("timeout")
+                resolve({});
+              }
+            },8000);
           })
         );
         Promise.all(promiseArray)
@@ -512,8 +521,10 @@ export default {
       //绘制小程序二维码  
       canvasHeight = canvasHeight + 10;
       let qrImgWidth = 100;
-      ctx.drawImage(pmRes[3].path,sysInfo.screenWidth /2-qrImgWidth/2,canvasHeight,qrImgWidth,qrImgWidth);
-      canvasHeight = canvasHeight + qrImgWidth;
+      if(pmRes[3].path){
+        ctx.drawImage(pmRes[3].path,sysInfo.screenWidth /2-qrImgWidth/2,canvasHeight,qrImgWidth,qrImgWidth);
+        canvasHeight = canvasHeight + qrImgWidth;
+      }
 
       //绘制小程序分享人头像
       let userImgWidth = 20;

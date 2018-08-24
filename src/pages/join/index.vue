@@ -106,7 +106,7 @@
 
       <div :class="'flexBox pad-ver-sm ver-cen ' + (pickerIndex===0?'b-b1':'')">
         <div class="flex25">
-          <p>所属分类:</p>
+          <p>所属行业:</p>
         </div>
         <div class="flexAuto">
           <picker @change="pickerChange" :value="pickerIndex" :range="typeArr" range-key="name">
@@ -118,8 +118,7 @@
       </div>
       <div :class="'bg-white flexBox pad-ver-xs ' + ((fsIndex+1)===fasetSelects.length?'':'b-b1')" 
         v-for="(fasetSelect,fsIndex) in fasetSelects" 
-        v-bind:key="fasetSelect.name+fsIndex"
-        v-if="pickerIndex===0">
+        v-bind:key="fasetSelect.name+fsIndex">
         <div class="pad-ver-xs" style="flex-shrink:0;">
           <p>{{fasetSelect.name}}:</p>
         </div>

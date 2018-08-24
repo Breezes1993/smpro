@@ -252,7 +252,7 @@
         }
         let name = _this.searchType==='01' ? _this.searchName : search;
         let name2 = _this.searchType==='01' ? search : _this.searchName;
-        let searchCondition = "?name=" + name + "&name2=" + name2 + "&from=" + _this.searchType;
+        let searchCondition = "?trading_area=" + name + "&industry=" + name2;
         let o = {
           // url: Api.url_index_near + "?name=" + search + "&from=" + _this.searchType
           url: Api.url_index_near + searchCondition

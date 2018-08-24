@@ -7,7 +7,7 @@ import defImg from '../../../static/img/defstore.png'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
-    debug: true,
+    debug: false,
     doMain: 'https://www.zhongxiangliquan.com/index.php',
     getSessionUrl: '/home/program/userinfo',
     userInfo: '',
@@ -35,20 +35,20 @@ const store = new Vuex.Store({
   },
   mutations: {
     getUserInfoFn(state, obj) {
-      console.log("getUserInfoFn");
+      (state.debug) ? console.log("getUserInfoFn") : '';
       let cb = obj.cb;
       let _this = this;
       let that = obj.that;
       
       if (_this.session_key) {
-        console.log("直接get",_this.session_key);
+        (state.debug) ? console.log("直接get",_this.session_key) : '';
         typeof cb == "function" && cb(_this.session_key)
       } else {
-        console.log("setting");
-        console.log(getApp());
+        (state.debug) ? console.log("setting") : '';
+        (state.debug) ? console.log(getApp()) : '';
         wx.getSetting({
           success: function(res){
-            console.log("setting,res",res)
+            (state.debug) ? console.log("setting,res",res) : '';
             if (res.authSetting['scope.userInfo']) {
               // 调用登录接口
               wx.getUserInfo({
@@ -76,11 +76,11 @@ const store = new Vuex.Store({
                   })
                 },
                 fail: info => {
-                  console.log("失败",info)
+                  (state.debug) ? console.log("失败",info) : '';
                 }
               });
             }else{
-              console.log("弹出确认用户信息界面！",that);
+              (state.debug) ? console.log("弹出确认用户信息界面！",that) : '';
               that.showModalStatus = true;
               
             }
@@ -89,11 +89,11 @@ const store = new Vuex.Store({
       }
     },
     getUserInfoBtn: (state, obj) => {
-      console.log(obj);
+      (state.debug) ? console.log(obj) : '';
       let e = obj.e;
       let cb = obj.cb;
       let info = e.target;
-      console.log("用户信息btn",e);
+      (state.debug) ? console.log("用户信息btn",e) : '';
       wx.login({
         success: res => {
           // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -114,7 +114,8 @@ const store = new Vuex.Store({
       })
     },
     getInfo: (state, o) => {
-      console.log("getInfo",o);
+      (state.debug) ? console.time('getInfo') : '';
+      (state.debug) ? console.log("getInfo",o) : '';
       let url = state.doMain;
       url = url + o.url;
       if (o.url.indexOf('?') != -1) {
@@ -131,7 +132,7 @@ const store = new Vuex.Store({
         success: function (res) {
           if (res.data) {
             let got = JSON.parse(res.data);
-            console.log(got);
+            (state.debug) ? console.log(got) : '';
             if (o.noStatus) {
               return o.cb(got,o.resolve);
             } else {
@@ -156,10 +157,11 @@ const store = new Vuex.Store({
             }
           }
         }
-      })
+      });
+      (state.debug) ? console.timeEnd('getInfo') : '';
     },
     reqInfo: (state, o) => {
-      console.log("reqInfo",o);
+      (state.debug) ? console.log("reqInfo",o) : '';
       if (o.mask) {
         wx.showLoading({mask: true});
       }
@@ -168,7 +170,7 @@ const store = new Vuex.Store({
         d.openid = state.openId;
         d.session_key = state.session_key;
       }
-      console.log("reqInfoData",d);
+      (state.debug) ? console.log("reqInfoData",d) : '';
       wx.request({
         url: state.doMain + o.url,
         data: d,

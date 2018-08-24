@@ -382,7 +382,7 @@ export default {
           canvasHeight,
           "地址：" + shareInfo.storeInfo.address,
           "#7F7F7F",
-          16,
+          14,
           topImgWith - 40,
           20,
           true,
@@ -403,7 +403,7 @@ export default {
           canvasHeight,
           business,
           "#7F7F7F",
-          16,
+          14,
           topImgWith - 40,
           20,
           true,
@@ -419,7 +419,7 @@ export default {
           canvasHeight,
           telphone,
           "#7F7F7F",
-          16,
+          14,
           topImgWith - 60,
           20,
           true,
@@ -448,21 +448,32 @@ export default {
         ticketHeight = ticketHeight + 20;
         ctx.setFontSize(12);
         //绘制描述
-        ctx.setFillStyle("#7F7F7F");
-        ctx.fillText(
-          element.describe,
-          40, //+20表示左边的marigin
-          canvasHeight + ticketHeight
+        // ctx.setFillStyle("#7F7F7F");
+        // ctx.fillText(
+        //   "使用条件："+element.describe,
+        //   40, //+20表示左边的marigin
+        //   canvasHeight + ticketHeight
+        // );
+        // ticketHeight = ticketHeight + 20;
+        ticketHeight = ticketHeight + _this.mFillText(
+          ctx,
+          canvasHeight + ticketHeight,
+          "使用条件："+element.describe,
+          "#7F7F7F",
+          14,
+          topImgWith - 100 - 40,
+          40,
+          false
         );
-        ticketHeight = ticketHeight + 20;
+        
         //绘制有效期
         let ticketTextHeight = _this.mFillText(
           ctx,
           canvasHeight + ticketHeight,
           element.timeinfo,
           "#7F7F7F",
-          12,
-          topImgWith - 110 - 40,
+          14,
+          topImgWith - 100 - 40,
           40,
           false
         );
@@ -475,20 +486,20 @@ export default {
         console.log("按钮x",canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40))
         _this.roundRect(
           ctx,
-          topImgWith - 110 + 20,
+          topImgWith - 100 + 20,
           canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40),//当无换行需要向上移居中
-          100,
+          80,
           40,
           0,
           "#ED5759",
           "#ED5759"
         );
         //绘制领取按钮文字
-        ctx.setFontSize(13);
+        ctx.setFontSize(12);
         ctx.setFillStyle("#fff");
         ctx.fillText(
           "立即领取",
-          topImgWith - 110 + 20 + 25,
+          topImgWith - 100 + 20 + 17,
           canvasHeight + 25 + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40),
         );
         //绘制虚线
@@ -528,18 +539,20 @@ export default {
         canvasHeight = canvasHeight + qrImgWidth;
       }
 
+      canvasHeight = canvasHeight + 20;
       //绘制小程序分享人头像
-      let userImgWidth = 20;
+      let userImgWidth = 30;
       let bottomText = store.state.userInfo.nickName + " 为你推荐好店";
+      ctx.setFontSize(16)
       let bottomTextWidth = ctx.measureText(bottomText).width;
-      ctx.drawImage(pmRes[2].path||"",(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2,canvasHeight+5,userImgWidth,userImgWidth);
+      ctx.drawImage(pmRes[2].path||"",(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2,canvasHeight+10,userImgWidth,userImgWidth);
       canvasHeight = canvasHeight + userImgWidth;
 
 
       //绘制小程序分享人名称
       ctx.setFillStyle("#7F7F7F");
       ctx.fillText(bottomText,(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2+userImgWidth+10,canvasHeight);
-      canvasHeight = canvasHeight + 30;
+      canvasHeight = canvasHeight + 60;
       return canvasHeight;
     },
     saveImage: function(){

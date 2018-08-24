@@ -1,6 +1,7 @@
 <template>
   <div>
 
+    
     <div class="pad-sm bg-white">
       <div class="flexBox text-sm">
         <div class="flexAuto">
@@ -121,13 +122,14 @@
     </div>
 
     <div class="pad-bottom-sm">
-      <div class="bg-white text-sm">
+      <scroll-view enable-back-to-top="true" @scrolltolower="scrolltolower" @scroll="scroll" class="bg-white text-sm">
 
         <div class="pad-sm b-b1" v-for="(item,index) in storeArr" @click="toStore(item.id)" :key="index"
              :wx:key="index"><!-- v-show="item.category==curCate"-->
           <div class="flexBox">
             <div class="flex25">
               <div class="posReal">
+                <!-- <img :src="item.logo" class="block" style="width: 170rpx;height: 170rpx;" @error="setDefImg(index)"> -->
                 <img :src="item.logo" class="block" style="width: 170rpx;height: 170rpx;" @error="setDefImg(index)">
 
                 <img src="/static/img/ossmHead.png" style="width: 150rpx;height: 150rpx;" class="ossmhead block" v-if="item.top>0">
@@ -197,7 +199,7 @@
           </div>
         </div>
 
-      </div>
+      </scroll-view>
 
       <div class="te-cen" v-show="isLoading">
         <div class="pad-ver-xs bg-white">
@@ -296,14 +298,22 @@
       //console.log("_this",_this);
       _this.verifyCode = o.scene || -1;
     },
+    onPageScroll(res){
+      // console.log("onPageScroll",res)
+    },
     onReachBottom() {
+      console.log('----------------------');
+      console.log('onReachBottom');
       let _this = this;
       //console.log("进入onReachBottom",_this.isEmpty+"",_this.isLoading+"")
       if (!_this.isEmpty&&!_this.isLoading) {
+        console.log('进入');
+        _this.isLoading = true;
         //console.log("执行")
         _this.curPage++;
         _this.initInfoFn();
       }
+      console.log('onReachBottom');
     },
     mounted() {
       this.$nextTick(() => {
@@ -312,7 +322,23 @@
       })
     },
     methods: {
+      scroll(){console.log("sda")},
+      scrolltolower(){
+        console.log('-------scroll--------');
+        console.log('onReachBottom');
+        let _this = this;
+        //console.log("进入onReachBottom",_this.isEmpty+"",_this.isLoading+"")
+        if (!_this.isEmpty&&!_this.isLoading) {
+          console.log('进入');
+          _this.isLoading = true;
+          //console.log("执行")
+          _this.curPage++;
+          _this.initInfoFn();
+        }
+        console.log('onReachBottom');
+      },
       initInfoFn() {
+        console.log('initInfoFn');
         //console.log("initInfoFn");
         let _this = this;
         _this.hasO = store.state.hasOpened;
@@ -328,10 +354,14 @@
           cb: _this.callBackInit,
           noStatus: true
         };
-        _this.isLoading = true;
-        store.commit('reqInfo', o);
+        setTimeout(function(){
+          store.commit('reqInfo', o);
+        },500)
+        
+        console.log('initInfoFn');
       },
       callBackInit(o) {
+        console.log('callBackInit');
         let _this = this;
         switch (o.status) {
           case 1:
@@ -351,6 +381,7 @@
             break;
         }
         _this.isLoading = false;
+        console.log('callBackInit');
       },
       initCateFn() {
         //console.log("initCateFn");
@@ -558,7 +589,7 @@
           if (currentStatu == "close") {
               this.showModalStatus = false;
           }
-        }.bind(this), 200)
+        }.bind(this), 0)
 
         // 显示
         if (currentStatu == "open") {

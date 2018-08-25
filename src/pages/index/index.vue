@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <scroll-view scroll-y="true"  :style="'height: '+screenHeight+'px'" enable-back-to-top="true" lower-threshold="100" @scrolltolower="scrolltolower">
 
     
     <div class="pad-sm bg-white">
@@ -122,7 +122,7 @@
     </div>
 
     <div class="pad-bottom-sm">
-      <scroll-view enable-back-to-top="true" @scrolltolower="scrolltolower" @scroll="scroll" class="bg-white text-sm">
+      <div class="bg-white text-sm">
 
         <div class="pad-sm b-b1" v-for="(item,index) in storeArr" @click="toStore(item.id)" :key="index"
              :wx:key="index"><!-- v-show="item.category==curCate"-->
@@ -163,13 +163,13 @@
                     <img src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
                          v-if="item.evaluate==5">
                     <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                         v-if="item.evaluate>=1.1&&item.evaluate<2">
+                         v-else-if="item.evaluate>=1.1&&item.evaluate<2">
                     <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                         v-if="item.evaluate>=2.1&&item.evaluate<3">
+                         v-else-if="item.evaluate>=2.1&&item.evaluate<3">
                     <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                         v-if="item.evaluate>=3.1&&item.evaluate<4">
+                         v-else-if="item.evaluate>=3.1&&item.evaluate<4">
                     <img src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;"
-                         v-if="item.evaluate>=4.1&&item.evaluate<5">
+                         v-else-if="item.evaluate>=4.1&&item.evaluate<5">
                     <span class="text-warning ver-mid pad-left-xs">{{item.evaluate}}分</span>
                   </div>
                   <div class="flexAuto te-right">
@@ -183,8 +183,8 @@
                 <div class="flexBox ver-cen pad-top-xs" v-if="item.typefrom>0">
                   <div class="flex8">
                     <p class="btn btn-danger btn-lit btn-radius" v-if="item.typefrom==1">金</p>
-                    <p class="btn btn-waring btn-lit btn-radius" v-if="item.typefrom==2">折</p>
-                    <p class="btn btn-waring btn-lit btn-radius" v-if="item.typefrom==3">通</p>
+                    <p class="btn btn-waring btn-lit btn-radius" v-else-if="item.typefrom==2">折</p>
+                    <p class="btn btn-waring btn-lit btn-radius" v-else-if="item.typefrom==3">通</p>
                   </div>
                   <div class="flexAuto">
                     <p class="pad-left-xs ell">{{item.quanname}}</p>
@@ -198,8 +198,7 @@
             </div>
           </div>
         </div>
-
-      </scroll-view>
+      </div>
 
       <div class="te-cen" v-show="isLoading">
         <div class="pad-ver-xs bg-white">
@@ -234,7 +233,7 @@
         <button @click="canUse" @getuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
       </div>
     </div>
-  </div>
+  </scroll-view>
 </template>
 
 <script>
@@ -258,6 +257,7 @@
           la: 24.490659
         },
         storeArr: [],
+        storeArr2: [],
         curPage: 1,
         isEmpty: false,
         cateArr: [],
@@ -265,7 +265,8 @@
         showCate: '',
         hasO: 1,
         verifyCode: -1,
-        showModalStatus: false
+        showModalStatus: false,
+        screenHeight: 800
       }
     },
     onShareAppMessage: function (res) {
@@ -294,6 +295,8 @@
     },
     onLoad(o) {
       let _this = this;
+      var sysInfo = wx.getSystemInfoSync();
+      this.screenHeight = sysInfo.screenHeight;
       //console.log("首页",o);
       //console.log("_this",_this);
       _this.verifyCode = o.scene || -1;
@@ -302,6 +305,7 @@
       // console.log("onPageScroll",res)
     },
     onReachBottom() {
+      return;
       console.log('----------------------');
       console.log('onReachBottom');
       let _this = this;
@@ -322,7 +326,6 @@
       })
     },
     methods: {
-      scroll(){console.log("sda")},
       scrolltolower(){
         console.log('-------scroll--------');
         console.log('onReachBottom');
@@ -371,8 +374,26 @@
               num = parseFloat(num).toFixed(2);
               num = (num > 1000) ? (num / 1000).toFixed(2) + 'km' : parseInt(num) + 'm';
               arr[i].disShow = num;
-              _this.storeArr.push(arr[i])
+              delete arr[i].distance;
+              delete arr[i].latitude;
+              delete arr[i].longitude;
+              delete arr[i].category;
+              delete arr[i].describe;
+              // delete arr[i].address;
+              // delete arr[i].disShow;
+              // delete arr[i].evaluate;
+              // delete arr[i].id;
+              // delete arr[i].logo;
+              // delete arr[i].name;
+              // delete arr[i].popularity;
+              // delete arr[i].quanname;
+              // delete arr[i].telphone;
+              // delete arr[i].top;
+              // delete arr[i].typefrom;
+              // _this.storeArr.push(JSON.parse(JSON.stringify(arr[i])));
             }
+            _this.storeArr.splice(_this.storeArr.length,0,...arr);
+            _this.storeArr = JSON.parse(JSON.stringify(_this.storeArr));
             _this.isEmpty = (arr.length === 0);
             _this.curAddress = o.address;
             break;
@@ -438,7 +459,7 @@
         _this.curTab = tab;
         _this.curPage = 1;
         _this.isEmpty = false;
-        _this.storeArr = [];
+        _this.storeArr = []
         _this.initInfoFn();
       },
       initJoinNews() {

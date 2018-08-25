@@ -114,7 +114,6 @@ const store = new Vuex.Store({
       })
     },
     getInfo: (state, o) => {
-      (state.debug) ? console.time('getInfo') : '';
       (state.debug) ? console.log("getInfo",o) : '';
       let url = state.doMain;
       url = url + o.url;
@@ -166,7 +165,6 @@ const store = new Vuex.Store({
           }
         }
       });
-      (state.debug) ? console.timeEnd('getInfo') : '';
     },
     reqInfo: (state, o) => {
       (state.debug) ? console.log("reqInfo",o) : '';

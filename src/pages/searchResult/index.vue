@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div class="pad-hov-sm pad-ver-xs bg-white text-Bolder text-lg pad-bottom-m">{{searchName}}</div>
+    <div class="pad-hov-sm pad-ver-xs bg-white text-Bolder text-lg pad-bottom-m">{{searchName||'不限'}}</div>
 
     <div class="bg-white text-sm posReal" style="margin-top:30rpx;" 
       v-for="(fasetSelect,fsIndex) in fasetSelects" 
@@ -96,7 +96,12 @@
 
     </div>
 
-
+    <div class="pad-top-big" v-if="resultArr.length==0">
+      <div>
+        <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
+      </div>
+      <p class="pad-top-lg te-cen text-999">暂无此{{name}}店铺</p>
+    </div>
   </div>
 </template>
 
@@ -116,45 +121,47 @@
 
         searchType: '01',
         searchName: "",
-        fasetSelects: [{
-          name: "商圈",
-          type: "01",
-          items:[{
-            itemName: "不限"
-          },{
-            itemName: "SM城市"
-          },{
-            itemName: "中山路"
-          },{
-            itemName: "中华城"
-          },{
-            itemName: "沙坡尾"
-          },{
-            itemName: "火车站"
-          },{
-            itemName: "排挡"
-          },]
-        },{
-          name: "行业",
-          type: "02",
-          items:[{
-            itemName: "不限"
-          },{
-            itemName: "SM城市"
-          },{
-            itemName: "中山路"
-          },{
-            itemName: "中华城"
-          },{
-            itemName: "沙坡尾"
-          },{
-            itemName: "火车站"
-          },{
-            itemName: "排挡"
-          },{
-            itemName: "香港"
-          },]
-        }]
+        name:"",
+        fasetSelects: []
+        // [{
+        //   name: "商圈",
+        //   type: "01",
+        //   items:[{
+        //     itemName: "不限"
+        //   },{
+        //     itemName: "SM城市"
+        //   },{
+        //     itemName: "中山路"
+        //   },{
+        //     itemName: "中华城"
+        //   },{
+        //     itemName: "沙坡尾"
+        //   },{
+        //     itemName: "火车站"
+        //   },{
+        //     itemName: "排挡"
+        //   },]
+        // },{
+        //   name: "行业",
+        //   type: "02",
+        //   items:[{
+        //     itemName: "不限"
+        //   },{
+        //     itemName: "SM城市"
+        //   },{
+        //     itemName: "中山路"
+        //   },{
+        //     itemName: "中华城"
+        //   },{
+        //     itemName: "沙坡尾"
+        //   },{
+        //     itemName: "火车站"
+        //   },{
+        //     itemName: "排挡"
+        //   },{
+        //     itemName: "香港"
+        //   },]
+        // }]
       }
     },
     onLoad(o) {
@@ -162,6 +169,8 @@
       if(!o){
         return;
       }
+      this.lastInp='';
+      this.searchInp='';
       this.resultArr = [];
       if(o.searchType){
         this.searchType = o.searchType;
@@ -169,6 +178,7 @@
       if(o.searchName) {
         this.searchName = o.searchName;
       }
+      this.name = o.name;
       this.subSearchFn();
 
     },
@@ -241,11 +251,14 @@
         return _this.subSearchFn();
       },
       subSearchFn(searchName) {
-        console.log("subSearchFn",searchName)
-        let kw = searchName;
+        wx.showLoading({mask: false});
         let _this = this;
+        searchName = searchName === '不限' ? '' : searchName;
+        _this.searchName = _this.searchName === '不限' ? '' : _this.searchName;
+        console.log("subSearchFn",searchName);
+        let kw = searchName;
         let search = "";
-        if (kw) {
+        if (kw||kw==='') {
           search = kw;
           // _this.searchName = kw;
           _this.searchInp = kw;
@@ -260,7 +273,8 @@
           + "&latitude=" + store.state.tempObj.tempLola.latitude
           + "&page=" + _this.curPage,
           data: {},
-          cb: _this.callBackSearch
+          cb: _this.callBackSearch,
+          hideAlert: true
         };
 
         if (_this.lastInp != _this.searchInp || !_this.searchInp) {
@@ -286,6 +300,7 @@
         }
         _this.lastInp = _this.searchInp;
         _this.isEmpty = (o.data.length < 5);
+        wx.hideLoading();
       },
       toStore(id) {
         wx.navigateTo({
@@ -310,7 +325,7 @@
       fastCallBack(res){
         console.log("获取faseselect",res);
         res.data.fasetSelects.forEach(element=>{
-          element.items.push({itemName:"不限"});
+          element.items.splice(0,0,{itemName:"不限",isSelect: true});
         });
         this.$set(this,"fasetSelects",res.data.fasetSelects);
       },

@@ -7,7 +7,7 @@ import defImg from '../../../static/img/defstore.png'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
-    debug: false,
+    debug: true,
     doMain: 'https://www.zhongxiangliquan.com/index.php',
     getSessionUrl: '/home/program/userinfo',
     userInfo: '',
@@ -131,7 +131,14 @@ const store = new Vuex.Store({
         header: {"Content-Type": "application/x-www-form-urlencoded"},
         success: function (res) {
           if (res.data) {
-            let got = JSON.parse(res.data);
+            let got=''
+            try{
+              got = JSON.parse(res.data);
+            }catch(msg){
+              console.log(msg)
+              got = {};
+              got.msg = res.statusCode + '';
+            }
             (state.debug) ? console.log(got) : '';
             if (o.noStatus) {
               return o.cb(got,o.resolve);
@@ -152,6 +159,7 @@ const store = new Vuex.Store({
                       }
                     });
                   }
+                  wx.hideLoading();
                   break;
               }
             }

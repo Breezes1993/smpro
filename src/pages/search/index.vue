@@ -27,7 +27,7 @@
         <p style="margin-left:10rpx;">{{fasetSelect.name}}</p>
       </div>
       <div class="flexBox changeLine pad-ver-xs pad-hov-xs">
-        <span @click="clickItem(fasetSelect.type,item.itemName)" class="fs-item" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
+        <span @click="clickItem(fasetSelect,item.itemName)" class="fs-item" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
       </div>
     </div>
     <div class="bg-white text-sm" v-show="showResult">
@@ -112,6 +112,12 @@
         </div>
       </div>
 
+    </div>
+    <div class="pad-top-big" v-if="resultArr.length==0&&showResult">
+      <div>
+        <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
+      </div>
+      <p class="pad-top-lg te-cen text-999">暂无此{{name}}店铺</p>
     </div>
   </div>
 </template>
@@ -260,7 +266,8 @@
           + "&latitude=" + store.state.tempObj.tempLola.latitude
           + "&page=" + _this.curPage,
           data: {},
-          cb: _this.callBackSearch
+          cb: _this.callBackSearch,
+          hideAlert: true
         };
 
         if (_this.lastInp != _this.searchInp) {
@@ -296,9 +303,11 @@
       },
 
 
-      clickItem(type,searchName){
+      clickItem(fasetSelect,searchName){
+        let type = fasetSelect.type;
+        let name = fasetSelect.name;
         wx.navigateTo({
-          url: "/pages/searchResult/main" + '?searchName=' + searchName + '&searchType=' + type
+          url: "/pages/searchResult/main" + '?searchName=' + searchName + '&searchType=' + type + '&name=' + name
         });
       },
       initFastSelect() {
@@ -312,7 +321,7 @@
       fastCallBack(res){
         console.log("获取faseselect",res);
         res.data.fasetSelects.forEach(element=>{
-          element.items.push({itemName:"不限"});
+          element.items.splice(0,0,{itemName:"不限"});
         });
         this.$set(this,"fasetSelects",res.data.fasetSelects);
       }

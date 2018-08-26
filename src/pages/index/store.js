@@ -7,7 +7,7 @@ import defImg from '../../../static/img/defstore.png'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
-    debug: true,
+    debug: false,
     doMain: 'https://www.zhongxiangliquan.com/index.php',
     getSessionUrl: '/home/program/userinfo',
     userInfo: '',

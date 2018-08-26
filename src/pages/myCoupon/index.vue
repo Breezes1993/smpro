@@ -166,6 +166,10 @@
       }
     },
     onShow() {
+      console.log("替换store");
+      if(Number(store.state.session_key)===1||Number(store.state.openId)===1){
+        store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
+      }
       this.initCpFn();
     },
     methods: {

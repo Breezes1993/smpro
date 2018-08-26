@@ -90,9 +90,16 @@
         tempArr: {}
       }
     },
-    onLoad() {
+    mounted(){
+      console.log("替换store",JSON.stringify(store.state),JSON.stringify(getApp().globalData.store.state));
+      if(Number(store.state.session_key)===1||Number(store.state.openId)===1){
+        store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
+      }
       let _this = this;
       _this.initInfoFn();
+    },
+    onLoad() {
+
     },
     onReachBottom() {
       let _this = this;

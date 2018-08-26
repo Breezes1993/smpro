@@ -185,6 +185,10 @@
     },
     mounted() {
       this.$nextTick(() => {
+        console.log("替换store",JSON.stringify(store.state),JSON.stringify(getApp().globalData.store.state));
+        if(Number(store.state.session_key)===1||Number(store.state.openId)===1){
+          store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
+        }
         this.initHis();
         this.initFastSelect();
       })
@@ -320,9 +324,9 @@
       },
       fastCallBack(res){
         console.log("获取faseselect",res);
-        res.data.fasetSelects.forEach(element=>{
-          element.items.splice(0,0,{itemName:"不限"});
-        });
+        // res.data.fasetSelects.forEach(element=>{
+        //   element.items.splice(0,0,{itemName:"不限"});
+        // });
         this.$set(this,"fasetSelects",res.data.fasetSelects);
       }
     }

@@ -44,7 +44,7 @@ export default {
     drawCanvas: function() {
       console.log(this);
       wx.showLoading({
-        title: '卡片生成中',
+        title: '海报生成中',
       });
       let _this = this;
       let canvasHeight = 40;
@@ -135,11 +135,11 @@ export default {
         );
         Promise.all(promiseArray)
           .then(function(pmRes) {
-            let roundRectHeight = _this.mDrawCanvas(pmRes,ctx);
+            let roundRectHeight = _this.mDrawCanvas(pmRes,ctx,false);
             _this.canvasHeight = (roundRectHeight+40) + "px";
             ctx.clearRect(10, 10, sysInfo.screenWidth, roundRectHeight)
             _this.roundRect(ctx, 10, 10, sysInfo.screenWidth - 20, roundRectHeight, 10);
-            _this.mDrawCanvas(pmRes,ctx);
+            _this.mDrawCanvas(pmRes,ctx,true);
             ctx.draw(true, function() {
               console.log("绘制图形");
             });
@@ -275,7 +275,8 @@ export default {
       measureWidth,
       textX,
       isCenter,
-      centerWidth
+      centerWidth,
+      canDraw
     ) {
       let addHeight = 0;
       //"地址：" + shareInfo.storeInfo.address,"#7F7F7F",16,topImgWith - 40,(topImgWith - ctx.measureText(element).width) / 2 + 20
@@ -284,7 +285,7 @@ export default {
       ctx.setFontSize(fontSize);
       let textRow = this.canvasTextChangeLine(ctx, text, measureWidth);
       textRow.forEach((element, indx) => {
-        ctx.fillText(
+        canDraw&&ctx.fillText(
           element,
           isCenter === true
             ? (centerWidth - ctx.measureText(element).width) / 2 + textX
@@ -312,7 +313,7 @@ export default {
       row.push(temp);
       return row;
     },
-    mDrawCanvas: function(pmRes,ctx){
+    mDrawCanvas: function(pmRes,ctx,canDraw){
       let _this = this;
       let canvasHeight = 40;
       var sysInfo = wx.getSystemInfoSync();
@@ -326,7 +327,7 @@ export default {
       topImgHeight = res.height / scalVal;
       canvasHeight = canvasHeight + topImgHeight;
       console.log("canvasHeight", canvasHeight);
-      ctx.drawImage(res.path, 20, 20, topImgWith, res.height / scalVal);
+      canDraw&&ctx.drawImage(res.path, 20, 20, topImgWith, res.height / scalVal);
       // let scalVal = res.width / topImgWith;
       // topImgHeight = 220;
       // let topImgRealHeight = res.height / scalVal;
@@ -340,16 +341,17 @@ export default {
       // ctx.restore();
       
       //绘制空白圆形区域
-      let arcPointX = 20 + topImgWith / 2;
-      let arcPointY = 20 + topImgHeight;
-      ctx.beginPath();
-      ctx.arc(arcPointX, arcPointY, 45, 0, 2 * Math.PI);
-      ctx.setFillStyle("#fff");
-      ctx.fill();
-      ctx.closePath();
-
-      //绘制圆形logo
-      _this.roundImg(ctx, 86, 86, arcPointX, arcPointY, pmRes[1].path);
+      if(canDraw){
+        let arcPointX = 20 + topImgWith / 2;
+        let arcPointY = 20 + topImgHeight;
+        ctx.beginPath();
+        ctx.arc(arcPointX, arcPointY, 45, 0, 2 * Math.PI);
+        ctx.setFillStyle("#fff");
+        ctx.fill();
+        ctx.closePath();
+        //绘制圆形logo
+        _this.roundImg(ctx, 86, 86, arcPointX, arcPointY, pmRes[1].path);
+      }
       canvasHeight = canvasHeight + 86 / 2;
       console.log("canvasHeight", canvasHeight);
 
@@ -357,7 +359,7 @@ export default {
       console.log("canvasHeight", canvasHeight);
       ctx.fillStyle = "#000";
       ctx.setFontSize(18);
-      ctx.fillText(
+      canDraw&&ctx.fillText(
         shareInfo.storeInfo.name,
         (topImgWith - ctx.measureText(shareInfo.storeInfo.name).width) /
           2 +
@@ -365,7 +367,7 @@ export default {
           0.5, //+20表示左边的marigin
         canvasHeight
       );
-      ctx.fillText(
+      canDraw&&ctx.fillText(
         shareInfo.storeInfo.name,
         (topImgWith - ctx.measureText(shareInfo.storeInfo.name).width) /
           2 +
@@ -386,7 +388,8 @@ export default {
           topImgWith - 40,
           20,
           true,
-          topImgWith
+          topImgWith,
+          canDraw
         );
 
       //绘制营业时间
@@ -407,7 +410,8 @@ export default {
           topImgWith - 40,
           20,
           true,
-          topImgWith
+          topImgWith,
+          canDraw
         );
 
       //绘制电话
@@ -423,7 +427,8 @@ export default {
           topImgWith - 60,
           20,
           true,
-          topImgWith
+          topImgWith,
+          canDraw
         );
 
       //代金券
@@ -438,15 +443,15 @@ export default {
         //绘制每一个礼券
         
         //绘制代金券
-        ctx.setFontSize(16);
-        ctx.setFillStyle("#ED5759");
-        ctx.fillText(
+        canDraw&&ctx.setFontSize(16);
+        canDraw&&ctx.setFillStyle("#ED5759");
+        canDraw&&ctx.fillText(
           element.name,
           40, //+20表示左边的marigin
           canvasHeight + ticketHeight
         );
         ticketHeight = ticketHeight + 20;
-        ctx.setFontSize(12);
+        canDraw&&ctx.setFontSize(12);
         //绘制描述
         // ctx.setFillStyle("#7F7F7F");
         // ctx.fillText(
@@ -460,10 +465,12 @@ export default {
           canvasHeight + ticketHeight,
           "使用条件："+element.describe,
           "#7F7F7F",
-          14,
+          13,
           topImgWith - 100 - 40,
           40,
-          false
+          false,
+          "",
+          canDraw
         );
         
         //绘制有效期
@@ -472,10 +479,12 @@ export default {
           canvasHeight + ticketHeight,
           element.timeinfo,
           "#7F7F7F",
-          14,
+          13,
           topImgWith - 100 - 40,
           40,
-          false
+          false,
+          "",
+          canDraw
         );
         ticketHeight =
           ticketHeight +
@@ -484,10 +493,10 @@ export default {
         console.log((ticketTextHeight<30?30:ticketTextHeight)+40)
         //绘制领取按钮
         console.log("按钮x",canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40))
-        _this.roundRect(
+        canDraw&&_this.roundRect(
           ctx,
           topImgWith - 100 + 20,
-          canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40),//当无换行需要向上移居中
+          canvasHeight + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+35),//当无换行需要向上移居中
           80,
           40,
           0,
@@ -495,28 +504,28 @@ export default {
           "#ED5759"
         );
         //绘制领取按钮文字
-        ctx.setFontSize(12);
-        ctx.setFillStyle("#fff");
-        ctx.fillText(
+        canDraw&&ctx.setFontSize(12);
+        canDraw&&ctx.setFillStyle("#fff");
+        canDraw&&ctx.fillText(
           "立即领取",
           topImgWith - 100 + 20 + 17,
-          canvasHeight + 25 + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+40),
+          canvasHeight + 25 + ticketHeight - ((ticketTextHeight<30?ticketTextHeight*1.5:ticketTextHeight)+35),
         );
         //绘制虚线
         if(shareInfo.ticketList.length!==(index+1)){
-          _this.drawDashedLine(
+          canDraw&&_this.drawDashedLine(
             ctx,
             40,
-            canvasHeight + ticketHeight - 10,
-            topImgWith - 40,
-            canvasHeight + ticketHeight - 10,
+            canvasHeight + ticketHeight - 5,
+            topImgWith,
+            canvasHeight + ticketHeight - 5,
             2
           );
-          ticketHeight = ticketHeight + 10;
+          ticketHeight = ticketHeight + 20;
         }
       });
       if(shareInfo.ticketList.length>0){
-        _this.roundRect(
+        canDraw&&_this.roundRect(
           ctx,
           20,
           ticketRoundHeight,
@@ -532,27 +541,27 @@ export default {
       }
 
       //绘制小程序二维码  
-      canvasHeight = canvasHeight + 10;
-      let qrImgWidth = 150;
+      canvasHeight = canvasHeight + 22;
+      let qrImgWidth = sysInfo.screenWidth*0.55;
       if(pmRes[3].path){
-        ctx.drawImage(pmRes[3].path,sysInfo.screenWidth /2-qrImgWidth/2,canvasHeight,qrImgWidth,qrImgWidth);
+        canDraw&&ctx.drawImage(pmRes[3].path,sysInfo.screenWidth /2-qrImgWidth/2,canvasHeight,qrImgWidth,qrImgWidth);
         canvasHeight = canvasHeight + qrImgWidth;
       }
 
-      canvasHeight = canvasHeight + 20;
+      canvasHeight = canvasHeight + 12;
       //绘制小程序分享人头像
       let userImgWidth = 30;
       let bottomText = store.state.userInfo.nickName + " 为你推荐好店";
-      ctx.setFontSize(16)
+      canDraw&&ctx.setFontSize(16)
       let bottomTextWidth = ctx.measureText(bottomText).width;
-      ctx.drawImage(pmRes[2].path||"",(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2,canvasHeight+10,userImgWidth,userImgWidth);
+      canDraw&&ctx.drawImage(pmRes[2].path||"",(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2,canvasHeight+10,userImgWidth,userImgWidth);
       canvasHeight = canvasHeight + userImgWidth;
 
 
       //绘制小程序分享人名称
-      ctx.setFillStyle("#7F7F7F");
-      ctx.fillText(bottomText,(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2+userImgWidth+10,canvasHeight);
-      canvasHeight = canvasHeight + 60;
+      canDraw&&ctx.setFillStyle("#7F7F7F");
+      canDraw&&ctx.fillText(bottomText,(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2+userImgWidth+10,canvasHeight);
+      canvasHeight = canvasHeight + 20;
       return canvasHeight;
     },
     saveImage: function(){

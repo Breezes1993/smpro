@@ -300,6 +300,10 @@
       //console.log("首页",o);
       //console.log("_this",_this);
       _this.verifyCode = o.scene || -1;
+      getApp().globalData.store = store;
+      wx.navigateTo({
+        url: "/pages/index2/index2"
+      })
     },
     onPageScroll(res){
       // console.log("onPageScroll",res)

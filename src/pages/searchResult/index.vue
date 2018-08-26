@@ -3,14 +3,14 @@
 
     <div class="pad-hov-sm pad-ver-xs bg-white text-Bolder text-lg pad-bottom-m">{{searchName||'不限'}}</div>
 
-    <div class="bg-white text-sm posReal" style="margin-top:30rpx;" 
+    <scroll-view scroll-x="true"  class="bg-white text-sm posReal" style="margin-top:30rpx;" 
       v-for="(fasetSelect,fsIndex) in fasetSelects" 
       v-bind:key="fasetSelect.name+fsIndex"
       v-if="fasetSelect.type !== searchType">
       <div class="flexBox pad-ver-xs pad-hov-xs" style="overflow-x: auto;">
         <span @click="clickItem(item)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" style="color:#000;flex-shrink:0;" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
       </div>
-    </div>
+    </scroll-view>
 
     <div class="bg-white text-sm">
 
@@ -100,7 +100,8 @@
       <div>
         <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
       </div>
-      <p class="pad-top-lg te-cen text-999">暂无此{{name}}店铺</p>
+      <p class="pad-top-lg te-cen text-999">{{searchType==='01'?(clickName==='不限'?'':'此分类')+'暂无'+searchName+'店铺入驻':(clickName==='不限'?'':'此商圈')+'暂无'+searchName+'店铺入驻'}}</p>
+      <!-- <p class="pad-top-lg te-cen text-999">{{'此'+name+'暂无'+searchName+'店铺入驻'}}</p> -->
     </div>
   </div>
 </template>
@@ -121,6 +122,7 @@
 
         searchType: '01',
         searchName: "",
+        clickName: "不限",
         name:"",
         fasetSelects: []
         // [{
@@ -331,6 +333,7 @@
       },
       clickItem(item){
         let name = item.itemName;
+        this.clickName = name;
         console.log(JSON.stringify(this.fasetSelects))
         this.fasetSelects.forEach(element=>{
           element.items.forEach(elementItem=>{

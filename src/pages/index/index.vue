@@ -302,7 +302,7 @@
       _this.verifyCode = o.scene || -1;
       getApp().globalData.store = store;
       wx.navigateTo({
-        url: "/pages/index2/index2"
+        url: "/pages/index/main"
       })
     },
     onPageScroll(res){

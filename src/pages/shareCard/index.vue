@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas canvasId="mycamvas" :style="';width:100%;height:'+canvasHeight+';'"></canvas>
+    <canvas canvasId="mycamvas" :style="'width:100%;height:'+canvasHeight+';'"></canvas>
     <!-- <img v-if="!tempFilePath" :style="'width:100%;height:'+canvasHeight" :src="tempFilePath"/> -->
     <div style="width:100%;height:128rpx;"></div>
     <cover-view class="save-image">
@@ -164,6 +164,8 @@ export default {
             let roundRectHeight = _this.mDrawCanvas(pmRes,ctx,false);
             _this.canvasHeight = (roundRectHeight+40) + "px";
             // ctx.clearRect(10, 10, sysInfo.screenWidth, roundRectHeight)
+            // ctx.fillStyle = '#fff';
+            // ctx.fillRect(0,0,sysInfo.screenWidth,roundRectHeight+40);
             _this.roundRect(ctx, 10, 10, sysInfo.screenWidth - 20, roundRectHeight, 10);
             _this.mDrawCanvas(pmRes,ctx,true);
             ctx.draw(true, function() {

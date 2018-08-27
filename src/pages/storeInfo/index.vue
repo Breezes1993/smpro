@@ -797,7 +797,7 @@
           //   delta: 1
           // });
           wx.reLaunch({
-            url: "/pages/index2/index2"
+            url: "/pages/index/main"
           });
         }
       },

@@ -1,0 +1,208 @@
+<scroll-view scroll-y="true" style="height:{{screenHeight}}px" enable-back-to-top="true" lower-threshold="100" bindscrolltolower="scrolltolower">
+  <view class="pad-sm bg-white">
+    <view class="flexBox text-sm">
+      <view class="flexAuto">
+        <view class="pad-right-sm">
+          <view class="bg-a5 rad500 pad-ver-xs pad-hov-xs" bindtap="openLocationFn">
+            <view class="flexBox ver-cen">
+              <view class="flex8">
+                <image src="/static/img/position.png" class="block" style="width: 40rpx;height: 40rpx;"></image>
+              </view>
+              <view class="flexAuto">
+                <p class="ell te-cen text-white">{{curAddress}}</p>
+              </view>
+              <view class="flex8">
+                <image src="/static/img/allow_r_white.png" class="block" style="width: 38rpx;height: 38rpx;"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="flexAuto">
+        <view class="_p bg-ed pad-ver-xs rad500 pad-left-sm" bindtap="toSearch">
+          <icon type="search" size="19" class="ver-mid"></icon>
+          <span class="ver-mid text-999 pad-hov-xs">搜索</span>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+  <view class="bg-white">
+    <swiper indicator-dots autoplay="true" interval="3000" duration="300" style="height: 360rpx;">
+      <block wx:for="{{imgArr}}" wx:key="index">
+        <swiper-item>
+          <view class="pad-hov-xs">
+            <image src="{{item.image}}" class="block" style="border-radius: 12px;" mode="widthFix" data-type="{{item.type}}" data-id="{{item.url}}" bindtap="bannerJump"></image>
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+  <view class="pad-sm bg-white">
+    <view class="flexBox te-cen changeLine">
+      <view class="flex25 pad-bottom-xs {{item.id==curCate?'cantClick':''}}" wx:for="{{cateArr}}" wx:key="index" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="changeCate">
+        <image src="{{item.image}}" class="block mar0A" style="height: 100rpx;width: 100rpx;"></image>
+        <view class="_p pad-top-xs">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+
+
+
+  <view class="pad-ver-sm">
+    <view class="bg-white pad-hov-xs pad-ver-xs">
+      <view class="flexBox ver-cen">
+        <view class="flex8">
+          <image src="/static/img/notice.png" class="block" style="width: 50rpx;height: 50rpx;"></image>
+        </view>
+        <view class="flexAuto">
+
+          <swiper autoplay="true" interval="3000" duration="300" vertical style="height: 42rpx;">
+            <block wx:for="{{textArr}}" wx:key="index">
+              <swiper-item>
+                <view class="_p ell text-sm text-333" data-id="{{item.id}}" bindtap="toStore">• 恭喜【
+                  <span class="text-danger"> {{item.name}}</span> 】入驻</view>
+              </swiper-item>
+            </block>
+          </swiper>
+
+        </view>
+        <view class="flex25">
+          <view class="_p btn btn-danger block btn-radius btn-xs" bindtap="toJoin" wx:if="{{hasO==2}}">我要入驻</view>
+          <view class="_p btn btn-danger block btn-radius btn-xs" wx:if="{{hasO==1}}">已入驻</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="bg-white pad-sm">
+    <view class="wid70 mar0A">
+      <view class="flexBox ver-cen">
+        <view class="flex25">
+          <view class="_p b-b1" style="padding-top: 1px"></view>
+        </view>
+        <view class="flexAuto te-cen text-sm">
+          <view>附近
+            <span class="text-danger">{{showCate}}</span> 商家</view>
+        </view>
+        <view class="flex25">
+          <view class="_p b-b1" style="padding-top: 1px"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="pad-hov-sm pad-bottom-xs b-b1 bg-white" >
+    <view class="flexBox ver-cen te-cen text-sm" >
+      <view bindtap="changeTabFn" class="flexAuto b-r1 {{curTab==1?'cantClick':''}}" data-tab="1" >
+        <view class="pad-ver-xs {{curTab==1?'text-Bolder':''}}">离我最近</view>
+      </view>
+      <view class="flexAuto b-r1 {{curTab==2?'cantClick':''}}" data-tab="2" bindtap="changeTabFn">
+        <view class="pad-ver-xs {{curTab==2?'text-Bolder':''}}">有券商户</view>
+      </view>
+      <view class="flexAuto {{curTab==3?'cantClick':''}}" data-tab="3" bindtap="changeTabFn">
+        <view class="pad-ver-xs {{curTab==3?'text-Bolder':''}}">火爆排名</view>
+      </view>
+    </view>
+  </view>
+
+
+  <view class="pad-bottom-sm">
+    <view class="bg-white text-sm">
+
+      <view class="pad-sm b-b1" wx:for="{{storeArr}}" bindtap="toStore" data-id="{{item.id}}" wx:key="{{index}}">
+        <!-- v-show="item.category==curCate"-->
+        <view class="flexBox">
+          <view class="flex25">
+            <view class="posReal">
+              <image src="{{item.logo}}" class="block" style="width: 170rpx;height: 170rpx;" data-index="{{index}}" binderror="setDefImg"></image>
+              <image src="/static/img/ossmHead.png" style="width: 150rpx;height: 150rpx;" class="ossmhead block" wx:if="{{item.top>0}}"></image>
+            </view>
+          </view>
+          <view class="flexAuto">
+            <view class="pad-left-sm">
+              <view class="flexBox ver-cen">
+                <view class="flexAuto">
+                  <p class="ell">{{item.name}}</p>
+                </view>
+                <view class="flexAuto te-right">
+                  <p class="text-danger">
+                    <image src="/static/img/hot.png" class="ver-mid" style="width: 36rpx;height: 36rpx;"></image>
+                    <span class="ver-mid pad-left-xs">人气 {{item.popularity || 0}}</span>
+                  </p>
+                </view>
+              </view>
+              <view class="flexBox ver-cen pad-top-xs singleLine">
+                <view class="flexAuto">
+                  <image src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=1}}"></image>
+                  <image src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=2}}"></image>
+                  <image src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=3}}"></image>
+                  <image src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=4}}"></image>
+                  <image src="/static/img/star-full.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate==5}}"></image>
+                  <image src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=1.1&&item.evaluate<2}}"></image>
+                  <image src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=2.1&&item.evaluate<3}}"></image>
+                  <image src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=3.1&&item.evaluate<4}}"></image>
+                  <image src="/static/img/star-half.png" class="ver-mid" style="width: 30rpx;height: 30rpx;" wx:if="{{item.evaluate>=4.1&&item.evaluate<5}}"></image>
+                  <span class="text-warning ver-mid pad-left-xs">{{item.evaluate}}分</span>
+                </view>
+                <view class="flexAuto te-right">
+                  <image src="/static/img/position_gray.png" class="ver-mid" style="width: 36rpx;height: 36rpx;"></image>
+                  <span class="ver-mid pad-left-xs">{{item.disShow}}</span>
+                </view>
+              </view>
+
+              <p class="ell text-999 pad-top-xs">{{item.address}}</p>
+
+              <view class="flexBox ver-cen pad-top-xs" wx:if="{{item.typefrom>0}}">
+                <view class="flex8">
+                  <p class="btn btn-danger btn-lit btn-radius" wx:if="{{item.typefrom==1}}">金</p>
+                  <p class="btn btn-waring btn-lit btn-radius" wx:if="{{item.typefrom==2}}">折</p>
+                  <p class="btn btn-waring btn-lit btn-radius" wx:if="{{item.typefrom==3}}">通</p>
+                </view>
+                <view class="flexAuto">
+                  <p class="pad-left-xs ell">{{item.quanname}}</p>
+                </view>
+                <view class="flexAuto">
+                  <p class="ell text-999">{{item.describe || ''}}</p>
+                </view>
+              </view>
+
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="te-cen" wx:if="{{isLoading}}">
+      <view class="pad-ver-xs bg-white">
+        <image src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;" animation="{{animationD}}"></image>
+        <span class="pad-left-sm ver-mid">加载更多...</span>
+      </view>
+    </view>
+
+    <view class="_p pad-sm te-cen bg-white b-t1" wx:if="{{isEmpty}}">已经到底了</view>
+
+    <view class="te-cen pad-top-sm text-999 text-sm">
+      <view>
+        <image src="/static/img/comLogo.png" class="ver-mid" style="width: 70rpx;height: 70rpx;"></image>
+        <span class="pad-left-xs ver-mid">众享礼券</span>
+      </view>
+      <p class="pad-top-xs">厦门中企信科技有限公司</p>
+    </view>
+
+  </view>
+  <view class="drawer_screen" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}"></view>
+
+  <view animation="{{animationData}}" class="drawer_box" wx:if="{{showModalStatus}}">
+    <view class="drawer_title">提示</view>
+    <view class="drawer_content">
+      <view class="top grid content">
+        <label class="">请先获取用户信息！</label>
+      </view>
+    </view>
+    <view class="btn_ok" data-statu="close" bindtap="powerDrawer">
+      <button bindtap="canUse" bindgetuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
+    </view>
+  </view>
+
+</scroll-view>

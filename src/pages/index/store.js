@@ -93,6 +93,7 @@ const store = new Vuex.Store({
       let e = obj.e;
       let cb = obj.cb;
       let info = e.target;
+      state.userInfo = info.userInfo;
       (state.debug) ? console.log("用户信息btn",e) : '';
       wx.login({
         success: res => {
@@ -232,6 +233,12 @@ const store = new Vuex.Store({
           wx.hideLoading();
         }
       })
+    },
+    initStore: (state, o) => {
+      (state.debug) ? console.log("initStore") : '';
+      if(Number(state.session_key)===1||Number(state.openId)===1){
+        store.replaceState(o);
+      }
     }
 
   }

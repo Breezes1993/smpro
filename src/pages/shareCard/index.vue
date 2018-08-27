@@ -6,6 +6,19 @@
     <cover-view class="save-image">
       <cover-view @click="saveImage"  hoverClass="hover">保存图片</cover-view>
     </cover-view>
+    <div class="drawer_screen" bindtap="powerDrawer" data-statu="close" v-show="showModalStatus"></div>
+
+    <div :animation="animationData" class="drawer_box" v-show="showModalStatus">
+      <div class="drawer_title">提示</div>
+      <div class="drawer_content">
+        <div class="top grid content">
+          <label class="">请先获取用户信息！</label>
+        </div>
+      </div>
+      <div class="btn_ok" @click="powerDrawer('close')" >
+        <button @click="canUse" @getuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,7 +33,8 @@ export default {
       canvasHeight: "900px",
       shareInfo: {},
       imgHead: 'data:image/png;base64,',
-      tempFilePath: ""
+      tempFilePath: "",
+      showModalStatus: false
     };
   },
   onLoad(o) {},
@@ -30,7 +44,19 @@ export default {
     let _this = this;
     this.$nextTick(() => {
       _this.shareInfo = wx.getStorageSync("shareInfo");
-      _this.drawCanvas();
+      wx.getLocation({
+        type: 'gcj02',
+        success: function (res) {
+          store.state.tempObj.tempLola.latitude = res.latitude;
+          store.state.tempObj.tempLola.longitude = res.longitude;
+        }
+      });
+      
+      // return;
+      let obj = {that:this,cb:_this.drawCanvas}
+      //console.log("先执行这里吗？",obj)
+      store.commit('getUserInfoFn', obj);
+      // _this.drawCanvas();
     });
   },
   onShareAppMessage: function(res) {
@@ -137,7 +163,7 @@ export default {
           .then(function(pmRes) {
             let roundRectHeight = _this.mDrawCanvas(pmRes,ctx,false);
             _this.canvasHeight = (roundRectHeight+40) + "px";
-            ctx.clearRect(10, 10, sysInfo.screenWidth, roundRectHeight)
+            // ctx.clearRect(10, 10, sysInfo.screenWidth, roundRectHeight)
             _this.roundRect(ctx, 10, 10, sysInfo.screenWidth - 20, roundRectHeight, 10);
             _this.mDrawCanvas(pmRes,ctx,true);
             ctx.draw(true, function() {
@@ -609,6 +635,71 @@ export default {
           wx.hideLoading();
         }
       });
+    },
+
+
+
+    powerDrawer: function(currentStatu) {
+      //console.log("12312")
+      this.util(currentStatu)
+    },
+    util: function(currentStatu) {
+      /* 动画部分 */
+      // 第1步：创建动画实例 
+      var animation = wx.createAnimation({
+        duration: 200, //动画时长
+        timingFunction: "linear", //线性
+        delay: 0 //0则不延迟
+      });
+
+      // 第2步：这个动画实例赋给当前的动画实例
+      this.animation = animation;
+
+      // 第3步：执行第一组动画
+      animation.opacity(0).rotateX(-100).step();
+
+      // 第4步：导出动画对象赋给数据对象储存
+
+      this.animationData = animation.export();
+
+      // 第5步：设置定时器到指定时候后，执行第二组动画
+      setTimeout(function() {
+        // 执行第二组动画
+        animation.opacity(1).rotateX(0).step();
+        // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+        this.animationData = animation
+
+        //关闭
+        if (currentStatu == "close") {
+            this.showModalStatus = false;
+        }
+      }.bind(this), 0)
+
+      // 显示
+      if (currentStatu == "open") {
+        this.setData({
+          showModalStatus: true
+        });
+      }
+    },
+    getUserInfo(e){
+      let obj = {
+        e: e,
+        that: this,
+        cb: this.drawCanvas
+      }
+      store.commit("getUserInfoBtn",obj);
+    },
+    canUse(){
+      if(wx.canIUse('button.open-type.getUserInfo')){
+        // 用户版本可用
+      }else{
+        wx.showModal({
+          title: '提示',
+          content: '请先升级版本！',
+          showCancel: false
+        });
+      }
     }
   }
 };

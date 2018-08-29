@@ -113,6 +113,25 @@
       </div>
 
     </div>
+
+    <div class="te-cen" v-show="isLoading">
+      <div class="pad-ver-xs bg-white">
+        <img src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;"
+              :animation="animationD">
+        <span class="pad-left-sm ver-mid">加载更多...</span>
+      </div>
+    </div>
+
+    <p class="pad-sm te-cen bg-white b-t1" v-if="isEmpty">已经到底了</p>
+
+    <div class="te-cen pad-top-sm text-999 text-sm">
+      <div>
+        <img src="/static/img/comLogo.png" class="ver-mid" style="width: 70rpx;height: 70rpx;">
+        <span class="pad-left-xs ver-mid">众享礼券</span>
+      </div>
+      <p class="pad-top-xs">厦门中企信科技有限公司</p>
+    </div>
+
     <div class="pad-top-big" v-if="resultArr.length==0&&showResult">
       <div>
         <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
@@ -134,6 +153,10 @@
         lastInp: '',
         curPage: 1,
         isEmpty: false,
+        isLoading: false,
+        animation: {},
+        animationD: '',
+        rotateNum: 0,
         resultArr: [],
 
         fasetSelects: [{
@@ -184,8 +207,10 @@
       }
     },
     mounted() {
+      this.clickName = "不限";
+      this.curPage = 1;
       this.$nextTick(() => {
-        console.log("替换store");
+        (store.state.debug)&&console.log("替换store");
         // if(Number(store.state.session_key)===1||Number(store.state.openId)===1){
         //   store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
         // }
@@ -194,6 +219,7 @@
         }
         this.initHis();
         this.initFastSelect();
+        this.initAnimat();
       })
     },
     methods: {
@@ -239,7 +265,7 @@
 
       },
       inputFunc(event){
-        console.log("inputFunc",event);
+        (store.state.debug)&&console.log("inputFunc",event);
         if(event.mp.detail.value.length===0){
           this.showResult = false;
         }
@@ -259,9 +285,10 @@
         return _this.subSearchFn();
       },
       subSearchFn(kw) {
-        console.log("subSearchFn",kw)
+        (store.state.debug)&&console.log("subSearchFn",kw)
         
         let _this = this;
+        _this.isLoading = true;
         let search = _this.searchInp;
         if (kw) {
           search = kw;
@@ -274,15 +301,16 @@
           + "&page=" + _this.curPage,
           data: {},
           cb: _this.callBackSearch,
-          hideAlert: true
+          hideAlert: true,
+          that:_this,
+          hideLoading: true
         };
 
         if (_this.lastInp != _this.searchInp) {
+          _this.lastInp = _this.searchInp;
           _this.resultArr = [];
           _this.curPage = 1;
           _this.isEmpty = false;
-        } else {
-          return;
         }
 
         store.commit('getInfo', o);
@@ -299,6 +327,7 @@
         }
         _this.lastInp = _this.searchInp;
         _this.isEmpty = (o.data.length < 5);
+        _this.isLoading = false;
       },
       toStore(id) {
         wx.navigateTo({
@@ -326,12 +355,32 @@
         store.commit("getInfo", o);
       },
       fastCallBack(res){
-        console.log("获取faseselect",res);
+        (store.state.debug)&&console.log("获取faseselect",res);
         // res.data.fasetSelects.forEach(element=>{
         //   element.items.splice(0,0,{itemName:"不限"});
         // });
         this.$set(this,"fasetSelects",res.data.fasetSelects);
-      }
+      },
+      initAnimat() {
+        let _this = this;
+        _this.animation = wx.createAnimation({
+          duration: 500,
+          timingFunction: 'linear',
+          delay: 0,
+          transformOrigin: '50% 50% 0',
+          success: function (res) {
+            //console.log(res)
+          }
+        });
+        setInterval(() => {
+          _this.rotateNum++;
+          _this.animation.rotate(180 * _this.rotateNum).step();
+          _this.animationD = _this.animation.export();
+          if (_this.rotateNum >= Number.MAX_VALUE) {
+            _this.rotateNum = 0;
+          }
+        }, 500)
+      },
     }
   }
 </script>

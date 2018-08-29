@@ -287,7 +287,7 @@
           store.state.tempObj.tempLola.longitude = res.longitude;
         }
       });
-      
+      _this.curPage = 1;
       // return;
       let obj = {that:this,cb:_this.initCateFn}
       //console.log("先执行这里吗？",obj)

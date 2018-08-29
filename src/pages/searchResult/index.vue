@@ -95,7 +95,23 @@
       </div>
 
     </div>
+    <div class="te-cen" v-show="isLoading">
+      <div class="pad-ver-xs bg-white">
+        <img src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;"
+              :animation="animationD">
+        <span class="pad-left-sm ver-mid">加载更多...</span>
+      </div>
+    </div>
 
+    <p class="pad-sm te-cen bg-white b-t1" v-if="isEmpty">已经到底了</p>
+
+    <div class="te-cen pad-top-sm text-999 text-sm">
+      <div>
+        <img src="/static/img/comLogo.png" class="ver-mid" style="width: 70rpx;height: 70rpx;">
+        <span class="pad-left-xs ver-mid">众享礼券</span>
+      </div>
+      <p class="pad-top-xs">厦门中企信科技有限公司</p>
+    </div>
     <div class="pad-top-big" v-if="resultArr.length==0">
       <div>
         <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
@@ -118,6 +134,10 @@
         lastInp: '',
         curPage: 1,
         isEmpty: false,
+        isLoading: false,
+        animation: {},
+        animationD: '',
+        rotateNum: 0,
         resultArr: [],
 
         searchType: '01',
@@ -167,7 +187,9 @@
       }
     },
     onLoad(o) {
-      console.log("onload,option",o);
+      (store.state.debug)&&console.log("onload,option",o);
+      this.clickName = "不限";
+      this.curPage = 1;
       if(!o){
         return;
       }
@@ -195,6 +217,7 @@
       this.$nextTick(() => {
         this.initHis();
         this.initFastSelect();
+        this.initAnimat();
       })
     },
     methods: {
@@ -241,23 +264,16 @@
       },
       searchFn() {
         let _this = this;
-        if (_this.searchInp.length == 0) {
-          wx.showToast({
-            title: '请输入需要查找的内容',
-            icon: 'none',
-            duration: 1000
-          });
-          return;
-        }
         _this.setKw();
         return _this.subSearchFn();
       },
       subSearchFn(searchName) {
-        wx.showLoading({mask: false});
+        // wx.showLoading({mask: false});
         let _this = this;
+        _this.isLoading = true;
         searchName = searchName === '不限' ? '' : searchName;
         _this.searchName = _this.searchName === '不限' ? '' : _this.searchName;
-        console.log("subSearchFn",searchName);
+        (store.state.debug)&&console.log("subSearchFn",searchName);
         let kw = searchName;
         let search = "";
         if (kw||kw==='') {
@@ -279,15 +295,13 @@
           hideAlert: true
         };
 
-        if (_this.lastInp != _this.searchInp || !_this.searchInp) {
+        if (_this.lastInp != _this.searchInp) {
           _this.resultArr = [];
           _this.curPage = 1;
           _this.isEmpty = false;
-        } else {
-          console.log("执行了return");
-          return;
         }
-        console.log("执行了return 2")
+        _this.isEmpty = false;
+        (store.state.debug)&&console.log("执行了return 2")
         store.commit('getInfo', o);
       },
       callBackSearch(o) {
@@ -302,7 +316,8 @@
         }
         _this.lastInp = _this.searchInp;
         _this.isEmpty = (o.data.length < 5);
-        wx.hideLoading();
+        _this.isLoading = false;
+        // wx.hideLoading();
       },
       toStore(id) {
         wx.navigateTo({
@@ -325,7 +340,7 @@
         store.commit("getInfo", o);
       },
       fastCallBack(res){
-        console.log("获取faseselect",res);
+        (store.state.debug)&&console.log("获取faseselect",res);
         res.data.fasetSelects.forEach(element=>{
           element.items.splice(0,0,{itemName:"不限",isSelect: true});
         });
@@ -334,16 +349,36 @@
       clickItem(item){
         let name = item.itemName;
         this.clickName = name;
-        console.log(JSON.stringify(this.fasetSelects))
+        (store.state.debug)&&console.log(JSON.stringify(this.fasetSelects))
         this.fasetSelects.forEach(element=>{
           element.items.forEach(elementItem=>{
-            console.log(JSON.stringify(elementItem));
+            (store.state.debug)&&console.log(JSON.stringify(elementItem));
             delete elementItem.isSelect;
           })
         })
         this.$set(item,"isSelect",true);
         this.curPage = 1;
         this.subSearchFn(name);
+      },
+      initAnimat() {
+        let _this = this;
+        _this.animation = wx.createAnimation({
+          duration: 500,
+          timingFunction: 'linear',
+          delay: 0,
+          transformOrigin: '50% 50% 0',
+          success: function (res) {
+            //console.log(res)
+          }
+        });
+        setInterval(() => {
+          _this.rotateNum++;
+          _this.animation.rotate(180 * _this.rotateNum).step();
+          _this.animationD = _this.animation.export();
+          if (_this.rotateNum >= Number.MAX_VALUE) {
+            _this.rotateNum = 0;
+          }
+        }, 500)
       },
     }
   }

@@ -329,6 +329,7 @@ Page({
     })
   },
   bannerJump(res) {
+    let _this = this;
     let type = res.currentTarget.dataset.type;
     let id = res.currentTarget.dataset.id;
     let ty = parseInt(type);

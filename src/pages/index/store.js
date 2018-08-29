@@ -82,7 +82,7 @@ const store = new Vuex.Store({
             }else{
               (state.debug) ? console.log("弹出确认用户信息界面！",that) : '';
               that.showModalStatus = true;
-              
+              wx.hideLoading();
             }
           }
         })
@@ -215,6 +215,8 @@ const store = new Vuex.Store({
                     state.mobile = got.data.mobile;
                     state.name = got.data.name;
                   }
+                  getApp().globalData.store = {};
+                  getApp().globalData.store.state = state;
                   return o.cb(got);
                   break;
                 default:

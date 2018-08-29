@@ -4,7 +4,7 @@
     <div class="pad-hov-sm pad-ver-xs bg-white">
       <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
         <input type="text" class="block te-cen" v-model="searchInp" placeholder="搜索" confirm-type="search"
-               @confirm="searchFn" v-on:input ="inputFunc">
+               @confirm="searchFn(searchInp)" v-on:input ="inputFunc">
       </div>
     </div>
 
@@ -113,8 +113,8 @@
       </div>
 
     </div>
-
-    <div class="te-cen" v-show="isLoading">
+    <!-- <div style="height:40px;width:100%;" v-show="!isLoading&&!isEmpty"></div> -->
+    <div class="te-cen b-t1" v-show="isLoading">
       <div class="pad-ver-xs bg-white">
         <img src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;"
               :animation="animationD">
@@ -124,7 +124,7 @@
 
     <p class="pad-sm te-cen bg-white b-t1" v-if="isEmpty">已经到底了</p>
 
-    <div class="te-cen pad-top-sm text-999 text-sm">
+    <div class="te-cen pad-top-sm text-999 text-sm" v-show="resultArr.length!==0">
       <div>
         <img src="/static/img/comLogo.png" class="ver-mid" style="width: 70rpx;height: 70rpx;">
         <span class="pad-left-xs ver-mid">众享礼券</span>
@@ -132,7 +132,7 @@
       <p class="pad-top-xs">厦门中企信科技有限公司</p>
     </div>
 
-    <div class="pad-top-big" v-if="resultArr.length==0&&showResult">
+    <div class="pad-top-big" v-if="resultArr.length==0&&showResult&&!isLoading">
       <div>
         <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
       </div>
@@ -201,8 +201,10 @@
     },
     onReachBottom() {
       let _this = this;
-      if (!_this.isEmpty) {
+      (store.state.debug)&&console.log("onreach");
+      if (!_this.isEmpty && _this.showResult && !_this.isLoading) {
         _this.curPage++;
+        _this.isLoading = true;
         return _this.searchFn();
       }
     },
@@ -270,7 +272,7 @@
           this.showResult = false;
         }
       },
-      searchFn() {
+      searchFn(searchInp) {
         let _this = this;
         if (_this.searchInp.length == 0) {
           wx.showToast({
@@ -282,7 +284,7 @@
         }
         this.showResult = true;
         _this.setKw();
-        return _this.subSearchFn();
+        return _this.subSearchFn(searchInp);
       },
       subSearchFn(kw) {
         (store.state.debug)&&console.log("subSearchFn",kw)
@@ -311,6 +313,11 @@
           _this.resultArr = [];
           _this.curPage = 1;
           _this.isEmpty = false;
+        } else if(!kw){
+          
+        }else{
+          _this.isLoading = false;
+          return;
         }
 
         store.commit('getInfo', o);
@@ -335,7 +342,7 @@
         })
       },
       setDefImg(index) {
-        this.storeArr[index].src = store.state.defStore;
+        this.resultArr[index].src = store.state.defStore;
       },
 
 

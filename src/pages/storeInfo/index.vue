@@ -638,8 +638,7 @@
     },*/
     methods: {
       initUserInfo() {
-        wx.showLoading({
-        });
+        wx.showLoading({mask: true});
         wx.getLocation({
           type: 'gcj02',
           success: function (res) {

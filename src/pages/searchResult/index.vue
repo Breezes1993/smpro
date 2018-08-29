@@ -95,7 +95,8 @@
       </div>
 
     </div>
-    <div class="te-cen" v-show="isLoading">
+    <!-- <div style="height:40px;width:100%;" v-show="!isLoading&&!isEmpty"></div> -->
+    <div class="te-cen b-t1" v-show="isLoading">
       <div class="pad-ver-xs bg-white">
         <img src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;"
               :animation="animationD">
@@ -105,14 +106,14 @@
 
     <p class="pad-sm te-cen bg-white b-t1" v-if="isEmpty">已经到底了</p>
 
-    <div class="te-cen pad-top-sm text-999 text-sm">
+    <div class="te-cen pad-top-sm text-999 text-sm" v-show="resultArr.length!==0">
       <div>
         <img src="/static/img/comLogo.png" class="ver-mid" style="width: 70rpx;height: 70rpx;">
         <span class="pad-left-xs ver-mid">众享礼券</span>
       </div>
       <p class="pad-top-xs">厦门中企信科技有限公司</p>
     </div>
-    <div class="pad-top-big" v-if="resultArr.length==0">
+    <div class="pad-top-big" v-if="resultArr.length==0&&!isLoading">
       <div>
         <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
       </div>
@@ -208,9 +209,14 @@
     },
     onReachBottom() {
       let _this = this;
-      if (!_this.isEmpty) {
+      (store.state.debug)&&console.log("onreach");
+      if (!_this.isEmpty && !_this.isLoading) {
+        _this.isLoading = true;
+        (store.state.debug)&&console.log("isLoading",_this.isLoading,"isEmpty",_this.isEmpty)
         _this.curPage++;
-        return _this.searchFn();
+        _this.$nextTick(() => {
+          return _this.searchFn();
+        })
       }
     },
     mounted() {
@@ -292,13 +298,19 @@
           + "&page=" + _this.curPage,
           data: {},
           cb: _this.callBackSearch,
-          hideAlert: true
+          hideAlert: true,
+          that:_this,
+          hideLoading: true
         };
 
         if (_this.lastInp != _this.searchInp) {
           _this.resultArr = [];
           _this.curPage = 1;
           _this.isEmpty = false;
+        } else if(!searchName){
+          
+        }else{
+          return;
         }
         _this.isEmpty = false;
         (store.state.debug)&&console.log("执行了return 2")
@@ -325,7 +337,7 @@
         })
       },
       setDefImg(index) {
-        this.storeArr[index].src = store.state.defStore;
+        this.resultArr[index].src = store.state.defStore;
       },
 
 
@@ -347,6 +359,10 @@
         this.$set(this,"fasetSelects",res.data.fasetSelects);
       },
       clickItem(item){
+        if(this.isLoading){
+          this.isLoading = false;
+          return;
+        }
         let name = item.itemName;
         this.clickName = name;
         (store.state.debug)&&console.log(JSON.stringify(this.fasetSelects))

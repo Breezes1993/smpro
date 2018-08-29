@@ -10,7 +10,7 @@
         </div>
         <div class="pad-top-big">
           <div class="wid45 mar0A">
-            <p class="btn btn-danger block btn-radius" @click="initInfoFn()">确定</p>
+            <button class="btn btn-danger block btn-radius"  @click="canUse" @getuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
           </div>
         </div>
       </div>
@@ -61,6 +61,32 @@
           }
         })
       },
+
+
+
+      getUserInfo(e){
+        console.log("getUserInfo");
+        let _this = this;
+        let obj = {
+          e: e,
+          that: this,
+          cb: () => {
+            return _this.initInfoFn();
+          }
+        }
+        store.commit("getUserInfoBtn",obj);
+      },
+      canUse(){
+        if(wx.canIUse('button.open-type.getUserInfo')){
+          // 用户版本可用
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: '请先升级版本！',
+            showCancel: false
+          });
+        }
+      }
     }
   }
 </script>

@@ -14,6 +14,9 @@
       }
     },
     onShow() {
+      if(getApp().globalData.store){
+        store.commit('initStore',getApp().globalData.store.state);  
+      }
       this.initInfoFn();
     },
     methods: {

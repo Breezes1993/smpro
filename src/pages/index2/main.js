@@ -162,8 +162,6 @@ Page({
     console.log('onReachBottom');
   },
   initInfoFn() {
-    console.log('initInfoFn');
-    //console.log("initInfoFn");
     let _this = this;
     _this.setData({
       hasO: _this.data.store.state.hasOpened
@@ -182,12 +180,9 @@ Page({
     };
     setTimeout(function() {
       _this.reqInfo(o);
-    }, 500)
-
-    console.log('initInfoFn');
+    }, 500);
   },
   callBackInit(o) {
-    console.log('callBackInit');
     let _this = this;
     switch (o.status) {
       case 1:
@@ -230,7 +225,6 @@ Page({
     _this.setData({
       isLoading: false
     });
-    console.log('callBackInit');
   },
   initCateFn() {
     //console.log("initCateFn");
@@ -520,7 +514,7 @@ Page({
             wx.getUserInfo({
               withCredentials: false,
               success: function(info){
-                console.log("成功", info);
+                (_this.data.store.state.debug)&&console.log("成功", info);
                 _this.setData({
                   "store.state.userInfo": info.userInfo
                 });

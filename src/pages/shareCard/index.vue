@@ -6,7 +6,8 @@
     <cover-view class="save-image">
       <cover-view @click="saveImage"  hoverClass="hover">保存图片</cover-view>
     </cover-view>
-    <div class="drawer_screen" bindtap="powerDrawer" data-statu="close" v-show="showModalStatus"></div>
+
+    <div class="drawer_screen" @click="powerDrawer('close')" v-show="showModalStatus"></div>
 
     <div :animation="animationData" class="drawer_box" v-show="showModalStatus">
       <div class="drawer_title">提示</div>

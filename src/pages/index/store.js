@@ -123,7 +123,7 @@ const store = new Vuex.Store({
       } else {
         url += "?openid=" + state.openId + "&session_key=" + state.session_key;
       }
-      
+      let that = o.that;
       wx.request({
         url: url,
         data: o.data,
@@ -158,6 +158,9 @@ const store = new Vuex.Store({
                         }
                       }
                     });
+                  }
+                  if (o.hideLoading){
+                    that.isLoading = false;
                   }
                   wx.hideLoading();
                   break;

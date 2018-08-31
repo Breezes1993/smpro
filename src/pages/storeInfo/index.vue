@@ -606,10 +606,12 @@
     mounted() {
       this.$nextTick(() => {
         if(getApp().globalData.store){
+          console.log("执行了这里");
           store.commit('initStore',getApp().globalData.store.state);  
         }
+        store.commit('initUserInfo',{that:this,cb:()=>wx.hideLoading()});
         this.initInfoFn();
-        this.initUserInfo();
+        
       })
     },
     onShareAppMessage: function (res) {
@@ -637,20 +639,6 @@
       }
     },*/
     methods: {
-      initUserInfo() {
-        wx.showLoading({mask: true});
-        wx.getLocation({
-          type: 'gcj02',
-          success: function (res) {
-            store.state.tempObj.tempLola.latitude = res.latitude;
-            store.state.tempObj.tempLola.longitude = res.longitude;
-          }
-        });
-        let obj = {that:this,cb:function(){
-          wx.hideLoading()
-        }};
-        store.commit('getUserInfoFn', obj);
-      },
       initInfoFn() {
         let _this = this;
         let o = {

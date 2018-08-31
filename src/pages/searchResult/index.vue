@@ -191,6 +191,7 @@
       (store.state.debug)&&console.log("onload,option",o);
       this.clickName = "不限";
       this.curPage = 1;
+      this.searchInp = '';
       if(!o){
         return;
       }
@@ -215,7 +216,7 @@
         (store.state.debug)&&console.log("isLoading",_this.isLoading,"isEmpty",_this.isEmpty)
         _this.curPage++;
         _this.$nextTick(() => {
-          return _this.searchFn();
+          return _this.searchFn(_this.searchInp);
         })
       }
     },
@@ -268,12 +269,12 @@
         })
 
       },
-      searchFn() {
+      searchFn(searchInp) {
         let _this = this;
         _this.setKw();
-        return _this.subSearchFn();
+        return _this.subSearchFn(searchInp,true);
       },
-      subSearchFn(searchName) {
+      subSearchFn(searchName,isOnReach) {
         // wx.showLoading({mask: false});
         let _this = this;
         _this.isLoading = true;
@@ -307,9 +308,10 @@
           _this.resultArr = [];
           _this.curPage = 1;
           _this.isEmpty = false;
-        } else if(!searchName){
+        } else if(!searchName||isOnReach){
           
         }else{
+          _this.isLoading = false;
           return;
         }
         _this.isEmpty = false;

@@ -54,7 +54,7 @@ const store = new Vuex.Store({
               wx.getUserInfo({
                 withCredentials: false,
                 success: info => {
-                  console.log("成功",info);
+                  (state.debug)&&console.log("成功",info);
                   _this.state.userInfo = info.userInfo;
                   wx.login({
                     success: res => {
@@ -243,6 +243,24 @@ const store = new Vuex.Store({
       (state.debug) ? console.log("initStore") : '';
       if(Number(state.session_key)===1||Number(state.openId)===1){
         store.replaceState(o);
+      }
+    },
+    initUserInfo: (state, o) => {
+      if(Number(state.session_key)===1||Number(state.openId)===1){
+        (state.debug) && console.log("if");
+        wx.showLoading({mask: true});
+        wx.getLocation({
+          type: 'gcj02',
+          success: function (res) {
+            state.tempObj.tempLola.latitude = res.latitude;
+            state.tempObj.tempLola.longitude = res.longitude;
+          }
+        });
+        // let obj = {that:this,cb:cb};
+        store.commit('getUserInfoFn', o);
+      } else {
+        (state.debug) && console.log("else");
+        o.cb();
       }
     }
 

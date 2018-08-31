@@ -214,7 +214,19 @@
         </div>
       </div>
     </div>
+    <div class="drawer_screen" @click="powerDrawer('close')" v-show="showModalStatus"></div>
 
+    <div :animation="animationData" class="drawer_box" v-show="showModalStatus">
+      <div class="drawer_title">提示</div>
+      <div class="drawer_content">
+        <div class="top grid content">
+          <label class="">请先获取用户信息！</label>
+        </div>
+      </div>
+      <div class="btn_ok" @click="powerDrawer('close')" >
+        <button @click="canUse" @getuserinfo='getUserInfo' open-type='getUserInfo'>确定</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -233,7 +245,8 @@
         isVip: false,
         isShowHX: false,
         IDCard: 0,
-        endTime: false
+        endTime: false,
+        showModalStatus: false
       }
     },
     created() {
@@ -244,13 +257,17 @@
       // if(Number(store.state.session_key)===1||Number(store.state.openId)===1){
       //   store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
       // }
+      console.log(getApp().globalData)
       if(getApp().globalData.store){
         store.commit('initStore',getApp().globalData.store.state);  
       }
-      this.initInfoFn();
-      this.initShopFn()
+      store.commit('initUserInfo',{that:this,cb:this.initShow});
     },
     methods: {
+      initShow() {
+        this.initInfoFn();
+        this.initShopFn();
+      },
       initInfoFn() {
         let _this = this;
         _this.userInfo = store.state.userInfo;
@@ -399,6 +416,73 @@
         let _this = this;
         this.storeArr = o.data || [];
         this.storeNum = parseInt(o.num) || 1;
+      },
+
+
+
+      powerDrawer: function(currentStatu) {
+          this.util(currentStatu)
+      },
+      util: function(currentStatu) {
+        /* 动画部分 */
+        // 第1步：创建动画实例 
+        var animation = wx.createAnimation({
+          duration: 200, //动画时长
+          timingFunction: "linear", //线性
+          delay: 0 //0则不延迟
+        });
+
+        // 第2步：这个动画实例赋给当前的动画实例
+        this.animation = animation;
+
+        // 第3步：执行第一组动画
+        animation.opacity(0).rotateX(-100).step();
+
+        // 第4步：导出动画对象赋给数据对象储存
+
+        this.animationData = animation.export();
+
+        // 第5步：设置定时器到指定时候后，执行第二组动画
+        setTimeout(function() {
+          // 执行第二组动画
+          animation.opacity(1).rotateX(0).step();
+          // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+          this.animationData = animation
+
+          //关闭
+          if (currentStatu == "close") {
+              this.showModalStatus = false;
+          }
+        }.bind(this), 200)
+
+        // 显示
+        if (currentStatu == "open") {
+          this.setData({
+            showModalStatus: true
+          });
+        }
+      },
+      getUserInfo(e){
+        console.log("getUserInfo");
+        let obj = {
+          e: e,
+          that: this,
+          cb: () => {
+            return this.initShow();
+          }
+        }
+        store.commit("getUserInfoBtn",obj);
+      },
+      canUse(){
+        if(wx.canIUse('button.open-type.getUserInfo')){
+          // 用户版本可用
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: '请先升级版本！',
+            showCancel: false
+          });
+        }
       }
     }
   }

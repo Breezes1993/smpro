@@ -48,7 +48,7 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.initUserInfo(this.initCheckParFn);
+        store.commit('initUserInfo',{that:this,cb:this.initCheckParFn});
       })
     },
     methods: {
@@ -92,18 +92,6 @@
 
 
 
-      initUserInfo(cb) {
-        wx.showLoading({mask: true});
-        wx.getLocation({
-          type: 'gcj02',
-          success: function (res) {
-            store.state.tempObj.tempLola.latitude = res.latitude;
-            store.state.tempObj.tempLola.longitude = res.longitude;
-          }
-        });
-        let obj = {that:this,cb:cb};
-        store.commit('getUserInfoFn', obj);
-      },
       powerDrawer: function(currentStatu) {
         this.util(currentStatu)
       },

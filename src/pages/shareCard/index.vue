@@ -45,27 +45,9 @@ export default {
     let _this = this;
     this.$nextTick(() => {
       _this.shareInfo = wx.getStorageSync("shareInfo");
-      wx.getLocation({
-        type: 'gcj02',
-        success: function (res) {
-          store.state.tempObj.tempLola.latitude = res.latitude;
-          store.state.tempObj.tempLola.longitude = res.longitude;
-        }
-      });
-      
-      // return;
-      let obj = {that:this,cb:_this.drawCanvas}
-      //console.log("先执行这里吗？",obj)
-      store.commit('getUserInfoFn', obj);
+      store.commit('initUserInfo',{that:_this,cb:_this.drawCanvas});
       // _this.drawCanvas();
     });
-  },
-  onShareAppMessage: function(res) {
-    let _this = this;
-    return {
-      title: _this.name,
-      path: "/pages/storeInfo/main" + "?id=" + _this.curId
-    };
   },
   methods: {
     drawCanvas: function() {
@@ -639,7 +621,6 @@ export default {
         }
       });
     },
-
 
 
     powerDrawer: function(currentStatu) {

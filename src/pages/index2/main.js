@@ -40,7 +40,7 @@ Page({
         mobile: 1,
         name: false,
         openId: 1,
-        session_key: "",
+        session_key: '',
         isVip: false,
         isShowHX: false,
         endTime: false,
@@ -592,10 +592,17 @@ Page({
     (_this.data.store.state.debug) ? console.log("getInfo", o): '';
     let url = _this.data.store.state.doMain;
     url = url + o.url;
+    // if (o.url.indexOf('?') != -1) {
+    //   url += "&openid=" + _this.data.store.state.openId + "&session_key=" + _this.data.store.state.session_key;
+    // } else {
+    //   url += "?openid=" + _this.data.store.state.openId + "&session_key=" + _this.data.store.state.session_key;
+    // }
+    let mOpenId = _this.data.store.state.optnId === 1 ? wx.getStorageSync('openId') : _this.data.store.state.openId;
+    let mSessionKey = !_this.data.store.state.session_key ? wx.getStorageSync('session_key') : _this.data.store.state.session_key;
     if (o.url.indexOf('?') != -1) {
-      url += "&openid=" + _this.data.store.state.openId + "&session_key=" + _this.data.store.state.session_key;
+      url += "&openid=" + mOpenId + "&session_key=" + mSessionKey;
     } else {
-      url += "?openid=" + _this.data.store.state.openId + "&session_key=" + _this.data.store.state.session_key;
+      url += "?openid=" + mOpenId + "&session_key=" + mSessionKey;
     }
 
     wx.request({
@@ -650,9 +657,15 @@ Page({
       });
     }
     let d = o.data;
+    // if (!o.isGetSession) {
+    //   d.openid = _this.data.store.state.openId;
+    //   d.session_key = _this.data.store.state.session_key;
+    // }
+    let mOpenId = _this.data.store.state.optnId === 1 ? wx.getStorageSync('openId') : _this.data.store.state.openId;
+    let mSessionKey = !_this.data.store.state.session_key ? wx.getStorageSync('session_key') : _this.data.store.state.session_key;
     if (!o.isGetSession) {
-      d.openid = _this.data.store.state.openId;
-      d.session_key = _this.data.store.state.session_key;
+      d.openid = mOpenId;
+      d.session_key = mSessionKey;
     }
     (_this.data.store.state.debug) ? console.log("reqInfoData", d): '';
     wx.request({
@@ -681,6 +694,9 @@ Page({
               case 1:
                 if (o.isGetSession) {
                   wx.hideLoading();
+                  console.log("got.data",got.data);
+                  wx.setStorageSync("session_key", got.data.session_key);
+                  wx.setStorageSync("openId", got.data.openid);
                   _this.setData({
                     "store.state.session_key": got.data.session_key,
                     "store.state.openId": got.data.openid,

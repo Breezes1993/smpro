@@ -302,7 +302,7 @@
       _this.verifyCode = o.scene || -1;
       getApp().globalData.store = store;
       wx.navigateTo({
-        url: "/pages/index/main"
+        url: "/pages/index2/main"
       })
     },
     onPageScroll(res){
@@ -396,8 +396,9 @@
               // delete arr[i].typefrom;
               // _this.storeArr.push(JSON.parse(JSON.stringify(arr[i])));
             }
-            _this.storeArr.splice(_this.storeArr.length,0,...arr);
-            _this.storeArr = JSON.parse(JSON.stringify(_this.storeArr));
+            // _this.storeArr.splice(_this.storeArr.length,0,...arr);
+            // _this.storeArr = JSON.parse(JSON.stringify(_this.storeArr));
+            _this.storeArr = [..._this.storeArr,...arr];
             _this.isEmpty = (arr.length === 0);
             _this.curAddress = o.address;
             break;

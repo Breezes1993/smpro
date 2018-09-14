@@ -291,18 +291,7 @@
         let name = _this.searchType==='01' ? _this.searchName : search;
         let name2 = _this.searchType==='01' ? search : _this.searchName;
         let searchCondition = "?trading_area=" + name + "&industry=" + name2;
-        let o = {
-          // url: Api.url_index_near + "?name=" + search + "&from=" + _this.searchType
-          url: Api.url_index_near + searchCondition
-          + "&longitude=" + store.state.tempObj.tempLola.longitude
-          + "&latitude=" + store.state.tempObj.tempLola.latitude
-          + "&page=" + _this.curPage,
-          data: {},
-          cb: _this.callBackSearch,
-          hideAlert: true,
-          that:_this,
-          hideLoading: true
-        };
+
 
         if (_this.lastInp != _this.searchInp) {
           _this.resultArr = [];
@@ -314,6 +303,21 @@
           _this.isLoading = false;
           return;
         }
+
+        let o = {
+          // url: Api.url_index_near + "?name=" + search + "&from=" + _this.searchType
+          url: Api.url_index_near + searchCondition
+          + "&longitude=" + store.state.tempObj.tempLola.longitude
+          + "&latitude=" + store.state.tempObj.tempLola.latitude
+          + "&page=" + _this.curPage,
+          data: {},
+          cb: _this.callBackSearch,
+          hideAlert: true,
+          that:_this,
+          hideLoading: true,
+          doEmpty: true
+        };
+
         _this.isEmpty = false;
         (store.state.debug)&&console.log("执行了return 2")
         store.commit('getInfo', o);

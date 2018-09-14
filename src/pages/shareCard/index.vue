@@ -404,11 +404,12 @@ export default {
         );
 
       //绘制营业时间
+      console.log("shareInfo.storeInfo",shareInfo.storeInfo);
       let business =
         "营业时间：" +
         shareInfo.storeInfo.businessstart +
         ":00-" +
-        shareInfo.storeInfo.businessstart +
+        shareInfo.storeInfo.businessend +
         ":00";
       canvasHeight =
         canvasHeight +

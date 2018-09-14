@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     mobile: 1,
     name: false,
     openId: 1,
-    session_key: 1,
+    session_key: '',
     isVip: false,
     isShowHX: false,
     endTime: false,
@@ -39,7 +39,7 @@ const store = new Vuex.Store({
       let cb = obj.cb;
       let _this = this;
       let that = obj.that;
-      
+      console.log("testgniodgnio:", _this, _this.session_key);
       if (_this.session_key) {
         (state.debug) ? console.log("直接get",_this.session_key) : '';
         typeof cb == "function" && cb(_this.session_key)
@@ -118,10 +118,13 @@ const store = new Vuex.Store({
       (state.debug) ? console.log("getInfo",o) : '';
       let url = state.doMain;
       url = url + o.url;
+      let mOpenId = state.openId === 1 ? wx.getStorageSync('openId') : state.openId;
+      let mSessionKey = !state.session_key ? wx.getStorageSync('session_key') : state.session_key;
+      // console.log("mOpenId:", mOpenId, "mSessionKey", mSessionKey, "state.openId", state.openId, "state.session_key", state.session_key);
       if (o.url.indexOf('?') != -1) {
-        url += "&openid=" + state.openId + "&session_key=" + state.session_key;
+        url += "&openid=" + mOpenId + "&session_key=" + mSessionKey;
       } else {
-        url += "?openid=" + state.openId + "&session_key=" + state.session_key;
+        url += "?openid=" + mOpenId + "&session_key=" + mSessionKey;
       }
       let that = o.that;
       wx.request({
@@ -162,6 +165,9 @@ const store = new Vuex.Store({
                   if (o.hideLoading){
                     that.isLoading = false;
                   }
+                  if (o.doEmpty){
+                    that.isEmpty = true;
+                  }
                   wx.hideLoading();
                   break;
               }
@@ -176,9 +182,12 @@ const store = new Vuex.Store({
         wx.showLoading({mask: true});
       }
       let d = o.data;
+      let mOpenId = state.openId === 1 ? wx.getStorageSync('openId') : state.openId;
+      let mSessionKey = !state.session_key ? wx.getStorageSync('session_key') : state.session_key;
+      // console.log("mOpenId:", mOpenId, "mSessionKey", mSessionKey);
       if (!o.isGetSession) {
-        d.openid = state.openId;
-        d.session_key = state.session_key;
+        d.openid = mOpenId;
+        d.session_key = mSessionKey;
       }
       (state.debug) ? console.log("reqInfoData",d) : '';
       wx.request({
@@ -205,6 +214,8 @@ const store = new Vuex.Store({
                 case 1:
                   if (o.isGetSession) {
                     wx.hideLoading();
+                    wx.setStorageSync("session_key", got.data.session_key);
+                    wx.setStorageSync("openId", got.data.openid);
                     state.session_key = got.data.session_key;
                     state.openId = got.data.openid;
                     state.hasOpened = got.data.relation;
@@ -241,12 +252,13 @@ const store = new Vuex.Store({
     },
     initStore: (state, o) => {
       (state.debug) ? console.log("initStore") : '';
+      console.log(Number(state.session_key));
       if(Number(state.session_key)===1||Number(state.openId)===1){
         store.replaceState(o);
       }
     },
     initUserInfo: (state, o) => {
-      if(Number(state.session_key)===1||Number(state.openId)===1){
+      if(!state.session_key||Number(state.openId)===1){
         (state.debug) && console.log("if");
         wx.showLoading({mask: true});
         wx.getLocation({

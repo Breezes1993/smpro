@@ -296,17 +296,7 @@
           search = kw;
           _this.searchInp = kw
         }
-        let o = {
-          url: Api.url_index_near + "?title=" + search
-          + "&longitude=" + store.state.tempObj.tempLola.longitude
-          + "&latitude=" + store.state.tempObj.tempLola.latitude
-          + "&page=" + _this.curPage,
-          data: {},
-          cb: _this.callBackSearch,
-          hideAlert: true,
-          that:_this,
-          hideLoading: true
-        };
+
 
         if (_this.lastInp != _this.searchInp) {
           _this.lastInp = _this.searchInp;
@@ -319,7 +309,18 @@
           _this.isLoading = false;
           return;
         }
-
+        let o = {
+          url: Api.url_index_near + "?title=" + search
+          + "&longitude=" + store.state.tempObj.tempLola.longitude
+          + "&latitude=" + store.state.tempObj.tempLola.latitude
+          + "&page=" + _this.curPage,
+          data: {},
+          cb: _this.callBackSearch,
+          hideAlert: true,
+          that:_this,
+          hideLoading: true,
+          doEmpty: true
+        };
         store.commit('getInfo', o);
       },
       callBackSearch(o) {

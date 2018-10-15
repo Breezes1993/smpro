@@ -55,6 +55,8 @@ export default {
 
       'pages/noticePage/main',
       'pages/fakeindex/main',
+
+      'pages/selectCity/main',
     ],
     window: {
       backgroundTextStyle: 'light',

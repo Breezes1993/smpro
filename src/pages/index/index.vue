@@ -4,6 +4,17 @@
     
     <div class="pad-sm bg-white">
       <div class="flexBox text-sm">
+        <div class="flexBox flexAuto flex15 ver-cen">
+          <div class="flexAuto" @click="toSelectCity(mCity)">
+            <p>{{mCity}}</p>
+          </div>
+          <div class="flex4">
+            <img src="/static/img/icon_down.png" class="block" style="width: 19rpx;height: 19rpx;">
+          </div>
+          <div class="flex4">
+            <img src="/static/img/allow_r_white.png" class="block" style="width: 19rpx;height: 19rpx;">
+          </div>
+        </div>
         <div class="flexAuto">
           <div class="pad-right-sm">
             <div class="bg-a5 rad500 pad-ver-xs pad-hov-xs" @click="openLocationFn">
@@ -266,7 +277,8 @@
         hasO: 1,
         verifyCode: -1,
         showModalStatus: false,
-        screenHeight: 800
+        screenHeight: 800,
+        mCity: '厦门'
       }
     },
     onShareAppMessage: function (res) {
@@ -496,6 +508,11 @@
       toStore(id) {
         wx.navigateTo({
           url: '/pages/storeInfo/main' + '?id=' + id
+        })
+      },
+      toSelectCity(mCity) {
+        wx.navigateTo({
+          url: "/pages/selectCity/main" + '?city=' + mCity
         })
       },
       bannerJump(type, id) {

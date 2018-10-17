@@ -104,6 +104,16 @@
         </div>
       </div>
 
+      <div class="flexBox pad-ver-sm b-b1 ver-cen">
+        <div class="flex25">
+          <p>人均消费:</p>
+        </div>
+        <div class="flexAuto">
+          <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==2" @input="inputFn($event,7)">
+          <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==1" v-model="avgConsumer">
+        </div>
+      </div>
+
       <div :class="'flexBox pad-ver-sm ver-cen ' + (pickerIndex===0?'b-b1':'')">
         <div class="flex25">
           <p>所属行业:</p>
@@ -472,6 +482,9 @@
             break;
           case 6:
             _this.telCode = e.target.value;
+            break;
+          case 7:
+            _this.avgConsumer = e.target.value;
             break;
           default:
             break;

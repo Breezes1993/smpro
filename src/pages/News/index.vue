@@ -1,6 +1,13 @@
 <template>
   <div>
-
+    <scroll-view scroll-x="true"  class="bg-white text-sm posReal" style="margin-top:30rpx;" 
+      v-for="(fasetSelect,fsIndex) in fasetSelects" 
+      v-bind:key="fasetSelect.name+fsIndex"
+      v-if="fasetSelect.type === '02'">
+      <div class="flexBox pad-ver-xs pad-hov-xs" style="overflow-x: auto;">
+        <span @click="clickItem(item)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" style="color:#000;flex-shrink:0;" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
+      </div>
+    </scroll-view>
     <div class="pad-top-sm" v-for="(item,index) in infoArr" :key="index" :wx:key="index">
       <div class="bg-white pad-top-sm pad-hov-sm pad-bottom-xs">
 
@@ -102,7 +109,8 @@
         isSeeImg: false,
         hasZan: false,
         tempArr: {},
-        showModalStatus: false
+        showModalStatus: false,
+        fasetSelects: []
       }
     },
     mounted(){
@@ -114,6 +122,7 @@
       //   store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
       // }
       store.commit('initUserInfo',{that:this,cb:this.initInfoFn});
+      this.initFastSelect();
       
     },
     onLoad() {
@@ -300,6 +309,44 @@
             showCancel: false
           });
         }
+      },
+
+
+      initFastSelect() {
+        let o = {
+          url: Api.url_fastselect,
+          data: {},
+          cb: this.fastCallBack
+        };
+        store.commit("getInfo", o);
+      },
+      fastCallBack(res){
+        (store.state.debug)&&console.log("获取faseselect",res);
+        res.data.fasetSelects.forEach(element=>{
+          element.items.splice(0,0,{itemName:"不限",isSelect: true});
+        });
+        this.$set(this,"fasetSelects",res.data.fasetSelects);
+      },
+      clickItem(item){
+        // TODO 需要修改成类型
+        if(this.isLoading){
+          this.isLoading = false;
+          return;
+        }
+        let name = item.itemName;
+        this.clickName = name;
+        (store.state.debug)&&console.log(JSON.stringify(this.fasetSelects))
+        this.fasetSelects.forEach(element=>{
+          element.items.forEach(elementItem=>{
+            (store.state.debug)&&console.log(JSON.stringify(elementItem));
+            delete elementItem.isSelect;
+          })
+        })
+        this.$set(item,"isSelect",true);
+        this.infoArr = [];
+        this.curPage = 1;
+        this.isEmpty = false;
+        this.initInfoFn();
       }
     }
   }

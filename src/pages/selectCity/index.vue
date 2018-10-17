@@ -8,7 +8,7 @@
     </div>
     <div class="col-999 pad-ver-xs">热门城市</div>
     <div class="flexBox pad-ver-xs" style="justify-content:space-between;">
-      <div class="ver-cen city-box" v-for="city in cityList" :key="city">
+      <div class="ver-cen city-box" v-for="city in cityList" :key="city" @click="changeCity(city)">
         <p class="pad-ver-xs pad-hov-xs">{{city}}</p>
       </div>
     </div>
@@ -33,6 +33,10 @@
       })
     },
     methods: {
+      changeCity(city) {
+        // TODO 这里需要修改sotrage里面的地区，避免与首页用微信写的冲突。
+        wx.setStorageSync("_city", city);
+      }
     }
   }
 </script>

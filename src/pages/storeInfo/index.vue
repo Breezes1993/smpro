@@ -175,6 +175,15 @@
             </div>
           </div>
 
+          <div class="flexBox pad-ver-sm ver-cen b-b1">
+            <div class="flex8">
+              <icon type="waiting" size="16" color="#8a8a8a" class="ver-mid"></icon>
+            </div>
+            <div class="flexAuto">
+              <p class="ell">人均消费：{{storeInfo.avgConsumer}}</p>
+            </div>
+          </div>
+
           <div class="flexBox pad-ver-sm ver-cen b-b1" @click="callStore">
             <div class="flex8">
               <img src="/static/img/tel.png" class="block" style="width: 30rpx;height: 30rpx;">

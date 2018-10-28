@@ -3,7 +3,7 @@
     <scroll-view scroll-x="true"  class="bg-white text-sm posReal" style="margin-top:30rpx;" 
       v-for="(fasetSelect,fsIndex) in fasetSelects" 
       v-bind:key="fasetSelect.name+fsIndex"
-      v-if="fasetSelect.type === '02'">
+      v-if="fasetSelect.type === '02'" v-show="false">
       <div class="flexBox pad-ver-xs pad-hov-xs" style="overflow-x: auto;">
         <span @click="clickItem(item)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" style="color:#000;flex-shrink:0;" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
       </div>

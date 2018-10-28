@@ -104,7 +104,7 @@
         </div>
       </div>
 
-      <div class="flexBox pad-ver-sm b-b1 ver-cen">
+      <div class="flexBox pad-ver-sm b-b1 ver-cen" v-if="false">
         <div class="flex25">
           <p>人均消费:</p>
         </div>
@@ -535,6 +535,7 @@
                 for (let i = 0, len = _this.bannerArr.length; i < len; i++) {
                   if (!_this.bannerArr[i].isLoad) {
                     _this.upLoadF(1, i);
+                    _this.bannerArr[i].isLoad = true;
                   }
                 }
                 break;
@@ -542,6 +543,7 @@
                 for (let i = 0, len = _this.detailArr.length; i < len; i++) {
                   if (!_this.detailArr[i].isLoad) {
                     _this.upLoadF(2, i);
+                    _this.detailArr[i].isLoad = true;
                   }
                 }
                 break;
@@ -847,7 +849,6 @@
           });
           return;
         }
-
         return _this.upLoadF(0, 0)
       },
       imgDelFn(id) {

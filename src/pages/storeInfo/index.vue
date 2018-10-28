@@ -175,7 +175,7 @@
             </div>
           </div>
 
-          <div class="flexBox pad-ver-sm ver-cen b-b1">
+          <div class="flexBox pad-ver-sm ver-cen b-b1" v-if="false">
             <div class="flex8">
               <icon type="waiting" size="16" color="#8a8a8a" class="ver-mid"></icon>
             </div>

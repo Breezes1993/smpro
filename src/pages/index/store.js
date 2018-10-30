@@ -61,6 +61,7 @@ const store = new Vuex.Store({
                       // 发送 res.code 到后台换取 openId, sessionKey, unionId
                       // return cb();
                       wx.showLoading({mask: true});
+                      // TODO 参数新增一个商户id字段，从store获取，从分享进来的用户，带入id
                       let o = {
                         url: state.getSessionUrl,
                         data: {

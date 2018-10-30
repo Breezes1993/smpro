@@ -104,6 +104,16 @@
         </div>
       </div>
 
+      <div class="flexBox pad-ver-sm b-b1 ver-cen" v-if="false">
+        <div class="flex25">
+          <p>人均消费:</p>
+        </div>
+        <div class="flexAuto">
+          <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==2" @input="inputFn($event,7)">
+          <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==1" v-model="avgConsumer">
+        </div>
+      </div>
+
       <div :class="'flexBox pad-ver-sm ver-cen ' + (pickerIndex===0?'b-b1':'')">
         <div class="flex25">
           <p>所属行业:</p>
@@ -473,6 +483,9 @@
           case 6:
             _this.telCode = e.target.value;
             break;
+          case 7:
+            _this.avgConsumer = e.target.value;
+            break;
           default:
             break;
         }
@@ -522,6 +535,7 @@
                 for (let i = 0, len = _this.bannerArr.length; i < len; i++) {
                   if (!_this.bannerArr[i].isLoad) {
                     _this.upLoadF(1, i);
+                    _this.bannerArr[i].isLoad = true;
                   }
                 }
                 break;
@@ -529,6 +543,7 @@
                 for (let i = 0, len = _this.detailArr.length; i < len; i++) {
                   if (!_this.detailArr[i].isLoad) {
                     _this.upLoadF(2, i);
+                    _this.detailArr[i].isLoad = true;
                   }
                 }
                 break;
@@ -834,7 +849,6 @@
           });
           return;
         }
-
         return _this.upLoadF(0, 0)
       },
       imgDelFn(id) {

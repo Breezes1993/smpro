@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    mCity: '厦门',
     curTab: 1,
     curRate: 3.6,
     curAddress: '当前地址',
@@ -326,6 +327,12 @@ Page({
   toStore(res) {
     wx.navigateTo({
       url: '/pages/storeInfo/main' + '?id=' + res.currentTarget.dataset.id
+    })
+  },
+  toSelectCity(res) {
+    console.log(res.currentTarget.dataset);
+    wx.navigateTo({
+      url: "/pages/selectCity/main" + '?city=' + res.currentTarget.dataset.mCity
     })
   },
   bannerJump(res) {

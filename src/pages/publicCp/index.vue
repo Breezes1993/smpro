@@ -92,17 +92,17 @@
             <p>有效日期类型:</p>
           </div>
           <div class="flexAuto te-cen">
-            <p @click="dateType=1">
-              <icon type="success" class="ver-mid" size="20"
-                    :color="(dateType!=1) ? 'rgb(210,210,210)': 'rgb(244,68,68)'"></icon>
-              <span class="ver-mid pad-left-xs">指定时间段</span>
-            </p>
-          </div>
-          <div class="flexAuto te-cen">
             <p @click="dateType=2">
               <icon type="success" class="ver-mid" size="20"
                     :color="(dateType!=2) ? 'rgb(210,210,210)': 'rgb(244,68,68)'"></icon>
               <span class="ver-mid pad-left-xs">领取后开始计算</span>
+            </p>
+          </div>
+          <div class="flexAuto te-cen">
+            <p @click="dateType=1">
+              <icon type="success" class="ver-mid" size="20"
+                    :color="(dateType!=1) ? 'rgb(210,210,210)': 'rgb(244,68,68)'"></icon>
+              <span class="ver-mid pad-left-xs">指定时间段</span>
             </p>
           </div>
         </div>

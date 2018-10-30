@@ -38,6 +38,7 @@
 .bg-aq{background-color: #33B8B8}
 
 .col-bbb{color: #bbbbbb}
+.col-999{color: #999}
 
 .b-t1.b-t-red{border-top-color: #dd514c!important;}
 
@@ -210,4 +211,8 @@
 
 .save-image cover-view.hover {
   opacity: .6;
+}
+
+.city-box {
+  width:31%;border:1rpx solid #F0F0F0;text-align:center;
 }

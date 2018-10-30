@@ -162,6 +162,17 @@ const store = new Vuex.Store({
                         }
                       }
                     });
+                    if (got.msg == '用户不存在') {
+                      wx.showModal({
+                        title: '测试',
+                        content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
+                        success: function (res) {
+                          if (res.confirm) {
+                          } else if (res.cancel) {
+                          }
+                        }
+                      });
+                    }
                   }
                   if (o.hideLoading){
                     that.isLoading = false;
@@ -241,6 +252,17 @@ const store = new Vuex.Store({
                       }
                     }
                   });
+                  if (got.msg == '用户不存在') {
+                    wx.showModal({
+                      title: '测试',
+                      content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
+                      success: function (res) {
+                        if (res.confirm) {
+                        } else if (res.cancel) {
+                        }
+                      }
+                    });
+                  }
                   break;
               }
             }

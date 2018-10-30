@@ -4,7 +4,7 @@
     <div class="pad-hov-sm pad-ver-xs bg-white">
       <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
         <input type="text" class="block te-cen" v-model="searchInp" placeholder="搜索" confirm-type="search"
-               @confirm="searchFn(searchInp)" v-on:input ="inputFunc">
+               @confirm="searchFn(searchInp)">
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="bg-white text-sm pad-ver-xs pad-hov-smb2 posReal" v-show="!showResult" v-for="(fasetSelect,fsIndex) in fasetSelects" v-bind:key="fasetSelect.name+fsIndex">
+    <div class="bg-white text-sm pad-ver-xs pad-hov-smb2 posReal" v-show="searchInp.length === 0" v-for="(fasetSelect,fsIndex) in fasetSelects" v-bind:key="fasetSelect.name+fsIndex">
       <div class="pad-ver-xs pad-hov-xs text-lg text-Bolder">
         <span class="fs-tag"></span>
         <p style="margin-left:10rpx;">{{fasetSelect.name}}</p>
@@ -266,12 +266,12 @@
         })
 
       },
-      inputFunc(event){
-        (store.state.debug)&&console.log("inputFunc",event);
-        if(event.mp.detail.value.length===0){
-          this.showResult = false;
-        }
-      },
+      // inputFunc(event){
+      //   (store.state.debug)&&console.log("inputFunc",event);
+      //   if(event.mp.detail.value.length===0){
+      //     this.showResult = false;
+      //   }
+      // },
       searchFn(searchInp) {
         let _this = this;
         if (_this.searchInp.length == 0) {

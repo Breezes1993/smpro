@@ -2,9 +2,15 @@
   <div>
 
     <div class="pad-hov-sm pad-ver-xs bg-white">
-      <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
+      <!-- <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
         <input type="text" class="block te-cen" v-model="searchInp" placeholder="搜索" confirm-type="search"
                @confirm="searchFn(searchInp)">
+      </div> -->
+      <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
+        <input type="text" class="block te-cen" placeholder="搜索"  confirm-type="search" v-model="searchInp2">
+      </div>
+      <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
+        <input type="text" class="block te-cen" placeholder="搜索"  confirm-type="search">
       </div>
     </div>
 
@@ -30,7 +36,7 @@
         <span @click="clickItem(fasetSelect,item.itemName)" class="fs-item" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
       </div>
     </div>
-    <div class="bg-white text-sm" v-show="showResult">
+    <div class="bg-white text-sm" v-show="searchInp.length !== 0">
 
       <div class="pad-sm b-t1" v-for="(item,index) in resultArr" @click="toStore(item.id)" :key="index"
            :wx:key="index">
@@ -150,6 +156,7 @@
       return {
         kwArr: [],
         searchInp: '',
+        searchInp2: '',
         lastInp: '',
         curPage: 1,
         isEmpty: false,

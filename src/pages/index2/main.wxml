@@ -1,7 +1,7 @@
 <scroll-view scroll-y="true" style="height:{{screenHeight}}px" enable-back-to-top="true" lower-threshold="100" bindscrolltolower="scrolltolower">
   <view class="pad-sm bg-white">
     <view class="flexBox text-sm">
-      <view class="flexBox flexAuto flex15 ver-cen" wx:if="false">
+      <view class="flexBox flexAuto flex15 ver-cen" wx:if="{{false}}">
         <view class="flexAuto" data-m-city="{{mCity}}" bindtap="toSelectCity">
           <p>{{mCity}}</p>
         </view>

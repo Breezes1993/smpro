@@ -437,7 +437,8 @@
         let arr = [];
         for (let i = 1; i <= 24; i++) {
           let num = (i < 10) ? '0' + i : i;
-          arr.push(num + ":00")
+          arr.push(num + ":00");
+          i !== 24 && arr.push(num + ":30");
         }
         _this.dateArr = arr.slice(0);
         _this.codeAlert = false;

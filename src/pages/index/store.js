@@ -67,7 +67,8 @@ const store = new Vuex.Store({
                         data: {
                           code: res.code,
                           nickName: info.userInfo.nickName,
-                          avatarUrl: info.userInfo.avatarUrl
+                          avatarUrl: info.userInfo.avatarUrl,
+                          shop_id: obj.shop_id
                         },
                         cb: cb,
                         isGetSession: true
@@ -106,7 +107,8 @@ const store = new Vuex.Store({
             data: {
               code: res.code,
               nickName: info.userInfo.nickName,
-              avatarUrl: info.userInfo.avatarUrl
+              avatarUrl: info.userInfo.avatarUrl,
+              shop_id: obj.shop_id
             },
             cb: cb,
             isGetSession: true
@@ -119,8 +121,8 @@ const store = new Vuex.Store({
       (state.debug) ? console.log("getInfo",o) : '';
       let url = state.doMain;
       url = url + o.url;
-      let mOpenId = state.openId === 1 ? wx.getStorageSync('openId') : state.openId;
-      let mSessionKey = !state.session_key ? wx.getStorageSync('session_key') : state.session_key;
+      let mOpenId = wx.getStorageSync('openId') || state.openId;
+      let mSessionKey = wx.getStorageSync('session_key') || state.session_key;
       // console.log("mOpenId:", mOpenId, "mSessionKey", mSessionKey, "state.openId", state.openId, "state.session_key", state.session_key);
       if (o.url.indexOf('?') != -1) {
         url += "&openid=" + mOpenId + "&session_key=" + mSessionKey;
@@ -194,8 +196,8 @@ const store = new Vuex.Store({
         wx.showLoading({mask: true});
       }
       let d = o.data;
-      let mOpenId = state.openId === 1 ? wx.getStorageSync('openId') : state.openId;
-      let mSessionKey = !state.session_key ? wx.getStorageSync('session_key') : state.session_key;
+      let mOpenId = wx.getStorageSync('openId') || state.openId;
+      let mSessionKey = wx.getStorageSync('session_key') || state.session_key;
       // console.log("mOpenId:", mOpenId, "mSessionKey", mSessionKey);
       if (!o.isGetSession) {
         d.openid = mOpenId;
@@ -252,17 +254,17 @@ const store = new Vuex.Store({
                       }
                     }
                   });
-                  if (got.msg == '用户不存在') {
-                    wx.showModal({
-                      title: '测试',
-                      content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
-                      success: function (res) {
-                        if (res.confirm) {
-                        } else if (res.cancel) {
-                        }
-                      }
-                    });
-                  }
+                  // if (got.msg == '用户不存在') {
+                  //   wx.showModal({
+                  //     title: '测试',
+                  //     content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
+                  //     success: function (res) {
+                  //       if (res.confirm) {
+                  //       } else if (res.cancel) {
+                  //       }
+                  //     }
+                  //   });
+                  // }
                   break;
               }
             }

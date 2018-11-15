@@ -618,7 +618,11 @@
           console.log("执行了这里");
           store.commit('initStore',getApp().globalData.store.state);  
         }
-        store.commit('initUserInfo',{that:this,cb:()=>wx.hideLoading()});
+        store.commit('initUserInfo',{
+          shop_id: this.curId,
+          that:this,
+          cb:()=>wx.hideLoading()
+        });
         this.initInfoFn();
         
       })
@@ -867,6 +871,7 @@
         console.log("getUserInfo");
         let obj = {
           e: e,
+          shop_id: this.curId,
           that: this,
           cb: () => wx.hideLoading()
         }

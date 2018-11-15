@@ -2,15 +2,9 @@
   <div>
 
     <div class="pad-hov-sm pad-ver-xs bg-white">
-      <!-- <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
+      <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
         <input type="text" class="block te-cen" v-model="searchInp" placeholder="搜索" confirm-type="search"
                @confirm="searchFn(searchInp)">
-      </div> -->
-      <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
-        <input type="text" class="block te-cen" placeholder="搜索"  confirm-type="search" v-model="searchInp2">
-      </div>
-      <div class="pad-hov-xs pad-ver-xs overHid rad500 searchBorder">
-        <input type="text" class="block te-cen" placeholder="搜索"  confirm-type="search">
       </div>
     </div>
 
@@ -122,7 +116,7 @@
     <!-- <div style="height:40px;width:100%;" v-show="!isLoading&&!isEmpty"></div> -->
     <div class="te-cen b-t1" v-show="isLoading">
       <div class="pad-ver-xs bg-white">
-        <img src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;"
+        <img src="/static/img/reflash.png" class="ver-mid Rotation" style="height: 60rpx;width: 60rpx;"
               :animation="animationD">
         <span class="pad-left-sm ver-mid">加载更多...</span>
       </div>
@@ -161,11 +155,11 @@
         curPage: 1,
         isEmpty: false,
         isLoading: false,
-        animation: {},
-        animationD: '',
-        rotateNum: 0,
+        // 加载动画影响功能
+        //animation: {},
+        //animationD: '',
+        //rotateNum: 0,
         resultArr: [],
-
         fasetSelects: [{
           name: "商圈",
           type: "01",

@@ -95,7 +95,7 @@ Page({
     //console.log("先执行这里吗？",obj)
     _this.getUserInfoFn(obj);
     _this.initJoinNews();
-    _this.initAnimat();
+    // _this.initAnimat();
   },
 
   /**
@@ -604,8 +604,8 @@ Page({
     // } else {
     //   url += "?openid=" + _this.data.store.state.openId + "&session_key=" + _this.data.store.state.session_key;
     // }
-    let mOpenId = _this.data.store.state.optnId === 1 ? wx.getStorageSync('openId') : _this.data.store.state.openId;
-    let mSessionKey = !_this.data.store.state.session_key ? wx.getStorageSync('session_key') : _this.data.store.state.session_key;
+    let mOpenId = wx.getStorageSync('openId') || _this.data.store.state.openId;
+    let mSessionKey = wx.getStorageSync('session_key') || _this.data.store.state.session_key;
     if (o.url.indexOf('?') != -1) {
       url += "&openid=" + mOpenId + "&session_key=" + mSessionKey;
     } else {
@@ -668,8 +668,8 @@ Page({
     //   d.openid = _this.data.store.state.openId;
     //   d.session_key = _this.data.store.state.session_key;
     // }
-    let mOpenId = _this.data.store.state.optnId === 1 ? wx.getStorageSync('openId') : _this.data.store.state.openId;
-    let mSessionKey = !_this.data.store.state.session_key ? wx.getStorageSync('session_key') : _this.data.store.state.session_key;
+    let mOpenId = wx.getStorageSync('openId') || _this.data.store.state.openId;
+    let mSessionKey = wx.getStorageSync('session_key') || _this.data.store.state.session_key;
     if (!o.isGetSession) {
       d.openid = mOpenId;
       d.session_key = mSessionKey;

@@ -91,14 +91,14 @@
           <div class="flex25">
             <p>有效日期类型:</p>
           </div>
-          <div class="flexAuto te-cen">
+          <div class="flexAuto te-left">
             <p @click="dateType=2">
               <icon type="success" class="ver-mid" size="20"
                     :color="(dateType!=2) ? 'rgb(210,210,210)': 'rgb(244,68,68)'"></icon>
               <span class="ver-mid pad-left-xs">领取后开始计算</span>
             </p>
           </div>
-          <div class="flexAuto te-cen">
+          <div class="flexAuto te-cen" v-if="false" >
             <p @click="dateType=1">
               <icon type="success" class="ver-mid" size="20"
                     :color="(dateType!=1) ? 'rgb(210,210,210)': 'rgb(244,68,68)'"></icon>
@@ -324,7 +324,7 @@
         },
         hasOpened: false,
         curCpType: 1,//当前券类型
-        dateType: 1,//当前时间类型
+        dateType: 2,//当前时间类型
         startDay: 1,//开始天数 1为当天 2为第二天
         agreementInfo: ''
       }

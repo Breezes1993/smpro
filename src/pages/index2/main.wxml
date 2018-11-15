@@ -186,7 +186,7 @@
 
     <view class="te-cen" wx:if="{{isLoading}}">
       <view class="pad-ver-xs bg-white">
-        <image src="/static/img/reflash.png" class="ver-mid" style="height: 60rpx;width: 60rpx;" animation="{{animationD}}"></image>
+        <image src="/static/img/reflash.png" class="ver-mid Rotation" style="height: 60rpx;width: 60rpx;"></image>
         <span class="pad-left-sm ver-mid">加载更多...</span>
       </view>
     </view>

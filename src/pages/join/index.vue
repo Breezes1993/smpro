@@ -83,7 +83,7 @@
             <div class="flexAuto">
               <picker @change="dateChange($event,1)" :value="startIndex" :range="dateArr">
                 <view class="picker">
-                  {{dateArr[startIndex]}}
+                  {{startValueCmp}}
                 </view>
               </picker>
             </div>
@@ -95,7 +95,7 @@
             <div class="flexAuto">
               <picker @change="dateChange($event,2)" :value="endIndex" :range="dateArr">
                 <view class="picker">
-                  {{dateArr[endIndex]}}
+                  {{endValueCmp}}
                 </view>
               </picker>
             </div>
@@ -103,8 +103,8 @@
           </div>
         </div>
       </div>
-
-      <div class="flexBox pad-ver-sm b-b1 ver-cen" v-if="false">
+      
+            <div class="flexBox pad-ver-sm b-b1 ver-cen" v-if="false">
         <div class="flex25">
           <p>人均消费:</p>
         </div>
@@ -280,6 +280,36 @@
   import store from '../index/store'
 
   export default {
+    computed: {
+      startValueCmp() {
+        if (!this.startValue) return "01:00";
+        let type = typeof this.startValue;
+        if (type === 'string') {
+          let splits = this.startValue.split(":");
+          if (splits.length === 1) {
+            return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+          } else {
+            return this.startValue;
+          }
+        } else if (type === 'number') {
+          return this.startValue <= 9 ? "0" + this.startValue + ":00" : this.startValue + ":00";
+        }
+      },
+      endValueCmp() {
+        if (!this.endValue) return "01:00";
+        let type = typeof this.endValue;
+        if (type === 'string') {
+          let splits = this.endValue.split(":");
+          if (splits.length === 1) {
+            return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+          } else {
+            return this.endValue;
+          }
+        } else if (type === 'number') {
+          return this.endValue <= 9 ? "0" + this.endValue + ":00" : this.endValue + ":00";
+        }
+      }
+    },
     data() {
       return {
         curId: -1,
@@ -291,11 +321,13 @@
         curAddress: '请定位您的位置信息,定位后可再进行编辑',
         longitude: '',
         latitude: '',
-        typeArr: [{name: '', id: ''}],
+        typeArr: [{name: '1', id: '1'}],
         pickerIndex: 0,
         dateArr: [],
         startIndex: 0,
         endIndex: 2,
+        startValue: '',
+        endValue: '',
         device: {
           has1: false,
           has2: false,
@@ -423,10 +455,10 @@
         let _this = this;
         switch (way) {
           case 1:
-            _this.startIndex = e.target.value;
+            _this.startValue = _this.dateArr[e.target.value];
             break;
           case 2:
-            _this.endIndex = e.target.value;
+            _this.endValue = _this.dateArr[e.target.value];
             break;
           default:
             break;
@@ -587,7 +619,19 @@
       },
       callBackCate(o) {
         let _this = this;
-        _this.typeArr = o.data;
+        if (o.data instanceof Array) {
+          _this.typeArr = o.data.sort(function(a, b) {
+            return a.id>b.id;
+          })
+        } else {
+          let tmpArrays = [];
+          console.log(o.data);
+          for (let key in o.data) {
+            console.log(key);
+            tmpArrays.push(o.data[key]);
+          }
+          _this.typeArr = tmpArrays;
+        }
         return _this.initImg();
       },
       upLoadF(type, index) {
@@ -604,8 +648,10 @@
               return _this.editSubFn();
             }
             files = [{img: _this.storeLogo}];
-            let start = _this.dateArr[_this.startIndex].split(':')[0];
-            let end = _this.dateArr[_this.endIndex].split(':')[0];
+            // let start = _this.dateArr[_this.startIndex].split(':')[0];
+            // let end = _this.dateArr[_this.endIndex].split(':')[0];
+            let start = _this.startValue;
+            let end = _this.endValue;
             d = {
               name: _this.name,
               tel: _this.tel,
@@ -990,24 +1036,27 @@
           })
         });
         _this.fasetSelects = JSON.parse(JSON.stringify( _this.fasetSelects));
-        let op = (o.data.businessstart <= 9) ? '0' + o.data.businessstart : o.data.businessstart;
-        let ed = (o.data.businessend <= 9) ? '0' + o.data.businessend : o.data.businessend;
-        for (let i = 0, len = _this.dateArr.length; i < len; i++) {
-          let start = _this.dateArr[i].split(':')[0];
-          let end = _this.dateArr[i].split(':')[0];
-          if (op == start) {
-            _this.startIndex = i;
-          } else if (ed == end) {
-            _this.endIndex = i;
-          }
-        }
-
+        // let op = (o.data.businessstart <= 9) ? '0' + o.data.businessstart : o.data.businessstart;
+        // let ed = (o.data.businessend <= 9) ? '0' + o.data.businessend : o.data.businessend;
+        // for (let i = 0, len = _this.dateArr.length; i < len; i++) {
+        //   let start = _this.dateArr[i].split(':')[0];
+        //   let end = _this.dateArr[i].split(':')[0];
+        //   if (op == start) {
+        //     _this.startIndex = i;
+        //   } else if (ed == end) {
+        //     _this.endIndex = i;
+        //   }
+        // }
+        _this.startValue = o.data.businessstart || "01:00";
+        _this.endValue = o.data.businessend || "01:00";
         return _this.callBackLI({data: o.img});
       },
       editSubFn() {
         let _this = this;
-        let start = _this.dateArr[_this.startIndex].split(':')[0];
-        let end = _this.dateArr[_this.endIndex].split(':')[0];
+        // let start = _this.dateArr[_this.startIndex].split(':')[0];
+        // let end = _this.dateArr[_this.endIndex].split(':')[0];
+        let start = _this.startValue;
+        let end = _this.endValue;
         let o = {
           url: Api.url_join_edit_opened,
           data: {

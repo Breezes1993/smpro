@@ -27,6 +27,38 @@
 import a from "../../utils/canvasUtils.js";
 import store from '../index/store'
 export default {
+  computed: {
+    businessStartCmp() {
+      if (!this.shareInfo.storeInfo) return "";
+      if (!this.shareInfo.storeInfo.businessstart) return "01:00";
+      let type = typeof this.shareInfo.storeInfo.businessstart;
+      if (type === 'string') {
+        let splits = this.shareInfo.storeInfo.businessstart.split(":");
+        if (splits.length === 1) {
+          return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+        } else {
+          return this.shareInfo.storeInfo.businessstart;
+        }
+      } else if (type === 'number') {
+        return this.shareInfo.storeInfo.businessstart <= 9 ? "0" + this.shareInfo.storeInfo.businessstart + ":00" : this.shareInfo.storeInfo.businessstart + ":00";
+      }
+    },
+    businessEndCmp() {
+      if (!this.shareInfo.storeInfo) return "";
+      if (!this.shareInfo.storeInfo.businessend) return "01:00";
+      let type = typeof this.shareInfo.storeInfo.businessend;
+      if (type === 'string') {
+        let splits = this.shareInfo.storeInfo.businessend.split(":");
+        if (splits.length === 1) {
+          return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+        } else {
+          return this.shareInfo.storeInfo.businessend;
+        }
+      } else if (type === 'number') {
+        return this.shareInfo.storeInfo.businessend <= 9 ? "0" + this.shareInfo.storeInfo.businessend + ":00" : this.shareInfo.storeInfo.businessend + ":00";
+      }
+    }
+  },
   data() {
     return {
       name: "ss",
@@ -44,7 +76,8 @@ export default {
   mounted() {
     let _this = this;
     this.$nextTick(() => {
-      _this.shareInfo = wx.getStorageSync("shareInfo");
+      let storeShareInfo = wx.getStorageSync("shareInfo");
+      _this.shareInfo = storeShareInfo;
       store.commit('initUserInfo',{that:_this,cb:_this.drawCanvas});
       // _this.drawCanvas();
     });
@@ -405,12 +438,13 @@ export default {
 
       //绘制营业时间
       console.log("shareInfo.storeInfo",shareInfo.storeInfo);
-      let business =
-        "营业时间：" +
-        shareInfo.storeInfo.businessstart +
-        ":00-" +
-        shareInfo.storeInfo.businessend +
-        ":00";
+      // let business =
+      //   "营业时间：" +
+      //   shareInfo.storeInfo.businessstart +
+      //   ":00-" +
+      //   shareInfo.storeInfo.businessend +
+      //   ":00";
+      let business = "营业时间：" + _this.businessStartCmp + "-" + _this.businessEndCmp;
       canvasHeight =
         canvasHeight +
         _this.mFillText(

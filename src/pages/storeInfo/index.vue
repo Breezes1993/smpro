@@ -168,10 +168,14 @@
             <div class="flex8">
               <icon type="waiting" size="16" color="#8a8a8a" class="ver-mid"></icon>
             </div>
-            <div class="flexAuto">
+            <!-- <div class="flexAuto">
               <p class="ell">营业时间：
                 {{(storeInfo.businessstart>=10) ? storeInfo.businessstart : "0"+storeInfo.businessstart}}:00
                 - {{(storeInfo.businessend>=10) ? storeInfo.businessend : "0"+storeInfo.businessend}}:00</p>
+            </div> -->
+            <div class="flexAuto">
+              <p class="ell">营业时间：
+                {{businessStartCmp}} - {{businessEndCmp}}</p>
             </div>
           </div>
 
@@ -561,6 +565,36 @@
   import store from "../index/store";
 
   export default {
+    computed: {
+      businessStartCmp() {
+        if (!this.storeInfo.businessstart) return "01:00";
+        let type = typeof this.storeInfo.businessstart;
+        if (type === 'string') {
+          let splits = this.storeInfo.businessstart.split(":");
+          if (splits.length === 1) {
+            return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+          } else {
+            return this.storeInfo.businessstart;
+          }
+        } else if (type === 'number') {
+          return this.storeInfo.businessstart <= 9 ? "0" + this.storeInfo.businessstart + ":00" : this.storeInfo.businessstart + ":00";
+        }
+      },
+      businessEndCmp() {
+        if (!this.storeInfo.businessend) return "01:00";
+        let type = typeof this.storeInfo.businessend;
+        if (type === 'string') {
+          let splits = this.storeInfo.businessend.split(":");
+          if (splits.length === 1) {
+            return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+          } else {
+            return this.storeInfo.businessend;
+          }
+        } else if (type === 'number') {
+          return this.storeInfo.businessend <= 9 ? "0" + this.storeInfo.businessend + ":00" : this.storeInfo.businessend + ":00";
+        }
+      }
+    },
     data() {
       return {
         curId: -1,

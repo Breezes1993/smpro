@@ -95,6 +95,7 @@
 
           </div>
           <div class="flex25">
+            <p class="btn btn-danger block btn-radius btn-xs" @click="toUpdate" v-if="hasO==3">我要修改</p>
             <p class="btn btn-danger block btn-radius btn-xs" @click="toJoin" v-if="hasO==2">我要入驻</p>
             <p class="btn btn-danger block btn-radius btn-xs" v-if="hasO==1">已入驻</p>
           </div>
@@ -542,6 +543,11 @@
         wx.navigateTo({
           url: '/pages/join/main'
         })
+      },
+      toUpdate() {
+        wx.navigateTo({
+          url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopid
+        });
       },
       toSearch() {
         let _this = this;

@@ -81,6 +81,7 @@
 
         </view>
         <view class="flex25">
+          <view class="_p btn btn-danger block btn-radius btn-xs" bindtap="toUpdate" wx:if="{{hasO==3}}">我要修改</view>
           <view class="_p btn btn-danger block btn-radius btn-xs" bindtap="toJoin" wx:if="{{hasO==2}}">我要入驻</view>
           <view class="_p btn btn-danger block btn-radius btn-xs" wx:if="{{hasO==1}}">已入驻</view>
         </view>

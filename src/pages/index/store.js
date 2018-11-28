@@ -9,7 +9,7 @@ const store = new Vuex.Store({
   state: {
     debug: false,
     doMain: 'https://www.zhongxiangliquan.com/index.php',
-    getSessionUrl: '/home/program/userinfo',
+    getSessionUrl: '/home/program/cs_userinfo',
     userInfo: '',
     defStore: defImg,
     hasOpened: 1,
@@ -239,6 +239,7 @@ const store = new Vuex.Store({
                     state.endTime = got.data.overduetime;
                     state.mobile = got.data.mobile;
                     state.name = got.data.name;
+                    state.shopId = got.data.shop_id;
                   }
                   getApp().globalData.store = {};
                   getApp().globalData.store.state = state;

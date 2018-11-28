@@ -34,7 +34,7 @@ Page({
       state: {
         debug: false,
         doMain: 'https://www.zhongxiangliquan.com/index.php',
-        getSessionUrl: '/home/program/userinfo',
+        getSessionUrl: '/home/program/cs_userinfo',
         userInfo: '',
         defStore: '/static/img/defstore.png',
         hasOpened: 1,
@@ -367,6 +367,11 @@ Page({
     wx.navigateTo({
       url: '/pages/join/main'
     })
+  },
+  toUpdate() {
+    wx.navigateTo({
+      url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopid
+    });
   },
 
   toSearch() {
@@ -714,6 +719,7 @@ Page({
                     "store.state.endTime": got.data.overduetime,
                     "store.state.mobile": got.data.mobile,
                     "store.state.name": got.data.name,
+                    "store.state.shopId": got.data.shop_id
                   });
                   getApp().globalData.store = _this.data.store;
                 }

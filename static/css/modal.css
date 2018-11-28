@@ -65,9 +65,15 @@
     font: 20px "microsoft yahei";
     text-align: center;
     border-top: 1px solid #e8e8ea;
+    border:0;
     color: #3cc51f;
   }
-  
+  .no-radius button{
+    border-radius: 0 !important;
+  }
+  .no-radius button::after{
+    border-radius: 0;
+  }
   .top {
     padding-top: 8px;
   }

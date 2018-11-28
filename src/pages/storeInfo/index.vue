@@ -557,6 +557,21 @@
       </div>
     </div>
 
+    <div class="drawer_screen" @click="powerDrawer2('close')" v-show="showModalStatus2"></div>
+    <div :animation="animationData" class="drawer_box" v-show="showModalStatus2">
+      <div class="drawer_title">提示</div>
+      <div class="drawer_content">
+        <div class="top grid content">
+          <label class="">您现在是新手，需要升级VIP会员</label>
+          <label class="">立即前往升级？</label>
+        </div>
+      </div>
+      <div class="btn_ok flexBox ver-cen no-radius" @click="powerDrawer2('close')" >
+        <button class="flexAuto" style="color:#000;" @click="powerDrawer2('close')">取消</button>
+        <button class="flexAuto" @click="toVip">确定</button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -614,7 +629,8 @@
         curPage: 1,
         commArr: [],
         isEmpty: false,
-        showModalStatus: false
+        showModalStatus: false,
+        showModalStatus2: false
       }
     },
     onLoad(o) {
@@ -761,6 +777,8 @@
       },
       toGetCp(id) {
         let _this = this;
+        this.showModalStatus2 = true;
+        return;
         /*let cpOne = "";
         for (let i = 0, len = _this.ticketList.length; i < len; i++) {
           if (id == _this.ticketList[i].id) {
@@ -777,6 +795,11 @@
 
         wx.navigateTo({
           url: '/pages/getCoupon/main' + '?id=' + id + '&sid=' + _this.storeInfo.id
+        })
+      },
+      toVip() {
+        wx.navigateTo({
+          url: '/pages/openVIPCustomer/main' + '?id=' + id + '&sid=' + _this.storeInfo.id
         })
       },
       toCommonList() {
@@ -898,6 +921,49 @@
         if (currentStatu == "open") {
           this.setData({
             showModalStatus: true
+          });
+        }
+      },
+      powerDrawer2: function(currentStatu) {
+        console.log("12312")
+        this.util2(currentStatu)
+      },
+      util2: function(currentStatu) {
+        /* 动画部分 */
+        // 第1步：创建动画实例 
+        var animation = wx.createAnimation({
+          duration: 200, //动画时长
+          timingFunction: "linear", //线性
+          delay: 0 //0则不延迟
+        });
+
+        // 第2步：这个动画实例赋给当前的动画实例
+        this.animation = animation;
+
+        // 第3步：执行第一组动画
+        animation.opacity(0).rotateX(-100).step();
+
+        // 第4步：导出动画对象赋给数据对象储存
+
+        this.animationData = animation.export();
+
+        // 第5步：设置定时器到指定时候后，执行第二组动画
+        setTimeout(function() {
+          // 执行第二组动画
+          animation.opacity(1).rotateX(0).step();
+          // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+          this.animationData = animation
+
+          //关闭
+          if (currentStatu == "close") {
+              this.showModalStatus2 = false;
+          }
+        }.bind(this), 200)
+
+        // 显示
+        if (currentStatu == "open") {
+          this.setData({
+            showModalStatus2: true
           });
         }
       },

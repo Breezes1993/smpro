@@ -17,8 +17,8 @@
         </div>
         <div class="flex33 te-right">
           <p class="text-danger" style="visibility: hidden">VIP</p>
-          <p class="text-danger pad-top-xs" @click="jumpFn(9)" v-if="!isVip">去升级VIP</p>
-          <p class="text-danger pad-top-xs" @click="jumpFn(9)" v-if="isVip">VIP用户</p>
+          <!-- <p class="text-danger pad-top-xs" @click="jumpFn(9)" v-if="!isVip">去升级VIP</p> -->
+          <p class="text-danger pad-top-xs" @click="toOpenVipCustomer" v-if="vip === 2">开通会员</p>
           <p class="pad-top-xs text-danger" v-if="endTime!=false">{{endTime}} 到期</p>
         </div>
       </div>
@@ -243,6 +243,7 @@
         storeArr: [],
         storeNum: 1,
         isVip: false,
+        vip: 2,
         isShowHX: false,
         IDCard: 0,
         endTime: false,
@@ -404,7 +405,8 @@
         _this.isVip = store.state.isVip;
         _this.isShowHX = store.state.isShowHX;
         _this.IDCard = store.state.IDCard;
-        _this.endTime = store.state.endTime || false;
+        _this.vip = wx.getStorageSync("vip") || store.state.vip || 2;
+        _this.endTime = wx.getStorageSync("endTime") || store.state.endTime || false;
         let o = {
           url: Api.url_account_store_list,
           data: {},
@@ -417,7 +419,11 @@
         this.storeArr = o.data || [];
         this.storeNum = parseInt(o.num) || 1;
       },
-
+      toOpenVipCustomer() {
+        wx.navigateTo({
+          url: '/pages/openVIPCustomer/main'
+        })
+      },
 
 
       powerDrawer: function(currentStatu) {

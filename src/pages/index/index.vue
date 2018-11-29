@@ -125,7 +125,7 @@
           <p class="pad-ver-xs" :class="{'text-Bolder':curTab==1}">离我最近</p>
         </div>
         <div class="flexAuto b-r1" @click="changeTabFn(2)" :class="{cantClick:curTab==2}">
-          <p class="pad-ver-xs" :class="{'text-Bolder':curTab==2}">有券商户</p>
+          <p class="pad-ver-xs" :class="{'text-Bolder':curTab==2}">最新入驻</p>
         </div>
         <div class="flexAuto" @click="changeTabFn(3)" :class="{cantClick:curTab==3}">
           <p class="pad-ver-xs" :class="{'text-Bolder':curTab==3}">火爆排名</p>
@@ -546,7 +546,7 @@
       },
       toUpdate() {
         wx.navigateTo({
-          url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopid
+          url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopId
         });
       },
       toSearch() {

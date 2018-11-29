@@ -56,8 +56,11 @@ export default {
   url_manage_stuff_del: '/home/program/delstaff',
 
   url_vip_loadlist: '/home/program/vipbuy',
+  url_uservip_loadlist: '/home/program/user_vip',
   url_vip_pay: '/home/program/placeorder',
+  url_uservip_pay: '/home/program/pay_order',
   url_vip_pay_feeback: '/home/program/wechatpay',
+  url_uservip_pay_feeback: '/home/program/wechat_callback',
 
   url_verify_bestuff: '/home/program/becomestaff',
   url_verify_ticket: '/home/program/useticket',

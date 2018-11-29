@@ -110,7 +110,7 @@
         <view class="pad-ver-xs {{curTab==1?'text-Bolder':''}}">离我最近</view>
       </view>
       <view class="flexAuto b-r1 {{curTab==2?'cantClick':''}}" data-tab="2" bindtap="changeTabFn">
-        <view class="pad-ver-xs {{curTab==2?'text-Bolder':''}}">有券商户</view>
+        <view class="pad-ver-xs {{curTab==2?'text-Bolder':''}}">最新入驻</view>
       </view>
       <view class="flexAuto {{curTab==3?'cantClick':''}}" data-tab="3" bindtap="changeTabFn">
         <view class="pad-ver-xs {{curTab==3?'text-Bolder':''}}">火爆排名</view>

@@ -43,8 +43,7 @@
                     :color="(curWay==item.id) ? 'rgb(244,68,68)' : 'rgb(240,240,240)'"></icon>
             </div>
             <div class="flexAuto">
-              <!-- <p class="pad-left-sm">{{item.openmoney}}元，可以发布{{item.opentime}}天券</p> -->
-              <p class="pad-left-sm">{{item.openmoney}}元，可以指定{{item.opentime}}天</p>
+              <p class="pad-left-sm">{{item.price}}元，可以领券{{item.days}}天</p>
             </div>
           </div>
         </div>
@@ -138,7 +137,7 @@
       initInfoFn() {
         let _this = this;
         let o = {
-          url: Api.url_vip_loadlist,
+          url: Api.url_uservip_loadlist,
           data: {},
           cb: _this.callBackInit,
           mask: true
@@ -162,10 +161,11 @@
         }
 
         let o = {
-          url: Api.url_vip_pay,
+          url: Api.url_uservip_pay,
           data: {
-            money: item.openmoney,
-            daysnum: item.opentime,
+            // money: item.price,
+            money: "0.01",
+            daysnum: item.days,
           },
           cb: _this.callWXP,
           mask: true
@@ -206,7 +206,7 @@
       feeBackFn(type, oid) {
         let _this = this;
         let o = {
-          url: Api.url_vip_pay_feeback,
+          url: Api.url_uservip_pay_feeback,
           data: {
             state: type,
             order: oid
@@ -223,6 +223,11 @@
         });
         if (o.data) {
           store.state.endTime = o.data;
+          wx.setStorageSync("endTime", o.data);
+          wx.setStorageSync("vip", 3);
+          wx.navigateBack({
+            delta: 1
+          });
         }
       }
     }

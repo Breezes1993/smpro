@@ -230,16 +230,19 @@ const store = new Vuex.Store({
                     wx.hideLoading();
                     wx.setStorageSync("session_key", got.data.session_key);
                     wx.setStorageSync("openId", got.data.openid);
+                    wx.setStorageSync("endTime", got.data.overduetime);
+                    wx.setStorageSync("vip", got.data.vip);
                     state.session_key = got.data.session_key;
                     state.openId = got.data.openid;
                     state.hasOpened = got.data.relation;
                     state.isVip = (got.data.vip == 1);
+                    state.vip = got.data.vip;
                     state.isShowHX = (got.data.isstaff == 1);
                     state.IDCard = got.data.cardnum;
                     state.endTime = got.data.overduetime;
                     state.mobile = got.data.mobile;
                     state.name = got.data.name;
-                    state.shopId = got.data.shop_id;
+                    state.shopId = got.data.shopid;
                   }
                   getApp().globalData.store = {};
                   getApp().globalData.store.state = state;

@@ -43,7 +43,7 @@
                     :color="(curWay==item.id) ? 'rgb(244,68,68)' : 'rgb(240,240,240)'"></icon>
             </div>
             <div class="flexAuto">
-              <p class="pad-left-sm">{{item.openmoney}}元，可以发布{{item.opentime}}天券</p>
+              <p class="pad-left-sm">{{item.openmoney}}元，可以置顶{{item.opentime}}天</p>
             </div>
           </div>
         </div>

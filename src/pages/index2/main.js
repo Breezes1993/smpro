@@ -370,7 +370,7 @@ Page({
   },
   toUpdate() {
     wx.navigateTo({
-      url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopid
+      url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopId
     });
   },
 
@@ -709,17 +709,20 @@ Page({
                   console.log("got.data",got.data);
                   wx.setStorageSync("session_key", got.data.session_key);
                   wx.setStorageSync("openId", got.data.openid);
+                  wx.setStorageSync("endTime", got.data.overduetime);
+                  wx.setStorageSync("vip", got.data.vip);
                   _this.setData({
                     "store.state.session_key": got.data.session_key,
                     "store.state.openId": got.data.openid,
                     "store.state.hasOpened": got.data.relation,
                     "store.state.isVip": (got.data.vip == 1),
+                    "state.vip": got.data.vip,
                     "store.state.isShowHX": (got.data.isstaff == 1),
                     "store.state.IDCard": got.data.cardnum,
                     "store.state.endTime": got.data.overduetime,
                     "store.state.mobile": got.data.mobile,
                     "store.state.name": got.data.name,
-                    "store.state.shopId": got.data.shop_id
+                    "store.state.shopId": got.data.shopid
                   });
                   getApp().globalData.store = _this.data.store;
                 }

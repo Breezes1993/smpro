@@ -394,10 +394,11 @@
     },
     onLoad(o) {
       this.curId = o.id || -1;
+      this.hasOpened = o.hasOpened || 2;
       console.log("替换store");
       console.log(getApp().globalData)
       if(getApp().globalData.store){
-        store.commit('initStore',getApp().globalData.store.state);  
+        store.commit('initStore',getApp().globalData.store.state);
       }
       store.commit('initUserInfo',{that:this,cb:this.initOnload});
     },
@@ -424,9 +425,9 @@
       _this.detailArr = [];
       _this.curId = -1;
       _this.hasOpened = 2;
-      wx.switchTab({
-        url: '/pages/account/main'
-      })
+      // wx.switchTab({
+      //   url: '/pages/account/main'
+      // })
     },
     methods: {
       initOnload() {
@@ -768,6 +769,8 @@
                     icon: data.status===1?'success':'none',
                     duration: 2000
                   });
+                  wx.setStorageSync("hasOpened", 3);
+                  wx.setStorageSync("shopid", data);
                   setTimeout(() => {
                     wx.switchTab({
                       url: '/pages/index/main'

@@ -104,6 +104,7 @@
     data() {
       return {
         curId: -1,
+        curCate: 1,
         curPage: 1,
         infoArr: [],
         isEmpty: false,
@@ -297,7 +298,7 @@
           e: e,
           that: this,
           cb: () => {
-            return this.initInfoFn();
+            return this.initCateFn();
           }
         }
         store.commit("getUserInfoBtn",obj);

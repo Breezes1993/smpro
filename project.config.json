@@ -7,11 +7,11 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"miniprogramRoot": "./dist/",
+	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
 	"appid": "wxfc70e7847c9684d7",
 	"projectname": "smpro180423near",
-	"libVersion": "2.1.0",
+	"libVersion": "2.4.1",
 	"condition": {
 		"search": {
 			"current": -1,

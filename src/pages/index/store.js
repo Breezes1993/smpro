@@ -95,7 +95,18 @@ const store = new Vuex.Store({
       let e = obj.e;
       let cb = obj.cb;
       let info = e.target;
-      state.userInfo = info.userInfo;
+      if (info.userInfo) {
+        state.userInfo = info.userInfo;
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '您已拒绝小程序获取用户信息！',
+          success: function (res) {
+          }
+        });
+        return;
+      }
+      
       (state.debug) ? console.log("用户信息btn",e) : '';
       wx.login({
         success: res => {
@@ -119,6 +130,8 @@ const store = new Vuex.Store({
     },
     getInfo: (state, o) => {
       (state.debug) ? console.log("getInfo",o) : '';
+      let _store = this;
+      let hasRetry = o.hasRetry || false;
       let url = state.doMain;
       url = url + o.url;
       let mOpenId = wx.getStorageSync('openId') || state.openId;
@@ -165,15 +178,19 @@ const store = new Vuex.Store({
                       }
                     });
                     if (got.msg == '用户不存在') {
-                      wx.showModal({
-                        title: '测试',
-                        content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
-                        success: function (res) {
-                          if (res.confirm) {
-                          } else if (res.cancel) {
-                          }
-                        }
-                      });
+                      // wx.showModal({
+                      //   title: '测试',
+                      //   content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
+                      //   success: function (res) {
+                      //     if (res.confirm) {
+                      //     } else if (res.cancel) {
+                      //     }
+                      //   }
+                      // });
+                      if (!hasRetry) {
+                        o.hasRetry = true;
+                        _store.a.commit("getInfo", o);
+                      }
                     }
                   }
                   if (o.hideLoading){
@@ -195,6 +212,8 @@ const store = new Vuex.Store({
       if (o.mask) {
         wx.showLoading({mask: true});
       }
+      let hasRetry = o.hasRetry || false;
+      let _store = this;
       let d = o.data;
       let mOpenId = wx.getStorageSync('openId') || state.openId;
       let mSessionKey = wx.getStorageSync('session_key') || state.session_key;
@@ -250,6 +269,33 @@ const store = new Vuex.Store({
                   getApp().globalData.store.state = state;
                   return o.cb(got);
                   break;
+                case 2:
+                  if (got.msg == '用户不存在') {
+                    if (!hasRetry) {
+                      o.hasRetry = true;
+                      _store.a.commit("reqInfo", o);
+                    } else {
+                      wx.showModal({
+                        title: '提示',
+                        content: got.msg,
+                        success: function (res) {
+                          if (res.confirm) {
+                          } else if (res.cancel) {
+                          }
+                        }
+                      });
+                    }
+                  //   wx.showModal({
+                  //     title: '测试',
+                  //     content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
+                  //     success: function (res) {
+                  //       if (res.confirm) {
+                  //       } else if (res.cancel) {
+                  //       }
+                  //     }
+                  //   });
+                  }
+                break;
                 default:
                   wx.showModal({
                     title: '提示',
@@ -260,17 +306,7 @@ const store = new Vuex.Store({
                       }
                     }
                   });
-                  // if (got.msg == '用户不存在') {
-                  //   wx.showModal({
-                  //     title: '测试',
-                  //     content: 'wx.getStorageSync:' + wx.getStorageSync('openId') + ", wx.getStorageSync:" +  wx.getStorageSync('session_key') + ",state.session_key:" + state.session_key + ", state.openId:" + state.openId,
-                  //     success: function (res) {
-                  //       if (res.confirm) {
-                  //       } else if (res.cancel) {
-                  //       }
-                  //     }
-                  //   });
-                  // }
+
                   break;
               }
             }
@@ -285,7 +321,7 @@ const store = new Vuex.Store({
       (state.debug) ? console.log("initStore") : '';
       console.log(Number(state.session_key));
       if(Number(state.session_key)===1||Number(state.openId)===1){
-        store.replaceState(o);
+        // store.replaceState(o);
       }
     },
     initUserInfo: (state, o) => {

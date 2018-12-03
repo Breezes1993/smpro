@@ -95,7 +95,7 @@
 
           </div>
           <div class="flex25">
-            <p class="btn btn-danger block btn-radius btn-xs" @click="toUpdate" v-if="hasO==3">我要修改</p>
+            <p class="btn btn-danger block btn-radius btn-xs" @click="toUpdate" v-if="hasO==3">等待审核</p>
             <p class="btn btn-danger block btn-radius btn-xs" @click="toJoin" v-if="hasO==2">我要入驻</p>
             <p class="btn btn-danger block btn-radius btn-xs" v-if="hasO==1">已入驻</p>
           </div>
@@ -288,6 +288,9 @@
         path: '/pages/index/main'
       }
     },
+    onShow: function() {
+      this.hasO = wx.getStorageSync("hasOpened") || store.state.hasOpened;
+    },
     created() {
       //console.log("store",store)
       let _this = this;
@@ -361,7 +364,7 @@
         console.log('initInfoFn');
         //console.log("initInfoFn");
         let _this = this;
-        _this.hasO = store.state.hasOpened;
+        _this.hasO = wx.setStorageSync("hasOpened") || store.state.hasOpened;
         let o = {
           url: Api.url_index_near,
           data: {
@@ -546,7 +549,7 @@
       },
       toUpdate() {
         wx.navigateTo({
-          url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopId
+          url: '/pages/join/main' + '?type=edit' + '&id=' + wx.getStorageSync("shopid") || store.state.shopId
         });
       },
       toSearch() {

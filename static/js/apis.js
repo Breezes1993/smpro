@@ -8,6 +8,7 @@ export default {
   url_store_info: '/home/program/shopinfo',
   url_store_load_common: '/home/program/shopevaluate',
   url_store_user_getCp: '/home/program/getticket',
+  url_store_confirm_coupon: '/home/program/confirm_coupon',
 
   url_join_contactinfo: '/home/program/contactinfo',
   url_join_upload_img: '/home/program/uploadimg',

@@ -81,7 +81,7 @@
           <div class="flexBox ver-cen te-cen">
 
             <div class="flexAuto">
-              <picker @change="dateChange($event,1)" :value="startIndex" :range="dateArr">
+              <picker @change="dateChange($event,1)" :value="startValue" :range="dateArr">
                 <view class="picker">
                   {{startValueCmp}}
                 </view>
@@ -93,7 +93,7 @@
             </div>
 
             <div class="flexAuto">
-              <picker @change="dateChange($event,2)" :value="endIndex" :range="dateArr">
+              <picker @change="dateChange($event,2)" :value="endValue" :range="dateArr">
                 <view class="picker">
                   {{endValueCmp}}
                 </view>
@@ -104,13 +104,13 @@
         </div>
       </div>
       
-            <div class="flexBox pad-ver-sm b-b1 ver-cen" v-if="false">
+      <div class="flexBox pad-ver-sm b-b1 ver-cen">
         <div class="flex25">
           <p>人均消费:</p>
         </div>
         <div class="flexAuto">
           <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==2" @input="inputFn($event,7)">
-          <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==1" v-model="avgConsumer">
+          <input type="number" maxlength="5" placeholder="请输入人均消费" v-if="hasOpened==1" v-model="consumption">
         </div>
       </div>
 
@@ -347,6 +347,7 @@
         telCode: '',
         hasOpened: 2,
         agreementInfo: '',
+        consumption: '',
 
 
         fasetSelects: [{
@@ -392,21 +393,13 @@
       }
     },
     onLoad(o) {
-      let _this = this;
-      _this.curId = o.id || -1;
-      _this.initDateArr();
-      _this.initCateFn();
-      _this.initFastSelect().then(function(){
-        console.log("进入resolve")
-        if (o.id) {
-          _this.hasOpened = 1;
-          store.commit('initUserInfo',{that:_this,cb:_this.loadAlready});
-          console.log("_this.hasOpened=" + _this.hasOpened, "o.id=" + o.id)
-        }
-      }).catch(function(msg){
-        console.log("进入reject",msg);
-      });
-
+      this.curId = o.id || -1;
+      console.log("替换store");
+      console.log(getApp().globalData)
+      if(getApp().globalData.store){
+        store.commit('initStore',getApp().globalData.store.state);  
+      }
+      store.commit('initUserInfo',{that:this,cb:this.initOnload});
     },
     onUnload() {
       let _this = this;
@@ -420,6 +413,7 @@
       _this.curAddress = '请定位您的位置信息,定位后可再进行编辑';
       _this.storeName = '';
       _this.storeTel = '';
+      _this.consumption = '';
       _this.device.has1 = false;
       _this.device.has2 = false;
       _this.device.has3 = false;
@@ -435,6 +429,21 @@
       })
     },
     methods: {
+      initOnload() {
+        let _this = this;
+        _this.initDateArr();
+        _this.initCateFn();
+        _this.initFastSelect().then(function(){
+          console.log("进入resolve")
+          if (_this.curId && _this.curId !== -1) {
+            _this.hasOpened = 1;
+            store.commit('initUserInfo',{that:_this,cb:_this.loadAlready});
+            console.log("_this.hasOpened=" + _this.hasOpened, "o.id=" + _this.curId)
+          }
+        }).catch(function(msg){
+          console.log("进入reject",msg);
+        });
+      },
       openChooseLocal() {
         let _this = this;
         wx.chooseLocation({
@@ -517,7 +526,7 @@
             _this.telCode = e.target.value;
             break;
           case 7:
-            _this.avgConsumer = e.target.value;
+            _this.consumption = e.target.value;
             break;
           default:
             break;
@@ -662,6 +671,7 @@
               location: _this.curAddress,
               storename: _this.storeName,
               storetel: _this.storeTel,
+              consumption: _this.consumption,
               starttime: start,
               endtime: end,
               storetype: _this.typeArr[_this.pickerIndex].id,
@@ -861,6 +871,14 @@
           return;
         }
 
+        if (_this.consumption.length < 1) {
+          wx.showToast({
+            title: '请填写人均消费',
+            icon: 'none',
+            duration: 1000
+          });
+        }
+
         if (_this.storeInfo.length < 1) {
           wx.showToast({
             title: '请填写店铺简介',
@@ -1022,6 +1040,7 @@
         _this.latitude = o.data.latitude;
         _this.longitude = o.data.longitude;
         _this.storeInfo = o.data.introduction;
+        _this.consumption = o.data.consumption;
         o.data.fasetSelects.forEach(oElement=>{
           _this.fasetSelects.forEach(tElement=>{
             if(oElement.type === tElement.type){
@@ -1069,6 +1088,7 @@
             location: _this.curAddress,
             storename: _this.storeName,
             storetel: _this.storeTel,
+            consumption: _this.consumption,
             starttime: start,
             endtime: end,
             storetype: _this.typeArr[_this.pickerIndex].id,

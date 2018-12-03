@@ -68,7 +68,7 @@ const store = new Vuex.Store({
                           code: res.code,
                           nickName: info.userInfo.nickName,
                           avatarUrl: info.userInfo.avatarUrl,
-                          shop_id: obj.shop_id
+                          shop_id: obj.shop_id || ""
                         },
                         cb: cb,
                         isGetSession: true
@@ -108,7 +108,7 @@ const store = new Vuex.Store({
               code: res.code,
               nickName: info.userInfo.nickName,
               avatarUrl: info.userInfo.avatarUrl,
-              shop_id: obj.shop_id
+              shop_id: obj.shop_id || ""
             },
             cb: cb,
             isGetSession: true
@@ -232,6 +232,8 @@ const store = new Vuex.Store({
                     wx.setStorageSync("openId", got.data.openid);
                     wx.setStorageSync("endTime", got.data.overduetime);
                     wx.setStorageSync("vip", got.data.vip);
+                    wx.setStorageSync("shopid", got.data.shopid);
+                    wx.setStorageSync("hasOpened", got.data.relation);
                     state.session_key = got.data.session_key;
                     state.openId = got.data.openid;
                     state.hasOpened = got.data.relation;

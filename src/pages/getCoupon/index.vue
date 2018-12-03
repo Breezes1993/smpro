@@ -31,7 +31,9 @@
 
             <div class="pad-top-sm">
               <div class="pad-hov-xs m-flex">
-                <button style="line-height:1.6;" class="btn btn-danger btn-radius btn-xs" @click="getCpFn">立即领取</button>
+                <form report-submit="true" @submit="toGetCp" @reset="formReset">
+                  <button style="line-height:1.6;" class="btn btn-danger btn-radius btn-xs" form-type="submit">立即领取</button>
+                </form>
                 <button style="line-height:1.6;" class="btn btn-danger btn-radius btn-xs" open-type="share">直接转发</button>
               </div>
             </div>
@@ -109,6 +111,21 @@
       </div>
     </div>
 
+    <div class="drawer_screen" @click="powerDrawer2('close')" v-show="showModalStatus2"></div>
+    <div :animation="animationData" class="drawer_box" v-show="showModalStatus2">
+      <div class="drawer_title">提示</div>
+      <div class="drawer_content">
+        <div class="top grid content">
+          <label class="">您现在是新手，需要升级VIP会员</label>
+          <label class="">立即前往升级？</label>
+        </div>
+      </div>
+      <div class="btn_ok flexBox ver-cen no-radius" @click="powerDrawer2('close')" >
+        <button class="flexAuto" style="color:#000;" @click="powerDrawer2('close')">取消</button>
+        <button class="flexAuto" @click="toVip">确定</button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -122,13 +139,15 @@ export default {
       curId: -1,
       storeInfo: "",
       cpInfo: "",
-      showModalStatus: false
+      showModalStatus: false,
+      formId: ""
     };
   },
   onLoad(o) {
     let _this = this;
     _this.curId = o.id;
     _this.curSid = o.sid;
+    console.log("curId", _this.curId, "curSid", _this.curSid)
   },
   onUnload() {
     let _this = this;
@@ -195,11 +214,41 @@ export default {
         url: "/pages/storeInfo/main" + "?id=" + this.curSid
       });
     },
+    toGetCp(e) {
+      let _this = this;
+      _this.formId = e.target.formId;
+      let freeStoreTime = wx.getStorageSync("freeStoreTime") || {};
+      let freeDiff = new Date().getTime() - (freeStoreTime[_this.curSid] || 0);
+      let o = {
+        url: Api.url_store_confirm_coupon,
+        data: {
+          free_shop_id: freeDiff < 1000 * 60 * 60 ? _this.curSid : '',
+          shop_id: _this.curSid
+        },
+        cb: _this.callBackConfirmCp,
+        noStatus: true
+      };
+      store.commit('reqInfo', o);
+    },
+    callBackConfirmCp(o) {
+      if (o.data === 1) {
+        this.getCpFn();
+      } else {
+        wx.showToast({
+          title: o.msg || '',
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    },
     getCpFn() {
       let _this = this;
       let o = {
         url: Api.url_store_user_getCp,
-        data: { ticketid: _this.curId },
+        data: { 
+          ticketid: _this.curId,
+          formId: _this.formId
+        },
         cb: _this.callBackGetCp
       };
       store.commit("reqInfo", o);
@@ -223,7 +272,49 @@ export default {
       });
     },
 
+    powerDrawer2: function(currentStatu) {
+      console.log("12312")
+      this.util2(currentStatu)
+    },
+    util2: function(currentStatu) {
+      /* 动画部分 */
+      // 第1步：创建动画实例 
+      var animation = wx.createAnimation({
+        duration: 200, //动画时长
+        timingFunction: "linear", //线性
+        delay: 0 //0则不延迟
+      });
 
+      // 第2步：这个动画实例赋给当前的动画实例
+      this.animation = animation;
+
+      // 第3步：执行第一组动画
+      animation.opacity(0).rotateX(-100).step();
+
+      // 第4步：导出动画对象赋给数据对象储存
+
+      this.animationData = animation.export();
+
+      // 第5步：设置定时器到指定时候后，执行第二组动画
+      setTimeout(function() {
+        // 执行第二组动画
+        animation.opacity(1).rotateX(0).step();
+        // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+        this.animationData = animation
+
+        //关闭
+        if (currentStatu == "close") {
+            this.showModalStatus2 = false;
+        }
+      }.bind(this), 200)
+
+      // 显示
+      if (currentStatu == "open") {
+        this.setData({
+          showModalStatus2: true
+        });
+      }
+    },
     powerDrawer: function(currentStatu) {
         this.util(currentStatu)
     },

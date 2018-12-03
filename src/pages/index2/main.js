@@ -109,7 +109,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    this.setData({
+      hasO: wx.getStorageSync("hasOpened") || this.data.store.state.hasOpened
+    });
   },
 
   /**
@@ -165,7 +167,7 @@ Page({
   initInfoFn() {
     let _this = this;
     _this.setData({
-      hasO: _this.data.store.state.hasOpened
+      hasO: wx.setStorageSync("hasOpened") || _this.data.store.state.hasOpened
     });
     let o = {
       url: "/home/program/nearshop",
@@ -370,7 +372,7 @@ Page({
   },
   toUpdate() {
     wx.navigateTo({
-      url: '/pages/join/main' + '?type=edit' + '&id=' + store.state.shopId
+      url: '/pages/join/main' + '?type=edit' + '&id=' + wx.getStorageSync("shopid") || this.data.store.state.shopid
     });
   },
 
@@ -543,7 +545,8 @@ Page({
                       data: {
                         code: res.code,
                         nickName: info.userInfo.nickName,
-                        avatarUrl: info.userInfo.avatarUrl
+                        avatarUrl: info.userInfo.avatarUrl,
+                        shop_id: obj.shop_id || ""
                       },
                       cb: cb,
                       isGetSession: true
@@ -590,7 +593,8 @@ Page({
           data: {
             code: res.code,
             nickName: info.userInfo.nickName,
-            avatarUrl: info.userInfo.avatarUrl
+            avatarUrl: info.userInfo.avatarUrl,
+            shop_id: obj.shop_id || ""
           },
           cb: cb,
           isGetSession: true
@@ -711,6 +715,8 @@ Page({
                   wx.setStorageSync("openId", got.data.openid);
                   wx.setStorageSync("endTime", got.data.overduetime);
                   wx.setStorageSync("vip", got.data.vip);
+                  wx.setStorageSync("shopid", got.data.shopid);
+                  wx.setStorageSync("hasOpened", got.data.relation);
                   _this.setData({
                     "store.state.session_key": got.data.session_key,
                     "store.state.openId": got.data.openid,

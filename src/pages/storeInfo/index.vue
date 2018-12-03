@@ -179,12 +179,12 @@
             </div>
           </div>
 
-          <div class="flexBox pad-ver-sm ver-cen b-b1" v-if="false">
+          <div class="flexBox pad-ver-sm ver-cen b-b1">
             <div class="flex8">
               <icon type="waiting" size="16" color="#8a8a8a" class="ver-mid"></icon>
             </div>
             <div class="flexAuto">
-              <p class="ell">人均消费：{{storeInfo.avgConsumer}}</p>
+              <p class="ell">人均消费：{{storeInfo.consumption || ''}}</p>
             </div>
           </div>
 
@@ -562,8 +562,7 @@
       <div class="drawer_title">提示</div>
       <div class="drawer_content">
         <div class="top grid content">
-          <label class="">您现在是新手，需要升级VIP会员</label>
-          <label class="">立即前往升级？</label>
+          <label class="">modalStatus2Info</label>
         </div>
       </div>
       <div class="btn_ok flexBox ver-cen no-radius" @click="powerDrawer2('close')" >
@@ -630,7 +629,8 @@
         commArr: [],
         isEmpty: false,
         showModalStatus: false,
-        showModalStatus2: false
+        showModalStatus2: false,
+        curCpId: ''
       }
     },
     onLoad(o) {
@@ -639,6 +639,9 @@
       _this.curId = o.id;
       if (o.scene) {
         _this.curId = o.scene;
+        let freeStoreTime = wx.getStorageSync("freeStoreTime") || {};
+        freeStoreTime[_this.curId] = new Date().getTime();
+        wx.setStorageSync("freeStoreTime", freeStoreTime);
       }
       _this.curTab = 1;
     },
@@ -777,8 +780,18 @@
       },
       toGetCp(id) {
         let _this = this;
-        this.showModalStatus2 = true;
-        return;
+        let freeStoreTime = wx.getStorageSync("freeStoreTime") || {};
+        let freeDiff = new Date().getTime() - (freeStoreTime[_this.curId] || 0);
+        let o = {
+          url: Api.url_store_confirm_coupon,
+          data: {
+            free_shop_id: freeDiff < 1000 * 60 * 60 ? _this.curId : '',
+            shop_id: _this.curId
+          },
+          cb: _this.callBackGetCp
+        };
+        _this.curCpId = id;
+        store.commit('reqInfo', o);
         /*let cpOne = "";
         for (let i = 0, len = _this.ticketList.length; i < len; i++) {
           if (id == _this.ticketList[i].id) {
@@ -792,10 +805,17 @@
           storeId: _this.storeInfo.id,
           curCp: cpOne
         };*/
-
-        wx.navigateTo({
-          url: '/pages/getCoupon/main' + '?id=' + id + '&sid=' + _this.storeInfo.id
-        })
+      },
+      callBackGetCp(o) {
+        if (o.data === 1) {
+          wx.navigateTo({
+            url: '/pages/getCoupon/main' + '?id=' + this.curCpId + '&sid=' + this.storeInfo.id
+          });
+        } else {
+          this.modalStatus2Info = o.msg;
+          this.showModalStatus2 = true;
+        }
+        
       },
       toVip() {
         wx.navigateTo({

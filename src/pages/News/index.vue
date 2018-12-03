@@ -1,11 +1,12 @@
 <template>
   <div>
-    <scroll-view scroll-x="true"  class="bg-white text-sm posReal" style="margin-top:30rpx;" 
-      v-for="(fasetSelect,fsIndex) in fasetSelects" 
-      v-bind:key="fasetSelect.name+fsIndex"
-      v-if="fasetSelect.type === '02'" v-show="false">
+    <scroll-view scroll-x="true"  class="bg-white text-sm posReal" style="margin-top:30rpx;">
       <div class="flexBox pad-ver-xs pad-hov-xs" style="overflow-x: auto;">
-        <span @click="clickItem(item)" :class="'fs-item2 ' + (item.isSelect===true?'fs-select':'')" style="color:#000;flex-shrink:0;" v-for="(item,itemIndex) in fasetSelect.items" v-bind:key="item.itemName+itemIndex">{{item.itemName}}</span>
+        <span @click="clickItem(cate)"
+        :class="'fs-item2 ' + (cate.isSelect===true?'fs-select':'')"
+        style="color:#000;flex-shrink:0;"
+        v-for="cate in cateArr"
+        v-bind:key="cate.id">{{cate.name}}</span>
       </div>
     </scroll-view>
     <div class="pad-top-sm" v-for="(item,index) in infoArr" :key="index" :wx:key="index">
@@ -110,7 +111,7 @@
         hasZan: false,
         tempArr: {},
         showModalStatus: false,
-        fasetSelects: []
+        cateArr: []
       }
     },
     mounted(){
@@ -121,8 +122,7 @@
       // if(Number(store.state.session_key)===1||Number(store.state.openId)===1){
       //   store.replaceState(JSON.parse(JSON.stringify(getApp().globalData.store.state)));
       // }
-      store.commit('initUserInfo',{that:this,cb:this.initInfoFn});
-      this.initFastSelect();
+      store.commit('initUserInfo',{that:this,cb:this.initCateFn});
       
     },
     onLoad() {
@@ -159,7 +159,10 @@
         let _this = this;
         let o = {
           url: Api.url_user_news_load,
-          data: {page: _this.curPage},
+          data: {
+            page: _this.curPage,
+            type: _this.curCate
+          },
           cb: _this.callBackInit
         };
         wx.getStorage({
@@ -311,6 +314,27 @@
         }
       },
 
+      initCateFn() {
+        //console.log("initCateFn");
+        let _this = this;
+        let o = {
+          url: Api.url_index_cate,
+          data: {},
+          cb: _this.callBackCate
+        };
+        store.commit('getInfo', o);
+      },
+      callBackCate(o) {
+        //console.log("callBackCate",o);
+        let _this = this;
+        _this.cateArr = o.data;
+        if (o.data.length > 0) {
+          _this.curCate = o.data[0].id;
+          _this.$set(o.data[0], "isSelect", true);
+        }
+        return _this.initInfoFn();
+      },
+
 
       initFastSelect() {
         let o = {
@@ -333,19 +357,15 @@
           this.isLoading = false;
           return;
         }
-        let name = item.itemName;
-        this.clickName = name;
-        (store.state.debug)&&console.log(JSON.stringify(this.fasetSelects))
-        this.fasetSelects.forEach(element=>{
-          element.items.forEach(elementItem=>{
-            (store.state.debug)&&console.log(JSON.stringify(elementItem));
-            delete elementItem.isSelect;
-          })
+        this.cateArr.forEach(element=>{
+            (store.state.debug)&&console.log(JSON.stringify(element));
+            delete element.isSelect;
         })
         this.$set(item,"isSelect",true);
         this.infoArr = [];
         this.curPage = 1;
         this.isEmpty = false;
+        this.curCate = item.id;
         this.initInfoFn();
       }
     }

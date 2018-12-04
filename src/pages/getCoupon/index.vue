@@ -113,11 +113,10 @@
 
     <div class="drawer_screen" @click="powerDrawer2('close')" v-show="showModalStatus2"></div>
     <div :animation="animationData" class="drawer_box" v-show="showModalStatus2">
-      <div class="drawer_title">提示</div>
+      <div class="drawer_title">温馨提示</div>
       <div class="drawer_content">
         <div class="top grid content">
-          <label class="">您现在是新手，需要升级VIP会员</label>
-          <label class="">立即前往升级？</label>
+          <label class="">{{modalStatus2Info}}</label>
         </div>
       </div>
       <div class="btn_ok flexBox ver-cen no-radius" @click="powerDrawer2('close')" >
@@ -140,6 +139,7 @@ export default {
       storeInfo: "",
       cpInfo: "",
       showModalStatus: false,
+      modalStatus2Info: "",
       formId: ""
     };
   },
@@ -234,12 +234,14 @@ export default {
       if (o.data === 1) {
         this.getCpFn();
       } else {
-        wx.showToast({
-          title: o.msg || '',
-          icon: 'none',
-          duration: 2000
-        });
+        this.modalStatus2Info = o.msg;
+        this.showModalStatus2 = true;
       }
+    },
+    toVip() {
+      wx.navigateTo({
+        url: '/pages/openVIPCustomer/main'
+      })
     },
     getCpFn() {
       let _this = this;

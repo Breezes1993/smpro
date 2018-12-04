@@ -37,6 +37,7 @@ export default {
   url_help_info: '/home/program/explains',
 
   url_account_store_list: '/home/program/myshops',
+  // url_account_store_list: '/home/program/cs_myshops',
 
   url_news_uploadimg: '/home/program/shopinfoimg',
   url_news_addinfo: '/home/program/addinfor',

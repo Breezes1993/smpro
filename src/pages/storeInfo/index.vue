@@ -559,10 +559,10 @@
 
     <div class="drawer_screen" @click="powerDrawer2('close')" v-show="showModalStatus2"></div>
     <div :animation="animationData" class="drawer_box" v-show="showModalStatus2">
-      <div class="drawer_title">提示</div>
+      <div class="drawer_title">温馨提示</div>
       <div class="drawer_content">
         <div class="top grid content">
-          <label class="">modalStatus2Info</label>
+          <label class="">{{modalStatus2Info}}</label>
         </div>
       </div>
       <div class="btn_ok flexBox ver-cen no-radius" @click="powerDrawer2('close')" >
@@ -630,6 +630,7 @@
         isEmpty: false,
         showModalStatus: false,
         showModalStatus2: false,
+        modalStatus2Info: '',
         curCpId: ''
       }
     },
@@ -640,8 +641,18 @@
       if (o.scene) {
         _this.curId = o.scene;
         let freeStoreTime = wx.getStorageSync("freeStoreTime") || {};
-        freeStoreTime[_this.curId] = new Date().getTime();
-        wx.setStorageSync("freeStoreTime", freeStoreTime);
+        let inOneHour = false;
+        for (let key in freeStoreTime) {
+          let freeDiff = new Date().getTime() - (freeStoreTime[key] || 0);
+          if (freeDiff < 1000 * 60 * 60) {
+            inOneHour = true;
+          }
+          break;
+        }
+        if (!inOneHour) {
+          freeStoreTime[_this.curId] = new Date().getTime();
+          wx.setStorageSync("freeStoreTime", freeStoreTime);
+        }
       }
       _this.curTab = 1;
     },
@@ -819,7 +830,7 @@
       },
       toVip() {
         wx.navigateTo({
-          url: '/pages/openVIPCustomer/main' + '?id=' + id + '&sid=' + _this.storeInfo.id
+          url: '/pages/openVIPCustomer/main'
         })
       },
       toCommonList() {

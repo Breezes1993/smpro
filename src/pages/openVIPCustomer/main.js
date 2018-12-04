@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '开通VIP'
+    navigationBarTitleText: '开通VIP会员'
   }
 }

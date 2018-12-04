@@ -10,6 +10,7 @@ const store = new Vuex.Store({
     debug: false,
     doMain: 'https://www.zhongxiangliquan.com/index.php',
     getSessionUrl: '/home/program/userinfo',
+    // getSessionUrl: '/home/program/cs_userinfo',
     userInfo: '',
     defStore: defImg,
     hasOpened: 1,

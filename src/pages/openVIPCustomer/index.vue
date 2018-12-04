@@ -51,7 +51,7 @@
         <p class="pad-ver-xs text-999 b-t1 te-cen">
           我已阅读并同意
           <span class="text-danger b-b1" @click="getAgreeFn"
-                style="margin-left: 10rpx;border-bottom-color: #dd514c">优惠券发布协议</span>
+                style="margin-left: 10rpx;border-bottom-color: #dd514c">优惠券领取协议</span>
         </p>
 
       </div>
@@ -81,7 +81,7 @@
     <div class="shade dark" v-if="showAlert">
       <div class="pad-top-big">
         <div class="wid70 mar0A overHid rad6">
-          <p class="pad-sm text-white bg-red te-cen">优惠券发布协议</p>
+          <p class="pad-sm text-white bg-red te-cen">优惠券领取协议</p>
           <div class="pad-sm bg-white scrollAble" style="height: 400rpx">
             <p v-html="agreementInfo" class="contentShow"></p>
           </div>
@@ -163,8 +163,8 @@
         let o = {
           url: Api.url_uservip_pay,
           data: {
-            // money: item.price,
-            money: "0.01",
+            money: item.price,
+            // money: "0.01",
             daysnum: item.days,
           },
           cb: _this.callWXP,
@@ -192,7 +192,7 @@
       getAgreeFn() {
         let _this = this;
         let o = {
-          url: Api.url_help_agreement + "?title=优惠券发布协议",
+          url: Api.url_help_agreement + "?title=优惠券领取协议",
           data: {},
           cb: _this.callBackAG
         };

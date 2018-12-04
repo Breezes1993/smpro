@@ -225,6 +225,10 @@
           store.state.endTime = o.data;
           wx.setStorageSync("endTime", o.data);
           wx.setStorageSync("vip", 3);
+          store.commit("updateState", {
+            vip: 3,
+            endTime: o.data
+          });
           wx.navigateBack({
             delta: 1
           });

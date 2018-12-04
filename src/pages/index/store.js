@@ -9,7 +9,7 @@ const store = new Vuex.Store({
   state: {
     debug: false,
     doMain: 'https://www.zhongxiangliquan.com/index.php',
-    getSessionUrl: '/home/program/cs_userinfo',
+    getSessionUrl: '/home/program/userinfo',
     userInfo: '',
     defStore: defImg,
     hasOpened: 1,
@@ -34,6 +34,13 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    updateState(state, obj) {
+      debugger
+      for (let key in obj){
+        state[key] = obj[key];
+      }
+      debugger
+    },
     getUserInfoFn(state, obj) {
       (state.debug) ? console.log("getUserInfoFn") : '';
       let cb = obj.cb;

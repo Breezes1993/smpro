@@ -64,7 +64,7 @@ Component({
       state: {
         debug: false,
         doMain: 'https://www.zhongxiangliquan.com/index.php',
-        getSessionUrl: '/home/program/cs_userinfo',
+        getSessionUrl: '/home/program/userinfo',
         userInfo: '',
         defStore: '/static/img/defstore.png',
         hasOpened: 1,

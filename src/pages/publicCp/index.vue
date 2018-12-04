@@ -98,7 +98,7 @@
               <span class="ver-mid pad-left-xs">领取后开始计算</span>
             </p>
           </div>
-          <div class="flexAuto te-cen" v-if="false" >
+          <div class="flexAuto te-cen" v-if="ctrlCpTime" >
             <p @click="dateType=1">
               <icon type="success" class="ver-mid" size="20"
                     :color="(dateType!=1) ? 'rgb(210,210,210)': 'rgb(244,68,68)'"></icon>
@@ -326,7 +326,8 @@
         curCpType: 1,//当前券类型
         dateType: 2,//当前时间类型
         startDay: 1,//开始天数 1为当天 2为第二天
-        agreementInfo: ''
+        agreementInfo: '',
+        ctrlCpTime: false,//可否指定时间段
       }
     },
     onLoad(o) {
@@ -336,6 +337,9 @@
     },
     onShow() {
       this.hasOpened = (store.state.hasOpened == 1);
+      if (this.curId !== -1) {
+        this.initStatus();
+      }
     },
     onUnload() {
       this.curId = -1;
@@ -527,7 +531,14 @@
               });
               return;
             }
-
+            if (_this.showDate2 < _this.showDate1) {
+              wx.showToast({
+                title: '结束时间不能小于开始时间',
+                icon: 'none',
+                duration: 1000
+              });
+              return;
+            }
             break;
           case 2:
 
@@ -639,6 +650,24 @@
         let _this = this;
         _this.infoAlert = true;
         _this.agreementInfo = o.data.content;
+      },
+      initStatus() {
+        let _this = this;
+        let o = {
+          url: Api.url_manage_coupon_status,
+          data: {
+            shop_id: _this.curId
+          },
+          cb: _this.callBackStatus
+        };
+        store.commit('reqInfo', o);
+      },
+      callBackStatus(o) {
+        if (o.data == "2") {
+          this.ctrlCpTime = false;
+        } else {
+          this.ctrlCpTime = true;
+        }
       }
     }
   }

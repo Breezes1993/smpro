@@ -7,7 +7,7 @@
           <span class="inb pad-hov-sm pad-ver-xs b-b1 b-border-b-white" :class="{actTab:curTab==1}">可用优惠券</span>
         </div>
         <div class="flexAuto" @click="curTab=2">
-          <span class="inb pad-hov-sm pad-ver-xs b-b1 b-border-b-white" :class="{actTab:curTab==2}">过期优惠券</span>
+          <span class="inb pad-hov-sm pad-ver-xs b-b1 b-border-b-white" :class="{actTab:curTab==2}">失效优惠券</span>
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@
         </div>-->
 
         <div class="pad-hov-sm pad-top-sm"
-             v-for="(item,index) in cpArr" :key="index" :wx:key="index" v-if="item.state==2">
+             v-for="(item,index) in cpArr" :key="index" :wx:key="index" v-if="item.state==2|item.state==4">
           <!--<div class="overHid"
                :data-index="index" @touchstart="touchstart" @touchmove="touchmove"
                :class="{'touch-move-active':item.isTouchMove}">-->
@@ -126,7 +126,7 @@
               </div>
               <div class="inb wid25">
                 <img src="/static/img/cpcen.png" class="ver-mid" style="width: 25rpx;height: 200rpx;">
-                <span class="pad-hov-smb pad-ver-xs bg-a5 rad500 ver-mid text-white">过期失效</span>
+                <span class="pad-hov-smb pad-ver-xs bg-a5 rad500 ver-mid text-white">{{item.state==2?"已使用":"已过期"}}</span>
               </div>
               <div class="inb wid15 tempDel bg-red">
                 <p class="btn btn-danger block pad-top-lg pad-bottom-lg" @click="delFn(item.id)">删除</p>

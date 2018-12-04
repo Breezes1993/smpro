@@ -19,8 +19,8 @@
           <p class="text-danger" style="visibility: hidden">VIP</p>
           <!-- <p class="text-danger pad-top-xs" @click="jumpFn(9)" v-if="!isVip">去升级VIP</p> -->
           <p class="text-danger pad-top-xs" @click="toOpenVipCustomer" v-if="vip === 2">开通会员</p>
-          <p class="text-danger pad-top-xs" v-if="vip === 1">商户vip</p>
-          <p class="text-danger pad-top-xs" v-if="vip === 3">用户vip</p>
+          <p class="text-danger pad-top-xs" v-if="vip === 1">VIP商户</p>
+          <p class="text-danger pad-top-xs" v-if="vip === 3">VIP会员</p>
           <p class="pad-top-xs text-danger" v-if="endTime!=false">{{endTime}} 到期</p>
         </div>
       </div>

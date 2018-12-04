@@ -31,12 +31,12 @@ export default {
   url_manage_coupon_editnum: '/home/program/alterticketnum',
   url_manage_coupon_cancel: '/home/program/cancelticket',
   url_manage_coupon_info_one: '/home/program/ticketinfo',
+  url_manage_coupon_status: '/home/program/ticket_status',
 
   url_help_agreement: '/home/program/agreement',
   url_help_info: '/home/program/explains',
 
-  // url_account_store_list: '/home/program/myshops',
-  url_account_store_list: '/home/program/cs_myshops',
+  url_account_store_list: '/home/program/myshops',
 
   url_news_uploadimg: '/home/program/shopinfoimg',
   url_news_addinfo: '/home/program/addinfor',

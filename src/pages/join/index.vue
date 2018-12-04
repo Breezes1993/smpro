@@ -753,7 +753,7 @@
         wx.uploadFile({
           url: store.state.doMain + url,
           filePath: files[parseInt(index)].img,
-          name: 'file',
+        name: 'file',
           formData: d,
           success: function (res) {
             console.log("商户注册,",res);
@@ -770,7 +770,11 @@
                     duration: 2000
                   });
                   wx.setStorageSync("hasOpened", 3);
-                  wx.setStorageSync("shopid", data);
+                  wx.setStorageSync("shopid", data.data);
+                  store.commit("updateState", {
+                    hasOpened: 3,
+                    shopid: data.data
+                  });
                   setTimeout(() => {
                     wx.switchTab({
                       url: '/pages/index/main'

@@ -264,7 +264,8 @@
       if(getApp().globalData.store){
         store.commit('initStore',getApp().globalData.store.state);  
       }
-      store.commit('initUserInfo',{that:this,cb:this.initShow});
+      // store.commit('initUserInfo',{that:this,cb:this.initShow});
+      store.commit('getUserInfoFn', {that:this,cb:this.initShow});
     },
     methods: {
       initShow() {

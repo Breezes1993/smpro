@@ -1,6 +1,6 @@
 <template>
   <view>
-    <custom-index :hasO="hasO" />
+    <custom-index :hasO="hasO" @stateChange="stateChange" />
 
     <div class="drawer_screen"  v-show="showModalStatus"></div>
 <!-- @click="powerDrawer('close')" -->
@@ -376,6 +376,9 @@
     //     });
     //     return _this.initInfoFn();
     //   }*/
+      stateChange: function(e){
+        store.commit("updateState", e.mp.detail);
+      },
       powerDrawer: function(currentStatu) {
         //console.log("12312")
         this.util(currentStatu)

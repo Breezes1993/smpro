@@ -17,6 +17,10 @@ Component({
           "store.state.tempObj.tempLola.latitude": res.latitude,
           "store.state.tempObj.tempLola.longitude": res.longitude
         });
+        _this.triggerEvent('stateChange', {
+          "tempObj.tempLola.latitude": res.latitude,
+          "tempObj.tempLola.longitude": res.longitude
+        });
       }
     });
     this.initCateFn();
@@ -300,6 +304,7 @@ Component({
             _this.setData({
               "store.state.tempObj.tempUrl": id
             });
+            _this.triggerEvent('stateChange', {"tempObj.tempUrl":id});
             wx.navigateTo({
               url: '/pages/webVPage/main'
             });
@@ -326,6 +331,10 @@ Component({
       _this.setData({
         "store.state.tempObj.tempLola.longitude": _this.data.pos.lo,
         "store.state.tempObj.tempLola.latitude": _this.data.pos.la
+      });
+      _this.triggerEvent('stateChange', {
+        "tempObj.tempLola.longitude": _this.data.pos.lo,
+        "tempObj.tempLola.latitude": _this.data.pos.la
       });
       wx.navigateTo({
         url: '/pages/search/main'
@@ -459,6 +468,19 @@ Component({
                       "store.state.mobile": got.data.mobile,
                       "store.state.name": got.data.name,
                       "store.state.shopId": got.data.shopid
+                    });
+                    _this.triggerEvent('stateChange', {
+                      "session_key": got.data.session_key,
+                      "openId": got.data.openid,
+                      "hasOpened": got.data.relation,
+                      "isVip": (got.data.vip == 1),
+                      "state.vip": got.data.vip,
+                      "isShowHX": (got.data.isstaff == 1),
+                      "IDCard": got.data.cardnum,
+                      "endTime": got.data.overduetime,
+                      "mobile": got.data.mobile,
+                      "name": got.data.name,
+                      "shopId": got.data.shopid
                     });
                     getApp().globalData.store = _this.data.store;
                   }

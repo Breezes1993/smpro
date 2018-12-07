@@ -36,11 +36,16 @@ const store = new Vuex.Store({
   },
   mutations: {
     updateState(state, obj) {
-      debugger
       for (let key in obj){
-        state[key] = obj[key];
+        let keys = key.split(".");
+        if (keys.length === 2) {
+          state[keys[0]][keys[1]] = obj[key];
+        } else if (keys.length === 3) {
+          state[keys[0]][keys[1]][keys[2]] = obj[key];
+        } else {
+          state[key] = obj[key];
+        }
       }
-      debugger
     },
     getUserInfoFn(state, obj) {
       (state.debug) ? console.log("getUserInfoFn") : '';

@@ -43,7 +43,8 @@
                     :color="(curWay==item.id) ? 'rgb(244,68,68)' : 'rgb(240,240,240)'"></icon>
             </div>
             <div class="flexAuto">
-              <p class="pad-left-sm">{{item.price}}元，可以领券{{item.days}}天</p>
+              <!-- <p class="pad-left-sm">{{item.price}}元，可以领券{{item.days}}天</p> -->
+              <p class="pad-left-sm">{{item.title}}</p>
             </div>
           </div>
         </div>

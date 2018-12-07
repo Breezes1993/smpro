@@ -181,7 +181,7 @@
 
           <div class="flexBox pad-ver-sm ver-cen b-b1">
             <div class="flex8">
-              <icon type="waiting" size="16" color="#8a8a8a" class="ver-mid"></icon>
+              <img src="/static/img/account/icon_avg.jpg" class="ver-mid" style="width: 30rpx;height: 30rpx;">
             </div>
             <div class="flexAuto">
               <p class="ell">人均消费：{{storeInfo.consumption || ''}}</p>
@@ -586,7 +586,7 @@
         if (type === 'string') {
           let splits = this.storeInfo.businessstart.split(":");
           if (splits.length === 1) {
-            return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+            return Number(splits) <= 9 ? "0" + Number(splits) + ":00" : splits + ":00";
           } else {
             return this.storeInfo.businessstart;
           }
@@ -600,7 +600,7 @@
         if (type === 'string') {
           let splits = this.storeInfo.businessend.split(":");
           if (splits.length === 1) {
-            return Number(splits) <= 9 ? "0" + splits + ":00" : splits + ":00";
+            return Number(splits) <= 9 ? "0" + Number(splits) + ":00" : splits + ":00";
           } else {
             return this.storeInfo.businessend;
           }
@@ -638,8 +638,10 @@
       let _this = this;
       console.log("商户",o);
       _this.curId = o.id;
-      if (o.scene) {
-        _this.curId = o.scene;
+      if (o.scene || o.isShare) {
+        console.log("进入免费领券");
+        console.log(o.isShare, typeof o.isShare);
+        o.scene && (_this.curId = o.scene);
         let freeStoreTime = wx.getStorageSync("freeStoreTime") || {};
         let inOneHour = false;
         for (let key in freeStoreTime) {
@@ -649,7 +651,10 @@
           }
           break;
         }
-        if (!inOneHour) {
+        console.log("inOneHour", inOneHour);
+        console.log("freeStoreTime",  wx.getStorageSync("freeStoreTime"));
+        // if (!inOneHour) {
+        if (true) {
           freeStoreTime[_this.curId] = new Date().getTime();
           wx.setStorageSync("freeStoreTime", freeStoreTime);
         }
@@ -695,7 +700,7 @@
       let _this = this;
       return {
         title: _this.storeInfo.name,
-        path: '/pages/storeInfo/main' + '?id=' + _this.curId
+        path: '/pages/storeInfo/main' + '?id=' + _this.curId + "&isShare=true"
       }
     },
     /*onShareAppMessage: function (res) {

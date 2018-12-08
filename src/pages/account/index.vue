@@ -148,6 +148,18 @@
     <div class="pad-top-sm">
       <div class="bg-white pad-left-sm">
 
+        <div class="flexBox pad-ver-sm ver-cen b-b1" @click="jumpFn(14)">
+          <div class="flex8">
+            <img src="/static/img/account/icon_avg.jpg" class="block" style="width: 40rpx;height: 40rpx;">
+          </div>
+          <div class="flexAuto">
+            <p class="ell">消费记录</p>
+          </div>
+          <div class="flex8">
+            <img src="/static/img/allow_r_gray.png" class="block mar0A" style="width: 30rpx;height: 30rpx;">
+          </div>
+        </div>
+
         <div class="flexBox pad-ver-sm ver-cen b-b1" @click="jumpFn(6)">
           <div class="flex8">
             <img src="/static/img/account/line2.png" class="block" style="width: 40rpx;height: 40rpx;">
@@ -385,6 +397,11 @@
             });
 
             break;
+          case 14:
+
+            wx.navigateTo({
+              url: '/pages/cunsumerRecord/main'
+            });
           default:
             break;
         }

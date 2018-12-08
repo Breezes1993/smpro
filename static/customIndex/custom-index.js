@@ -64,6 +64,7 @@ Component({
     verifyCode: -1,
     showModalStatus: false,
     screenHeight: 800,
+    init: true,
     store: {
       state: {
         debug: false,
@@ -161,8 +162,17 @@ Component({
             // delete arr[i].typefrom;
             // _this._this.data.storeArr.push(JSON.parse(JSON.stringify(arr[i])));
           }
+          let tStoreArr = [];
+          if (!_this.data.init) {
+            tStoreArr = _this.data.storeArr.concat(arr);
+          } else {
+            tStoreArr = arr;
+            _this.setData({
+              init: false
+            });
+          }
           _this.setData({
-            storeArr: _this.data.storeArr.concat(arr),
+            storeArr: tStoreArr,
             isEmpty: (arr.length === 0),
             curAddress: o.address
           });
@@ -239,7 +249,8 @@ Component({
         curTab: tab,
         curPage: 1,
         isEmpty: false,
-        storeArr: []
+        // storeArr: [],
+        init: true
       });
       _this.initInfoFn();
     },

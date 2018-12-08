@@ -22,6 +22,7 @@
 .text-xs{font-size: 23rpx;}
 .text-xl{font-size: 50rpx;}
 .text-lgx{font-size: 36rpx;}
+.text-400{font-weight: 400;}
 
 .rad6{border-radius: 6px;}
 .rad6-bottom{border-radius: 0 0 6px 6px;}

@@ -52,6 +52,7 @@ export default {
       'pages/contectUs/main',
 
       'pages/openVIP/main',
+      'pages/cunsumerRecord/main',
 
       'pages/noticePage/main',
       'pages/fakeindex/main',

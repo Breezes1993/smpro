@@ -4,6 +4,7 @@ export default {
   url_index_near: '/home/program/nearshop',
   url_index_cate: '/home/program/shopcategory',
   url_index_join_news: '/home/program/joinshop',
+  url_index_info: '/home/program/info',
 
   url_store_info: '/home/program/shopinfo',
   url_store_load_common: '/home/program/shopevaluate',
@@ -37,6 +38,7 @@ export default {
   url_help_info: '/home/program/explains',
 
   url_account_store_list: '/home/program/myshops',
+  url_account_user_order: '/home/program/user_order',
   // url_account_store_list: '/home/program/cs_myshops',
 
   url_news_uploadimg: '/home/program/shopinfoimg',

@@ -27,6 +27,8 @@
 
               <p class="pad-top-xs">剩余{{cpInfo.num}}张</p>
 
+              <p class="pad-top-xs" v-if="receivenum != 0">已被领取{{cpInfo.receivenum}}张</p>
+
             </div>
 
             <div class="pad-top-sm">

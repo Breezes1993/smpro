@@ -23,6 +23,7 @@ Component({
         });
       }
     });
+    this.initInfo();
     this.initCateFn();
     this.initJoinNews();
   },
@@ -39,6 +40,7 @@ Component({
     }
   },
   data: {
+    info: '',
     mCity: '厦门',
     curTab: 1,
     curRate: 3.6,
@@ -185,6 +187,21 @@ Component({
       }
       _this.setData({
         isLoading: false
+      });
+    },
+    initInfo() {
+      let _this = this;
+      let o = {
+        url: "/home/program/info",
+        data: {},
+        cb: _this.callBackInfo
+      };
+      _this.getInfo(o);
+    },
+    callBackInfo(o) {
+      let _this = o._this;
+      _this.setData({
+        info: o.data.info
       });
     },
     initCateFn() {

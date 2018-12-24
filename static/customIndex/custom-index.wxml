@@ -40,7 +40,7 @@
 
 
   <view class="bg-white">
-    <swiper indicator-dots autoplay="true" interval="3000" duration="300" style="height: 360rpx;">
+    <swiper indicator-dots autoplay="true" interval="6000" duration="300" style="height: 360rpx;">
       <block wx:for="{{imgArr}}" wx:key="index">
         <swiper-item>
           <view class="pad-hov-xs">
@@ -82,7 +82,7 @@
         </view>
         <view class="flex25">
           <view class="_p btn btn-danger block btn-radius btn-xs" bindtap="toUpdate" wx:if="{{hasO==3}}">等待审核</view>
-          <view class="_p btn btn-danger block btn-radius btn-xs" bindtap="toJoin" wx:if="{{hasO==2}}">我要入驻</view>
+          <view class="_p btn btn-danger block btn-radius btn-xs" bindtap="toJoin" wx:if="{{hasO==2}}">{{info}}</view>
           <view class="_p btn btn-danger block btn-radius btn-xs" wx:if="{{hasO==1}}">已入驻</view>
         </view>
       </view>

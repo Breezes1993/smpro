@@ -337,7 +337,9 @@
         storeInfo: '',
         storeLogo: '/static/img/logoDef.png',
         bannerArr: [],
+        bannerSort: 0,
         detailArr: [],
+        detailSort: 0,
         agree: true,
         name: '',
         tel: '',
@@ -348,7 +350,6 @@
         hasOpened: 2,
         agreementInfo: '',
         consumption: '',
-
 
         fasetSelects: [{
           name: "所在商圈",
@@ -552,7 +553,7 @@
         }
         wx.chooseImage({
           count: num, // 默认9
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
           sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
           success: function (res) {
             // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
@@ -745,11 +746,26 @@
           default:
             break;
         }
+        switch (type) {
+          case 1:
+            d.sort = ++_this.bannerSort;
+            break;
+          case 2:
+            d.sort = ++_this.detailSort;
+            break;
+        }
         console.log("d",d);
         // if(type===0){
         //   wx.hideLoading();
         //   return;
         // }
+        // wx.getFileSystemManager().readFile({
+        //   filePath: files[parseInt(index)].img, //选择图片返回的相对路径
+        //   encoding: 'base64', //编码格式
+        //   success: res => { //成功的回调
+        //     console.log('data:image/png;base64,' + res.data)
+        //   }
+        // })
         wx.uploadFile({
           url: store.state.doMain + url,
           filePath: files[parseInt(index)].img,
@@ -1075,6 +1091,8 @@
         // }
         _this.startValue = o.data.businessstart || "01:00";
         _this.endValue = o.data.businessend || "01:00";
+        _this.bannerSort = o.banner_num;
+        _this.detailSort = o.detail_num;
         return _this.callBackLI({data: o.img});
       },
       editSubFn() {

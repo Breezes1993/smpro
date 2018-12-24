@@ -3,16 +3,21 @@
     <div class="pad-top-xs" v-for="(item,index) in infoArr" :key="index" :wx:key="index">
       <div class="bg-white pad-top-xs pad-hov-sm pad-bottom-xs flexBox ver-cen">
         <div class="flexAuto">
-          <p>{{item.infoTypeTitle}}</p>
-          <p>付费时间：{{item.payTime}}</p>
-          <p>到期时间：{{item.endTime}}</p>
+          <p class="text-lgx text-Bold">{{item.info}}</p>
+          <p>付费时间：{{item.start}}</p>
+          <p>到期时间：{{item.end}}</p>
         </div>
         <div class="flex33 te-right text-xl text-400">
-          <span>{{item.price}}</span>
+          <span>{{item.money}}</span>
         </div>
       </div>
     </div>
-
+    <div class="pad-top-big" v-if="infoArr.length === 0">
+      <div>
+        <img src="/static/img/nocomms.png" class="block mar0A" style="width: 200rpx;height: 200rpx;">
+      </div>
+      <p class="pad-top-lg te-cen text-999">暂无此消费记录</p>
+    </div>
   </div>
 </template>
 
@@ -23,19 +28,7 @@
   export default {
     data() {
       return {
-        infoArr: [{
-          infoTypeTitle: "季度会员",
-          infoType: 1,
-          payTime: "2018-12-04 17:51:11",
-          endTime: "2018-12-04 17:51:11",
-          price: "9.9",
-        }, {
-          infoTypeTitle: "年度会员",
-          infoType: 2,
-          payTime: "2018-12-04 17:51:11",
-          endTime: "2018-12-04 17:51:11",
-          price: "15.9",
-        }]
+        infoArr: []
       }
     },
     mounted(){
@@ -54,7 +47,7 @@
       initInfoFn() {
         let _this = this;
         let o = {
-          url: Api.url_user_news_load,
+          url: Api.url_account_user_order,
           data: {},
           cb: _this.callBackInit
         };
@@ -68,23 +61,7 @@
       },
       callBackInit(o) {
         let _this = this;
-        for (let i = 0, len = o.data.length; i < len; i++) {
-          _this.infoArr.push(o.data[i]);
-        }
-        _this.isEmpty = (o.data.length < 10);
-        let arr = _this.infoArr.slice(0);
-        for (let i = 0, len = arr.length; i < len; i++) {
-          if (_this.tempArr[arr[i].id]) {
-            let old = new Date();
-            old.setTime(_this.tempArr[arr[i].id].time);
-            let now = new Date();
-            let oldTime = old.getFullYear() + "-" + (old.getMonth() + 1) + "-" + old.getDate();
-            let nowTime = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-            arr[i].hasZaned = (oldTime == nowTime);
-          }
-        }
-        _this.infoArr = arr.slice(0);
-        wx.stopPullDownRefresh();
+        _this.infoArr = o.data;
       }
     }
   }

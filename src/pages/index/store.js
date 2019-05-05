@@ -47,6 +47,28 @@ const store = new Vuex.Store({
         }
       }
     },
+    // updateState(state, obj) {
+    //   /**
+    //    * 通过循环设置 key的内容
+    //    * @param stateObj 当前循环的对象
+    //    * @param objValue 需要设置的值
+    //    * @param keys keys的数组
+    //    * @param length keys的长度
+    //    */
+    //   let setState = function (stateObj, objValue, keys, length) {
+    //     if (length > 1) {
+    //       length = length - 1;
+    //       setState(stateObj[keys[keys.length - length - 1]], objValue, keys, length);
+    //     } else {
+    //       stateObj[keys[keys.length - length]] = objValue;
+    //     }
+    //   };
+    //   for (let key in obj) {
+    //     let keys = key.split('.');
+    //     let keysLength = keys.length;
+    //     setState(state, obj[key], keys, keysLength);
+    //   }
+    // },
     getUserInfoFn(state, obj) {
       (state.debug) ? console.log("getUserInfoFn") : '';
       let cb = obj.cb;

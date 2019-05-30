@@ -12,6 +12,8 @@
 	"appid": "wxfc70e7847c9684d7",
 	"projectname": "smpro180423near",
 	"libVersion": "2.4.1",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,

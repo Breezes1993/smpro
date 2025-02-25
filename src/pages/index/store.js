@@ -8,7 +8,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     debug: false,
-    doMain: 'https://www.zhongxiangliquan.com/index.php',
+    doMain: 'https://quan.zhongqi.xin/index.php',
     getSessionUrl: '/home/program/userinfo',
     // getSessionUrl: '/home/program/cs_userinfo',
     userInfo: '',

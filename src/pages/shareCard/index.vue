@@ -102,10 +102,10 @@ export default {
         /http:/,
         "https:"
       );
-      shareInfo.qrCodeImg = shareInfo.qrCodeImg.replace(
-        /http:/,
-        "https:"
-      );
+      // shareInfo.qrCodeImg = shareInfo.qrCodeImg.replace(
+      //   /http:/,
+      //   "https:"
+      // );
       const ctx = wx.createCanvasContext("mycamvas");
       // ctx.fillRect(0, 0, topImgWith, 500);
       new Promise(function(resolve, reject) {

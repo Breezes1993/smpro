@@ -8,6 +8,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     debug: false,
+    imgHead: 'data:image/png;base64,',
     doMain: 'https://quan.zhongqi.xin/index.php',
     getSessionUrl: '/home/program/userinfo',
     // getSessionUrl: '/home/program/cs_userinfo',
@@ -22,6 +23,8 @@ const store = new Vuex.Store({
     isShowHX: false,
     endTime: false,
     IDCard: 0,
+    avatarUrl: "",
+    nickName: "",
     tempObj: {
       getCp: '',
       manOne: '',
@@ -101,11 +104,14 @@ const store = new Vuex.Store({
                         url: state.getSessionUrl,
                         data: {
                           code: res.code,
-                          nickName: info.userInfo.nickName,
-                          avatarUrl: info.userInfo.avatarUrl,
+                          // nickName: info.userInfo.nickName,
+                          // avatarUrl: info.userInfo.avatarUrl,
                           shop_id: obj.shop_id || ""
                         },
-                        cb: cb,
+                        cb:(res) => {
+
+                          cb(res);
+                        },
                         isGetSession: true
                       };
                       store.commit('reqInfo', o);
@@ -288,6 +294,8 @@ const store = new Vuex.Store({
                     wx.setStorageSync("vip", got.data.vip);
                     wx.setStorageSync("shopid", got.data.shopid);
                     wx.setStorageSync("hasOpened", got.data.relation);
+                    wx.setStorageSync("nickName", got.data.nickname);
+                    wx.setStorageSync("avatarUrl", got.data.wechatimg);
                     state.session_key = got.data.session_key;
                     state.openId = got.data.openid;
                     state.hasOpened = got.data.relation;
@@ -299,6 +307,8 @@ const store = new Vuex.Store({
                     state.mobile = got.data.mobile;
                     state.name = got.data.name;
                     state.shopId = got.data.shopid;
+                    state.nickName = got.data.nickname;
+                    state.avatarUrl = got.data.wechatimg;
                   }
                   getApp().globalData.store = {};
                   getApp().globalData.store.state = state;

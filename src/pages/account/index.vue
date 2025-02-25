@@ -4,18 +4,18 @@
     <div class="pad-sm bg-white b-b1">
       <div class="flexBox ver-cen">
         <div class="flex25">
-          <img :src="userInfo.avatarUrl" class="block round" style="width: 140rpx;height: 140rpx">
+          <img :src="avatarUrl || userInfo.avatarUrl" class="block round" style="width: 140rpx;height: 140rpx" @click="toUserInfo">
           <!--<open-data type="userAvatarUrl" class="block round" style="width: 140rpx;height: 140rpx"></open-data>-->
         </div>
         <div class="flexAuto">
-          <p>{{userInfo.nickName}}</p>
+          <p>{{nickName || userInfo.nickName}}</p>
           <p class="pad-top-xs">ID：{{IDCard}}</p>
           <p class="pad-top-xs" @click="jumpFn(13)">
             <span class="text-success" v-if="!mobile">绑定手机号</span>
             <span v-if="mobile">TEL：{{mobile}}</span>
           </p>
         </div>
-        <div class="flex33 te-right">
+        <div class="flex33 te-right" style="visibility: hidden;">
           <p class="text-danger" style="visibility: hidden">VIP</p>
           <!-- <p class="text-danger pad-top-xs" @click="jumpFn(9)" v-if="!isVip">去升级VIP</p> -->
           <p class="text-danger pad-top-xs" @click="toOpenVipCustomer" v-if="vip === 2">开通VIP会员</p>
@@ -148,7 +148,7 @@
     <div class="pad-top-sm">
       <div class="bg-white pad-left-sm">
 
-        <div class="flexBox pad-ver-sm ver-cen b-b1" @click="jumpFn(14)">
+        <!-- <div class="flexBox pad-ver-sm ver-cen b-b1" @click="jumpFn(14)">
           <div class="flex8">
             <img src="/static/img/account/icon_avg.jpg" class="block" style="width: 40rpx;height: 40rpx;">
           </div>
@@ -158,7 +158,7 @@
           <div class="flex8">
             <img src="/static/img/allow_r_gray.png" class="block mar0A" style="width: 30rpx;height: 30rpx;">
           </div>
-        </div>
+        </div> -->
 
         <div class="flexBox pad-ver-sm ver-cen b-b1" @click="jumpFn(6)">
           <div class="flex8">
@@ -261,7 +261,9 @@
         isShowHX: false,
         IDCard: 0,
         endTime: false,
-        showModalStatus: false
+        showModalStatus: false,
+        avatarUrl: "",
+        nickName: ""
       }
     },
     created() {
@@ -287,7 +289,14 @@
       initInfoFn() {
         let _this = this;
         _this.userInfo = store.state.userInfo;
+        _this.avatarUrl = store.state.avatarUrl;
+        _this.nickName = store.state.nickName;
         _this.mobile = store.state.mobile;
+      },
+      toUserInfo() {
+        wx.navigateTo({
+          url: '/pages/userInfo/main'
+        });
       },
       jumpFn(n, id, canDo) {
         let _this = this;

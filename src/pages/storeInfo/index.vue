@@ -576,6 +576,7 @@
 
 <script>
   import Api from '../../../static/js/apis'
+import { base64src } from '../../utils/imageUtils';
   import store from "../index/store";
 
   export default {
@@ -888,16 +889,18 @@
           _this.isEmpty = (o.data.length < 5);
         }
       },
-      sotreBtn(index){
+      async sotreBtn(index){
         let _this = this;
         if(index === 1){
 
         }else if(index === 2){
+          const qrCodeImgPath = await base64src(_this.imgHead + this.qrCodeImg).catch();
           let shareInfo = {
             imgTop: (_this.imgArr&&_this.imgArr.length>0)?_this.imgArr[0]:"",
             storeInfo: _this.storeInfo,
             ticketList: _this.ticketList,
-            qrCodeImg: _this.shop_img
+            // qrCodeImg: _this.shop_img
+            qrCodeImg: qrCodeImgPath
           }
           wx.setStorageSync("shareInfo",shareInfo);
           wx.navigateTo({

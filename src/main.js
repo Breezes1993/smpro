@@ -58,6 +58,8 @@ export default {
       'pages/fakeindex/main',
 
       'pages/selectCity/main',
+
+      'pages/userInfo/main',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -94,6 +96,12 @@ export default {
           selectedIconPath: '/static/img/tabs/tab3-1.png'
         }
       ]
+    },
+    "requiredPrivateInfos": ["chooseAddress"],
+    "permission": {
+      "scope.userLocation": {
+        "desc": "你的位置信息将用于小程序位置接口的效果展示" 
+      }
     }
   }
 }

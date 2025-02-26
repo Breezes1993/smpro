@@ -8,21 +8,20 @@ Component({
     this.setData({
       screenHeight: sysInfo.screenHeight
     });
-    wx.getLocation({
-      type: 'gcj02',
-      success: function(res) {
-        _this.setData({
-          "pos.la": res.latitude,
-          "pos.lo": res.longitude,
-          "store.state.tempObj.tempLola.latitude": res.latitude,
-          "store.state.tempObj.tempLola.longitude": res.longitude
-        });
-        _this.triggerEvent('stateChange', {
-          "tempObj.tempLola.latitude": res.latitude,
-          "tempObj.tempLola.longitude": res.longitude
-        });
+    wx.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.userLocation']) {
+          wx.authorize({
+            scope: 'scope.userLocation',
+            success () {
+              _this.getLocation();
+            }
+          })
+        } else {
+          _this.getLocation();
+        }
       }
-    });
+    })
     this.initInfo();
     this.initCateFn();
     this.initJoinNews();
@@ -99,6 +98,31 @@ Component({
     }
   },
   methods: {
+    getLocation() {
+      console.log("getLocation")
+      wx.getLocation({
+        type: 'gcj02',
+        success: (res) => {
+          this.setData({
+            "pos.la": res.latitude,
+            "pos.lo": res.longitude,
+            "store.state.tempObj.tempLola.latitude": res.latitude,
+            "store.state.tempObj.tempLola.longitude": res.longitude,
+            curPage: 1,
+            storeArr: [],
+            isEmpty: false
+          });
+          this.triggerEvent('stateChange', {
+            "tempObj.tempLola.latitude": res.latitude,
+            "tempObj.tempLola.longitude": res.longitude
+          });
+          this.initInfoFn();
+        },
+        fail(res) {
+          console.log(res);
+        }
+      });
+    },
     scrolltolower() {
       console.log('-------scroll--------');
       console.log('onReachBottom');
@@ -116,6 +140,7 @@ Component({
       console.log('onReachBottom');
     },
     initInfoFn() {
+      console.log("initInfoFn")
       let _this = this;
       _this.setData({
         hasO: wx.getStorageSync("hasOpened") || _this.data.store.state.hasOpened
@@ -173,6 +198,8 @@ Component({
               init: false
             });
           }
+          console.log("tStoreArr", tStoreArr);
+          console.log("address", o.address);
           _this.setData({
             storeArr: tStoreArr,
             isEmpty: (arr.length === 0),
@@ -244,7 +271,7 @@ Component({
       _this.setData({
         imgArr: o.data
       });
-      return _this.initInfoFn();
+      // return _this.initInfoFn();
     },
     changeCate(res) {
       let cate = res.currentTarget.dataset.id;
@@ -300,6 +327,9 @@ Component({
           });
 
           _this.initInfoFn();
+        },
+        fail(res) {
+          console.log("fail", res);
         }
       })
     },

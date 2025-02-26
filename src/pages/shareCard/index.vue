@@ -141,7 +141,7 @@ export default {
         console.log(" store.state.userInfo.avatarUrl", store.state.userInfo.avatarUrl)
         promiseArray.push(new Promise((resolve,reject)=>{
           wx.getImageInfo({
-            src: store.state.userInfo.avatarUrl || "",
+            src: store.state.avatarUrl || store.state.userInfo.avatarUrl || "",
             success: function(res){
               resolve(res);
             },
@@ -597,7 +597,7 @@ export default {
       canvasHeight = canvasHeight + 12;
       //绘制小程序分享人头像
       let userImgWidth = 30;
-      let bottomText = store.state.userInfo.nickName + " 为你推荐好店";
+      let bottomText = (store.state.nickName || store.state.userInfo.nickName) + " 为你推荐好店";
       canDraw&&ctx.setFontSize(16)
       let bottomTextWidth = ctx.measureText(bottomText).width;
       canDraw&&ctx.drawImage(pmRes[2].path||"",(sysInfo.screenWidth-bottomTextWidth-userImgWidth)/2,canvasHeight+10,userImgWidth,userImgWidth);

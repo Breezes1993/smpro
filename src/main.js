@@ -97,8 +97,14 @@ export default {
         }
       ]
     },
-    "requiredPrivateInfos": ["chooseAddress"],
+    "requiredPrivateInfos": ["chooseLocation", "getLocation"],
     "permission": {
+      "scope.userInfo": {
+        "desc": "你的用户信息将用于小程序用户的效果展示" 
+      },
+      "scope.userFuzzyLocation": {
+        "desc": "你的位置信息将用于小程序位置接口的效果展示" 
+      },
       "scope.userLocation": {
         "desc": "你的位置信息将用于小程序位置接口的效果展示" 
       }

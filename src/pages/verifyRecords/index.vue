@@ -28,18 +28,18 @@
 
         <div class="flexBox ver-cen">
           <div class="flex25">
-            <img :src="item.wechatimg" class="block mar0A round" style="width: 122rpx;height: 122rpx;">
+            <img :src="item.wechatimg" class="block mar0A round" style="width: 110rpx;height: 110rpx;">
           </div>
           <div class="flexAuto">
 
-            <p class="pad-right-sm">使用人：{{item.name}}</p>
+            <p class="pad-right-sm">使用人：{{item.name}}（{{item.cardnum}}）</p>
 
             <p class="text-lg text-Bold">{{item.ticketname}}</p>
 
             <p class="text-xs text-999">{{item.usertime}}</p>
 
           </div>
-          <div class="flex25 te-cen">
+          <div class="flex20 te-cen">
             <p class="text-warning">已核销</p>
           </div>
 
@@ -105,7 +105,7 @@
       },
       callBackInit(o) {
         let _this = this;
-        if (o.status == 1) {
+        if (o && o.status == 1) {
           _this.show1 = o.todaynum;
           _this.show2 = o.yesterdaynum;
           _this.show3 = o.allnum;

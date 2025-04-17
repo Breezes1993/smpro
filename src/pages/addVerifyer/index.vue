@@ -21,6 +21,14 @@
           </div>
           <div class="flexAuto">
             <p class="ell">{{item.name}}</p>
+            <p class="ell">
+              <span>ID:</span>
+              <span>{{item.cardnum}}</span>
+            </p>
+            <p class="ell" v-if="item.mobile">
+              <span>TEL:</span>
+              <span>{{item.mobile}}</span>
+            </p>
           </div>
           <div class="flex15">
             <p class="btn btn-danger btn-xs btn-radius block" @click="openDel(item.id)">删除</p>

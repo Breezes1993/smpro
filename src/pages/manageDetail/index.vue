@@ -72,10 +72,12 @@
           <div class="flexAuto">
 
             <div class="pad-bottom-xs">
+              <span class="pad-right-sm">ID:{{item.usercardnum}}</span>
 
-              <span class="pad-right-sm">{{item.username}}</span>
+              <span class="adminCheck">{{item.username}}</span>
+              <!-- <span class="pad-right-sm">{{item.username}}</span>
 
-              <span class="adminCheck">{{item.verificationname}}</span>
+              <span class="adminCheck">{{item.verificationname}}</span> -->
 
             </div>
 

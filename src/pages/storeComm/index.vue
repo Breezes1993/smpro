@@ -105,7 +105,7 @@
       this.selImgArr = [];
       this.storeLogo = '';
       wx.reLaunch({
-        url: '/pages/fakeindex/main' + "?id=" + this.cardId
+        url: '/pages/index/main' + "?id=" + this.cardId
       })
     },
     methods: {
@@ -167,7 +167,7 @@
           });
           setTimeout(() => {
             wx.reLaunch({
-              url: '/pages/fakeindex/main' + "?id=" + _this.curId
+              url: '/pages/index/main' + "?id=" + _this.curId
             })
           }, 1000)
         }
@@ -198,7 +198,7 @@
                 });
                 setTimeout(() => {
                   wx.reLaunch({
-                    url: '/pages/fakeindex/main' + "?id=" + _this.curId
+                    url: '/pages/index/main' + "?id=" + _this.curId
                   })
                 }, 1000)
               }

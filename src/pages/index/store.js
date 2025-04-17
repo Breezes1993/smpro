@@ -271,6 +271,18 @@ const store = new Vuex.Store({
         dataType: 'JSON',
         header: {"Content-Type": "application/x-www-form-urlencoded"},
         success: function (res) {
+          if (res.statusCode != 200) {
+            wx.showModal({
+              title: '提示',
+              content: "服务器异常",
+              success: function (res) {
+                if (res.confirm) {
+                } else if (res.cancel) {
+                }
+              }
+            });
+            return;
+          }
           if (res.data) {
             let got = JSON.parse(res.data);
             new Promise(function(resolve,reject){
@@ -309,6 +321,7 @@ const store = new Vuex.Store({
                     state.shopId = got.data.shopid;
                     state.nickName = got.data.nickname;
                     state.avatarUrl = got.data.wechatimg;
+                    state.id = got.data.id;
                   }
                   getApp().globalData.store = {};
                   getApp().globalData.store.state = state;

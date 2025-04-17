@@ -285,7 +285,7 @@
               <div class="pad-left-sm">
 
                 <p>
-                  <span class="text-333">{{item.name}}</span>
+                  <span class="text-333">{{item.name}}（{{item.cardnum}}）</span>
                   <span class="text-xs pull-right text-999">{{item.time}}</span>
                 </p>
 

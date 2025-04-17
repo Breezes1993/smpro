@@ -5,5 +5,18 @@
     "compileHotReLoad": true,
     "urlCheck": false
   },
-  "libVersion": "3.7.8"
+  "libVersion": "3.7.8",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "1",
+          "pathName": "/pages/fakeindex/main",
+          "query": "id=4468",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
+  }
 }
